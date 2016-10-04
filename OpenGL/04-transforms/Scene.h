@@ -34,7 +34,7 @@ private:
 	ShaderProgram program;
 	float currentTime;
 	glm::mat4 projection;
-	float x;
+
 };
 
 

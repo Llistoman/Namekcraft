@@ -2,8 +2,10 @@
 #define _SCENE_INCLUDE
 
 
+#include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "Quad.h"
+#include "TileMap.h"
+#include "Player.h"
 
 
 // Scene contains all the entities of our game.
@@ -25,8 +27,11 @@ private:
 	void initShaders();
 
 private:
-	Quad *quads[4];
-	ShaderProgram program;
+	TileMap *map;
+	Player *player;
+	ShaderProgram texProgram;
+	float currentTime;
+	glm::mat4 projection;
 
 };
 

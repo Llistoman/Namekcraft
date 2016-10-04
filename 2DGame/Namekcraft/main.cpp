@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
 
@@ -25,6 +26,20 @@ static void keyboardDownCallback(unsigned char key, int x, int y)
 static void keyboardUpCallback(unsigned char key, int x, int y)
 {
 	Game::instance().keyReleased(key);
+}
+
+// If a special key is pressed this callback is called
+
+static void specialDownCallback(int key, int x, int y)
+{
+	Game::instance().specialKeyPressed(key);
+}
+
+// If a special key is released this callback is called
+
+static void specialUpCallback(int key, int x, int y)
+{
+	Game::instance().specialKeyReleased(key);
 }
 
 // Same for changes in mouse cursor position
@@ -72,16 +87,22 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(640, 480);
+	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glutCreateWindow(argv[0]);
 	glutDisplayFunc(drawCallback);
 	glutIdleFunc(idleCallback);
 	glutKeyboardFunc(keyboardDownCallback);
 	glutKeyboardUpFunc(keyboardUpCallback);
+	glutSpecialFunc(specialDownCallback);
+	glutSpecialUpFunc(specialUpCallback);
 	glutMouseFunc(mouseCallback);
 	glutMotionFunc(motionCallback);
 
+	// GLEW will take care of OpenGL extension functions
+	glewExperimental = GL_TRUE;
+	glewInit();
+	
 	// Game instance initialization
 	Game::instance().init();
 	prevTime = glutGet(GLUT_ELAPSED_TIME);

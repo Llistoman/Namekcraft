@@ -22,7 +22,6 @@ void Scene::init()
 	quad = Quad::createQuad(0.f, 0.f, 128.f, 128.f, program);
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
-	x = 0.0f;
 }
 
 void Scene::update(int deltaTime)
@@ -42,14 +41,6 @@ void Scene::render()
 
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(128.f, 48.f, 0.f));
 	modelview = glm::translate(modelview, glm::vec3(64.f, 64.f, 0.f));
-	if (int(currentTime / 1000.f) % 2 == 0) {		
-		modelview = glm::translate(modelview, glm::vec3(++x, 0.f, 0.f));
-		modelview = glm::scale(modelview, glm::vec3(float(x + 1) / 100, float(x + 1) / 100, 0.0f));
-	}
-	else {		
-		modelview = glm::translate(modelview, glm::vec3(--x, 0.f, 0.f));
-		modelview = glm::scale(modelview, glm::vec3(float(x - 1) / 100, float(x - 1) / 100, 0.0f));
-	}
 	modelview = glm::rotate(modelview, -currentTime / 1000.f, glm::vec3(0.0f, 0.0f, 1.0f));
 	modelview = glm::translate(modelview, glm::vec3(-64.f, -64.f, 0.f));
 	program.setUniformMatrix4f("modelview", modelview);
@@ -57,8 +48,6 @@ void Scene::render()
 
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(384.f, 48.f, 0.f));
 	modelview = glm::translate(modelview, glm::vec3(64.f, 64.f, 0.f));
-	if (int(currentTime / 1000.f) % 2 == 0) modelview = glm::translate(modelview, glm::vec3(++x, 0.f, 0.f));
-	else modelview = glm::translate(modelview, glm::vec3(--x, 0.f, 0.f));
 	modelview = glm::rotate(modelview, currentTime / 1000.f, glm::vec3(0.0f, 0.0f, 1.0f));
 	modelview = glm::translate(modelview, glm::vec3(-64.f, -64.f, 0.f));
 	program.setUniformMatrix4f("modelview", modelview);
