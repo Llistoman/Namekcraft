@@ -6,6 +6,8 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Quad.h"
+#include "TexturedQuad.h"
 
 
 // Scene contains all the entities of our game.
@@ -20,6 +22,7 @@ public:
 	~Scene();
 
 	void init();
+	void initbackground();
 	void update(int deltaTime);
 	void render();
 
@@ -27,6 +30,9 @@ private:
 	void initShaders();
 
 private:
+	Quad *quad;
+	Texture texs[2]; //vec de textures
+	TexturedQuad *background[2];
 	TileMap *map;
 	Player *player;
 	ShaderProgram texProgram;
