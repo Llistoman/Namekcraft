@@ -63,9 +63,9 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
     glm::ivec2 newpos = player->getPos();
-    //cout << newpos.x << " " << newpos.y << endl;
+    cout << "POS: " << newpos.x << " " << newpos.y << endl;
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-    projection = glm::translate(projection, glm::vec3(-newpos.x+SCREEN_WIDTH/2, -newpos.y+SCREEN_HEIGHT/2, 0.f));
+    projection = glm::translate(projection, glm::vec3(-newpos.x+SCREEN_WIDTH/2 - 32, -newpos.y+SCREEN_HEIGHT/2 - 32, 0.f));
 }
 
 void Scene::render()
