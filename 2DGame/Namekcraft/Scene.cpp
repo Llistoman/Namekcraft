@@ -27,9 +27,26 @@ Scene::~Scene()
 }
 
 
+void Scene::initbackground() {
+    glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT)};
+    glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
+    glm::vec2 geom2[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT/2)};
+    glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(2.f, 1.f)};
+
+    background[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
+    background[1] = TexturedQuad::createTexturedQuad(geom2, texCoords2, texProgram);
+    background[2] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
+
+    // Load textures
+    texs[0].loadFromFile("images/Sky.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    texs[1].loadFromFile("images/backgroundsimetric.png",TEXTURE_PIXEL_FORMAT_RGBA);
+    texs[2].loadFromFile("images/clouds.png",TEXTURE_PIXEL_FORMAT_RGBA);
+}
+
 void Scene::init()
 {
 	initShaders();
+    initbackground();
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -55,6 +72,9 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+    background[0]->render(texs[0]);
+    background[1]->render(texs[1]);
+    background[2]->render(texs[2]);
 	map->render();
 	player->render();
 }
