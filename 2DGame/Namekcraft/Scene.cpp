@@ -30,12 +30,14 @@ Scene::~Scene()
 void Scene::initbackground() {
     glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT)};
     glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom2[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT/2)};
+    glm::vec2 geom2[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT/1.5f)};
     glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(2.f, 1.f)};
+    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT/3)};
+    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
 
     background[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
     background[1] = TexturedQuad::createTexturedQuad(geom2, texCoords2, texProgram);
-    background[2] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
+    background[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
 
     // Load textures
     texs[0].loadFromFile("images/Sky.png", TEXTURE_PIXEL_FORMAT_RGBA);
