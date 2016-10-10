@@ -62,6 +62,8 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+    //glm::ivec2 newpos = player->getPos();
+    //projection = glm::ortho(newpos.x-SCREEN_WIDTH/2,newpos.x+SCREEN_WIDTH/2,newpos.y-SCREEN_HEIGHT/2,newpos.y+SCREEN_HEIGHT/2);
 }
 
 void Scene::render()

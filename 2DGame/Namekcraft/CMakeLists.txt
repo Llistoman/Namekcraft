@@ -6,7 +6,7 @@ execute_process(COMMAND ln -s ../shaders)
 execute_process(COMMAND ln -s ../images)
 execute_process(COMMAND ln -s ../levels)
 
-set(appName Bubble)
+set(appName Namekcraft)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(OpenGL REQUIRED)
