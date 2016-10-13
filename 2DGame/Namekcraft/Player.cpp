@@ -92,7 +92,7 @@ void Player::update(int deltaTime)
 		}
 		else
 		{
-            posPlayer.y = int(startY - (4*96) * sin(3.14159f * jumpAngle / 180.f));
+            posPlayer.y = int(startY - (spriteSize.y*3) * sin(3.14159f * jumpAngle / 180.f));
 			if(jumpAngle > 90)
                 bJumping = !map->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y);
 		}
