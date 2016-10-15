@@ -34,7 +34,7 @@ private:
     Quad *quad;
     Texture texs[3]; //vec de textures
     TexturedQuad *background[3];
-    TileMap *map;
+    //TileMap *map;
     World *world;
     Player *player;
     ShaderProgram texProgram;

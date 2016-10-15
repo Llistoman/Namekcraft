@@ -13,20 +13,23 @@
 #define PLAYER_SIZE_X 32
 #define PLAYER_SIZE_Y 32
 
-#define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_X_TILES 5
+#define INIT_PLAYER_Y_TILES 9
 
 
 Scene::Scene()
 {
-	map = NULL;
+    //map = NULL;
+    world = NULL;
 	player = NULL;
 }
 
 Scene::~Scene()
 {
-	if(map != NULL)
-		delete map;
+    /*if(map != NULL)
+        delete map;*/
+    if(world != NULL)
+        delete world;
 	if(player != NULL)
 		delete player;
 }
@@ -54,12 +57,13 @@ void Scene::init()
 {
 	initShaders();
     initbackground();
-    map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-    world = World::createWorld(0,glm::ivec2(20,10),glm::ivec2(BLOCK_X,BLOCK_Y),texProgram);
+    //map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+    world = World::createWorld(0,glm::ivec2(40,10),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(BLOCK_X*8,BLOCK_Y*4),glm::vec2(SCREEN_X, SCREEN_Y),texProgram);
 	player = new Player();
-    player->init(glm::ivec2(SCREEN_X, SCREEN_Y),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	player->setTileMap(map);
+    player->init(glm::ivec2(0, 0),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);
+    player->setPosition(glm::vec2(20*BLOCK_X,10*BLOCK_Y));
+    //player->set(map);
+    player->setWorld(world);
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -76,7 +80,6 @@ void Scene::update(int deltaTime)
 void Scene::render()
 {
 	glm::mat4 modelview;
-
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
@@ -86,7 +89,10 @@ void Scene::render()
     background[0]->render(texs[0]);
     background[1]->render(texs[1]);
     background[2]->render(texs[2]);
-	map->render();
+    //map->render();
+    glm::ivec2 newpos = player->getPos();
+    glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
+    world->render(newpos,screen);
 	player->render();
 }
 

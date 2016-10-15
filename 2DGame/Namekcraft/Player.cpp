@@ -17,7 +17,7 @@ enum PlayerAnims
 };
 
 
-void Player::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderProgram &shaderProgram)
+void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
     spriteSize = spSize;
@@ -44,36 +44,47 @@ void Player::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderP
     sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.5f));
 		
 	sprite->changeAnimation(0);
-	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+    posPlayer = position;
+    //tileMapDispl = tileMapPos;
+    //sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+    sprite->setPosition(glm::vec2(posPlayer.x,posPlayer.y));
 	
 }
 
 void Player::update(int deltaTime)
 {
-	sprite->update(deltaTime);
+    sprite->update(deltaTime);
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if(sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);
-		posPlayer.x -= 2;
-        if(map->collisionMoveLeft(posPlayer, spriteSize))
+        posPlayer.x -= 2;
+        if(world->collisionMoveLeft(posPlayer, spriteSize))
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
-		}
+        }
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		if(sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);
-		posPlayer.x += 2;
-        if(map->collisionMoveRight(posPlayer, spriteSize))
+        posPlayer.x += 2;
+        if(world->collisionMoveRight(posPlayer, spriteSize))
 		{
 			posPlayer.x -= 2;
 			sprite->changeAnimation(STAND_RIGHT);
-		}
+        }
 	}
+    //EXTRA DEBUG
+    /*else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+    {
+        posPlayer.y -= 10;
+    }
+    else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+    {
+        posPlayer.y += 10;
+    }*/
 	else
 	{
 		if(sprite->animation() == MOVE_LEFT)
@@ -82,9 +93,9 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
 	
-	if(bJumping)
+    if(bJumping)
 	{
-		jumpAngle += JUMP_ANGLE_STEP;
+        jumpAngle += JUMP_ANGLE_STEP;
 		if(jumpAngle == 180)
 		{
 			bJumping = false;
@@ -93,25 +104,25 @@ void Player::update(int deltaTime)
 		else
 		{
             posPlayer.y = int(startY - (spriteSize.y*3) * sin(3.14159f * jumpAngle / 180.f));
-			if(jumpAngle > 90)
-                bJumping = !map->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y);
-		}
+            if(jumpAngle > 90)
+                bJumping = !world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y);
+        }
 	}
 	else
 	{
-		posPlayer.y += FALL_STEP;
-        if(map->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y))
+        /*posPlayer.y += FALL_STEP;
+        if(world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y))
 		{
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
-			}
-		}
+            }
+        }*/
 	}
 	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+    sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
 void Player::render()
@@ -122,6 +133,11 @@ void Player::render()
 void Player::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;
+}
+
+void Player::setWorld(World *w)
+{
+    world = w;
 }
 
 void Player::setPosition(const glm::vec2 &pos)

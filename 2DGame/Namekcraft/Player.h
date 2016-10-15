@@ -3,6 +3,7 @@
 
 
 #include "Sprite.h"
+#include "World.h"
 #include "TileMap.h"
 
 
@@ -14,11 +15,12 @@ class Player
 {
 
 public:
-    void init(const glm::ivec2 &tileMapPos, const glm::vec2 &spriteSize, ShaderProgram &shaderProgram);
+    void init(const glm::ivec2 &position, const glm::vec2 &spriteSize, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
 	
 	void setTileMap(TileMap *tileMap);
+    void setWorld(World *w);
 	void setPosition(const glm::vec2 &pos);
     glm::ivec2 getPos();
     glm::ivec2 getSpSize();
@@ -30,6 +32,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
+    World *world;
 
 };
 
