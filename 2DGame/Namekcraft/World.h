@@ -5,8 +5,10 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <stdlib.h>
+#include <iostream>
 #include "Texture.h"
-#include "SimplexNoise.h"
+#include "TexturedQuad.h"
 #include "ShaderProgram.h"
 
 class World
@@ -14,37 +16,26 @@ class World
 
 public:
     // Tile maps can only be created inside an OpenGL context
-    World *createWorld(int sd, const glm::vec2 &minCoords, ShaderProgram &program);
+    static World *createWorld(int sd, const glm::ivec2 &worldSize, const glm::ivec2 &blockSize, ShaderProgram &program);
 
-    World(int sd, const glm::vec2 &minCoords, ShaderProgram &program);
+    World(int sd, const glm::ivec2 &worldSize, const glm::ivec2 &blockSize, ShaderProgram &program);
     ~World();
 
-    void render() const;
-    void free();
-
     int position(int i, int j);
-    int getTileSize() const;
+    glm::ivec2 size();
 
-    bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-    bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-    bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
-
+private:
+    void rec(int min, int max, int heightmin, int heightmax);
+    void prepareWorld(int sd, const glm::ivec2 &wSize);
+    void prepareTexQuads(const glm::ivec2 &bSize, ShaderProgram &program);
 
 private:
 
-    void prepareWorld(int sd, const glm::vec2 &minCoords);
-    void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
-
-private:
-    GLuint vao;
-    GLuint vbo;
-    GLint posLocation, texCoordLocation;
-    glm::ivec2 position, worldSize, tilesheetSize;
-    int tileSize, blockSize;
-    Texture tilesheet;
-    glm::vec2 tileTexSize;
-    int *world;
+    World *world;
+    glm::ivec2 blockSize;
+    glm::ivec2 worldSize;
     vector<vector<int> > coords;
+    vector<vector<TexturedQuad> > tilemap;
 
 };
 

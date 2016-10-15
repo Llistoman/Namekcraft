@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "Game.h"
 
+#define BLOCK_X 32
+#define BLOCK_Y 32
 
 #define SCREEN_X 32
 #define SCREEN_Y 16
@@ -53,6 +55,7 @@ void Scene::init()
 	initShaders();
     initbackground();
     map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+    world = World::createWorld(0,glm::ivec2(20,10),glm::ivec2(BLOCK_X,BLOCK_Y),texProgram);
 	player = new Player();
     player->init(glm::ivec2(SCREEN_X, SCREEN_Y),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
@@ -66,7 +69,6 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
     glm::ivec2 newpos = player->getPos();
-    //cout << "POS: " << newpos.x << " " << newpos.y << endl;
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
     projection = glm::translate(projection, glm::vec3(-newpos.x+SCREEN_WIDTH/2 - PLAYER_SIZE_X, -newpos.y+SCREEN_HEIGHT/2 - PLAYER_SIZE_Y, 0.f));
 }
