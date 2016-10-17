@@ -48,9 +48,13 @@ void Sprite::update(int deltaTime)
 	}
 }
 
-void Sprite::render() const
+void Sprite::render(int dir) const
 {
 	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
+  if(dir!= 0){
+    modelview = glm::scale(modelview, glm::vec3(-1.0f, 1.0f, 1.0f));
+    modelview = glm::translate(modelview, glm::vec3(-32.0f, 0.0f, 0.0f));
+  }
 	shaderProgram->setUniformMatrix4f("modelview", modelview);
 	shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
 	glEnable(GL_TEXTURE_2D);

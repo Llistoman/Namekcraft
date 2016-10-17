@@ -23,7 +23,7 @@ public:
 	Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program);
 
 	void update(int deltaTime);
-	void render() const;
+	void render(int dir) const;
 	void free();
 
 	void setNumberAnimations(int nAnimations);
