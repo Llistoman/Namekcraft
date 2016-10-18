@@ -54,75 +54,66 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
 void Player::update(int deltaTime)
 {
     sprite->update(deltaTime);
-	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
-	{
-		if(sprite->animation() != MOVE_LEFT)
-			sprite->changeAnimation(MOVE_LEFT);
-        posPlayer.x -= 2;
-        if(world->collisionMoveLeft(posPlayer, spriteSize))
-		{
-			posPlayer.x += 2;
-			sprite->changeAnimation(STAND_LEFT);
-        }
-	}
-	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
-	{
-		if(sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT);
-        posPlayer.x += 2;
-        if(world->collisionMoveRight(posPlayer, spriteSize))
-		{
-			posPlayer.x -= 2;
-			sprite->changeAnimation(STAND_RIGHT);
-        }
-	}
-    //EXTRA DEBUG
-    /*else if (Game::instance().getSpecialKey(GLUT_KEY_UP))
-    {
-        posPlayer.y -= 10;
-    }
-    else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN))
-    {
-        posPlayer.y += 10;
-    }*/
-	else
-	{
-		if(sprite->animation() == MOVE_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
-		else if(sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
-	}
-	
-    if(bJumping)
-	{
-        jumpAngle += JUMP_ANGLE_STEP;
-		if(jumpAngle == 180)
-		{
-			bJumping = false;
-			posPlayer.y = startY;
-		}
-		else
-		{
-            posPlayer.y = int(startY - (spriteSize.y*3) * sin(3.14159f * jumpAngle / 180.f));
-            if(jumpAngle > 90)
-                bJumping = !world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y);
-        }
-	}
-	else
-	{
-        /*posPlayer.y += FALL_STEP;
-        if(world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y))
-		{
-			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
-			{
-				bJumping = true;
-				jumpAngle = 0;
-				startY = posPlayer.y;
+        if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+        {
+            if(sprite->animation() != MOVE_LEFT)
+                sprite->changeAnimation(MOVE_LEFT);
+            posPlayer.x -= 2;
+            if(world->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+            {
+                posPlayer.x += 2;
+                sprite->changeAnimation(STAND_LEFT);
             }
-        }*/
-	}
-	
-    sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+        }
+        else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+        {
+            if(sprite->animation() != MOVE_RIGHT)
+                sprite->changeAnimation(MOVE_RIGHT);
+            posPlayer.x += 2;
+            if(world->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
+            {
+                posPlayer.x -= 2;
+                sprite->changeAnimation(STAND_RIGHT);
+            }
+        }
+        else
+        {
+            if(sprite->animation() == MOVE_LEFT)
+                sprite->changeAnimation(STAND_LEFT);
+            else if(sprite->animation() == MOVE_RIGHT)
+                sprite->changeAnimation(STAND_RIGHT);
+        }
+
+        if(bJumping)
+        {
+            jumpAngle += JUMP_ANGLE_STEP;
+            if(jumpAngle == 180)
+            {
+                bJumping = false;
+                posPlayer.y = startY;
+            }
+            else
+            {
+                posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+                if(jumpAngle > 90)
+                    bJumping = !world->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+            }
+        }
+        else
+        {
+            posPlayer.y += FALL_STEP;
+            if(world->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y))
+            {
+                if(Game::instance().getSpecialKey(GLUT_KEY_UP))
+                {
+                    bJumping = true;
+                    jumpAngle = 0;
+                    startY = posPlayer.y;
+                }
+            }
+        }
+
+    sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
 }
 
 void Player::render()
@@ -143,10 +134,10 @@ void Player::setWorld(World *w)
 void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+    sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
 }
 
-glm::ivec2 Player::getPos() {
+glm::ivec2 Player::getPosRender() {
     return posPlayer;
 }
 

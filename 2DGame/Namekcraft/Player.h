@@ -22,7 +22,7 @@ public:
 	void setTileMap(TileMap *tileMap);
     void setWorld(World *w);
 	void setPosition(const glm::vec2 &pos);
-    glm::ivec2 getPos();
+    glm::ivec2 getPosRender();
     glm::ivec2 getSpSize();
 	
 private:

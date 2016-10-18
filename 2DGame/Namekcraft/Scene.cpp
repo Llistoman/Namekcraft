@@ -26,8 +26,6 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    /*if(map != NULL)
-        delete map;*/
     if(world != NULL)
         delete world;
 	if(player != NULL)
@@ -57,12 +55,10 @@ void Scene::init()
 {
 	initShaders();
     initbackground();
-    //map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-    world = World::createWorld(0,glm::ivec2(40,10),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(BLOCK_X*8,BLOCK_Y*4),glm::vec2(SCREEN_X, SCREEN_Y),texProgram);
-	player = new Player();
+    world = World::createWorld(0,glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),texProgram);
+    player = new Player();
     player->init(glm::ivec2(0, 0),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);
-    player->setPosition(glm::vec2(20*BLOCK_X,10*BLOCK_Y));
-    //player->set(map);
+    player->setPosition(glm::vec2(world->getWorldSize().y/2*BLOCK_X,0));
     player->setWorld(world);
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -72,7 +68,7 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-    glm::ivec2 newpos = player->getPos();
+    glm::ivec2 newpos = player->getPosRender();
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
     projection = glm::translate(projection, glm::vec3(-newpos.x+SCREEN_WIDTH/2 - PLAYER_SIZE_X, -newpos.y+SCREEN_HEIGHT/2 - PLAYER_SIZE_Y, 0.f));
 }
@@ -89,8 +85,7 @@ void Scene::render()
     background[0]->render(texs[0]);
     background[1]->render(texs[1]);
     background[2]->render(texs[2]);
-    //map->render();
-    glm::ivec2 newpos = player->getPos();
+    glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
     world->render(newpos,screen);
 	player->render();
