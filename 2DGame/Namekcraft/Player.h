@@ -18,8 +18,7 @@ public:
     void init(const glm::ivec2 &position, const glm::vec2 &spriteSize, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
-  int dir;
-	void setTileMap(TileMap *tileMap);
+    int dir;
     void setWorld(World *w);
 	void setPosition(const glm::vec2 &pos);
     glm::ivec2 getPosRender();
@@ -33,7 +32,6 @@ private:
   float playerSpeed;
 	Texture spritesheet;
 	Sprite *sprite;
-	TileMap *map;
     World *world;
 
 };

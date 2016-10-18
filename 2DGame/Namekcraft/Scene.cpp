@@ -13,13 +13,8 @@
 #define PLAYER_SIZE_X 32
 #define PLAYER_SIZE_Y 32
 
-#define INIT_PLAYER_X_TILES 5
-#define INIT_PLAYER_Y_TILES 9
-
-
 Scene::Scene()
 {
-    //map = NULL;
     world = NULL;
 	player = NULL;
 }

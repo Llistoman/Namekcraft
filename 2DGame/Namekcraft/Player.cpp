@@ -48,8 +48,6 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
 
 	sprite->changeAnimation(0);
     posPlayer = position;
-    //tileMapDispl = tileMapPos;
-    //sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
     sprite->setPosition(glm::vec2(posPlayer.x,posPlayer.y));
 	
 }
@@ -77,7 +75,7 @@ void Player::update(int deltaTime)
         if(sprite->animation() != RUN and sprite->animation() != JUMP) sprite->changeAnimation(RUN);
       }
 		posPlayer.x -= playerSpeed;
-        if(map->collisionMoveLeft(posPlayer, spriteSize))
+        if(world->collisionMoveLeft(posPlayer, spriteSize))
 		{
 			posPlayer.x += playerSpeed;
 			sprite->changeAnimation(STAND);
@@ -93,7 +91,7 @@ void Player::update(int deltaTime)
         if(sprite->animation() != RUN and sprite->animation() != JUMP) sprite->changeAnimation(RUN);
       }
     posPlayer.x += playerSpeed;
-        if(map->collisionMoveLeft(posPlayer, spriteSize))
+        if(world->collisionMoveLeft(posPlayer, spriteSize))
     {
       posPlayer.x -= playerSpeed;
       sprite->changeAnimation(STAND);
@@ -120,13 +118,13 @@ void Player::update(int deltaTime)
 		{
             posPlayer.y = int(startY - (spriteSize.y*3) * sin(3.14159f * jumpAngle / 180.f));
 			if(jumpAngle > 90)
-                bJumping = !map->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y);
+                bJumping = !world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y);
 		}
 	}
 	else
 	{
 		posPlayer.y += FALL_STEP;
-        if(map->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y))
+        if(world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y))
           {
             if(Game::instance().getSpecialKey(GLUT_KEY_UP) or Game::instance().getKey(32))
             {
@@ -139,17 +137,12 @@ void Player::update(int deltaTime)
           if(sprite->animation() != JUMP and bJumping) sprite->changeAnimation(JUMP);
 	}
 	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+    sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
 }
 
 void Player::render()
 {
 	sprite->render(dir);
-}
-
-void Player::setTileMap(TileMap *tileMap)
-{
-	map = tileMap;
 }
 
 void Player::setWorld(World *w)
