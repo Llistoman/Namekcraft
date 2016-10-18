@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "TileMap.h"
+#include "World.h"
 #include "Player.h"
 #include "TexturedQuad.h"
 #include "Quad.h"
@@ -33,7 +34,8 @@ private:
     Quad *quad;
     Texture texs[3]; //vec de textures
     TexturedQuad *background[3];
-    TileMap *map;
+    //TileMap *map;
+    World *world;
     Player *player;
     ShaderProgram texProgram;
     float currentTime;
