@@ -34,11 +34,12 @@ Scene::~Scene()
 
 
 void Scene::initbackground() {
-    glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH *2, SCREEN_HEIGHT *2)};
+    glm::ivec2 size = world->getWorldSize();
+    glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2((size.x-1)*BLOCK_X, (size.y-1)*BLOCK_Y)};
     glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom2[2] = {glm::vec2(0.f, SCREEN_HEIGHT/2), glm::vec2(SCREEN_WIDTH *2, SCREEN_HEIGHT)};
+    glm::vec2 geom2[2] = {glm::vec2(0.f, (size.y-1)*BLOCK_Y/2), glm::vec2((size.x-1)*BLOCK_X , (size.y-1)*BLOCK_Y)};
     glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH *2, SCREEN_HEIGHT /3)};
+    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2((size.x-1)*BLOCK_X/3, (size.y-1)*BLOCK_Y/3)};
     glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
 
     background[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
@@ -54,8 +55,8 @@ void Scene::initbackground() {
 void Scene::init()
 {
 	initShaders();
+    world = World::createWorld(1,glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),texProgram);
     initbackground();
-    world = World::createWorld(0,glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),texProgram);
     player = new Player();
     player->init(glm::ivec2(0, 0),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);
     player->setPosition(glm::vec2(world->getWorldSize().y/2*BLOCK_X,0));

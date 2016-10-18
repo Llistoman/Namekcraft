@@ -26,9 +26,10 @@ void World::rec(int min, int max, int heightmin, int heightmax) {
     coords[y][mid] = 8;
     for(int i = 0; i < y; ++i) {
         int p = rand()%10;
-        if(p < 5) coords[i][mid] = 8;
-        else if (p < 9) coords[i][mid] = 16;
-        else coords[i][mid] = 24;
+        if(p < 4) coords[i][mid] = 8;
+        else if (p < 8) coords[i][mid] = 16;
+        else if (p < 9) coords[i][mid] = 24;
+        else coords[i][mid] = 32;
     }
     if(max-1 != min) {
         rec(mid,max,y,heightmax);
@@ -53,9 +54,10 @@ void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
     coords[y][mid] = 8;
     for(int i = 0; i < y; ++i) {
         int p = rand()%10;
-        if(p < 5) coords[i][mid] = 8;
-        else if (p < 9) coords[i][mid] = 16;
-        else coords[i][mid] = 24;
+        if(p < 4) coords[i][mid] = 8;
+        else if (p < 8) coords[i][mid] = 16;
+        else if (p < 9) coords[i][mid] = 24;
+        else coords[i][mid] = 32;
     }
     int maxheight = (rand()%(worldSize.y-1))+1;
     int minheight = (rand()%(maxheight))+1;
