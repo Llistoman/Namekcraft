@@ -38,6 +38,72 @@ void World::rec(int min, int max, int heightmin, int heightmax) {
 }
 
 void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
+    worldSize = wSize;
+    coords = vector<vector<float> > (worldSize.y,(vector<float>(worldSize.x,0)));
+    tex.loadFromFile("images/itemsRelevant.png",TEXTURE_PIXEL_FORMAT_RGBA);
+    tex.setWrapS(GL_CLAMP_TO_EDGE);
+    tex.setWrapT(GL_CLAMP_TO_EDGE);
+    tex.setMinFilter(GL_NEAREST);
+    tex.setMagFilter(GL_NEAREST);
+    generator = new mt19937;
+    generator->seed(sd);
+    SimplexNoise *simplex = new SimplexNoise(generator,100.f,0.f,1.0f);
+    //SimplexNoise *simplex2 = new SimplexNoise(generator,1000.f,0.f,0.4f);
+    //SimplexNoise *simplex3 = new SimplexNoise(generator, 100.0f, 0.0f, 1.0f);
+    int floor_level = 50;
+    for(int i = 0; i < floor_level; ++i) {
+        for(int j = 0; j < coords[0].size(); ++j) {
+            float nx = float(i)/float(worldSize.x);
+            float ny = float(j)/float(worldSize.y);
+            //coords[i][j] = simplex->fractal(10,1000.f,1.f,nx,ny)+simplex2->fractal(10,100.f,10.f,nx,ny);
+            coords[i][j] = simplex->noise(1000*nx,1000*ny);
+        }
+    }
+   for(int i = worldSize.y-1; i >= 0; --i) {
+        for(int j = 0; j < worldSize.x; ++j) {
+            cout << coords[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void World::prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program) {
+    blockSize = bSize;
+    tilesheetSize = tSize;
+    glm::vec2 tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+    glm::vec2 halfTexel = glm::vec2(0.5f / tex.width(), 0.5f / tex.height());
+
+    //geom -> position on screen
+    glm::vec2 geom[2];
+    //texCoords -> position on spreadsheet
+    glm::vec2 texCoords[2];
+
+    tilemap = vector<vector<TexturedQuad *> >(worldSize.y,vector<TexturedQuad *>(worldSize.x,NULL));
+    mat = vector<vector<int> >(worldSize.y,vector<int>(worldSize.x,0));
+    int tile;
+
+    for(int i = 0; i < worldSize.y; ++i) {
+        for(int j = 0; j < worldSize.x; ++j) {
+            if(coords[i][j] < 0.4) tile = 0; //empty
+            else if (coords[i][j] < 0.6 and coords[i][j] >= 0.4) tile = 8;
+            else if (coords[i][j] < 0.8 and coords[i][j] >= 0.6) tile = 16;
+            else if (coords[i][j] < 0.9 and coords[i][j] >= 0.8) tile = 24;
+            else tile = 32;
+            if(tile != 0) {
+                geom[0] = glm::vec2(j*blockSize.x, (worldSize.y - i - 1)*blockSize.y);
+                geom[1] = glm::vec2(geom[0].x + blockSize.x, geom[0].y + blockSize.y);
+                texCoords[0] = glm::vec2(float((tile-1)%8) / tilesheetSize.x, float((tile-1)/8) / tilesheetSize.y);
+                texCoords[1] = texCoords[0] + tileTexSize;
+                texCoords[1] -= halfTexel;
+                tilemap[i][j] = TexturedQuad::createTexturedQuad(geom,texCoords,program);
+            }
+            mat[i][j] = tile;
+        }
+    }
+}
+
+/*void World::prepareWorld2(int sd, const glm::ivec2 &wSize) {
 
     worldSize = wSize;
     coords = vector<vector<int> > (worldSize.y,(vector<int>(worldSize.x,0)));
@@ -66,16 +132,16 @@ void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
     rec(0,mid,minheight,y);
 
     //DEBUG
-    /*for(int i = worldSize.y-1; i >= 0; --i) {
+    for(int i = worldSize.y-1; i >= 0; --i) {
         for(int j = 0; j < worldSize.x; ++j) {
             cout << coords[i][j] << " ";
         }
         cout << endl;
     }
-    cout << endl;*/
+    cout << endl;
 }
 
-void World::prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program) {
+void World::prepareTexQuads2(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program) {
     blockSize = bSize;
     tilesheetSize = tSize;
     glm::vec2 tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
@@ -101,7 +167,7 @@ void World::prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, Sh
             }
         }
     }
-}
+}*/
 
 void World::render(glm::ivec2 &pos, glm::ivec2 &screen) {
 
@@ -152,7 +218,7 @@ bool World::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) con
 
     for(int y=y0; y<=y1; y++)
     {
-        if(coords[worldSize.y -1 - y][x] != 0)
+        if(mat[worldSize.y -1 - y][x] != 0)
             return true;
     }
 
@@ -169,7 +235,7 @@ bool World::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) co
     y1 = (pos.y + size.y - 1) / blockSize.y;
     for(int y=y0; y<=y1; y++)
     {
-        if(coords[worldSize.y -1 - y][x] != 0)
+        if(mat[worldSize.y -1 - y][x] != 0)
             return true;
     }
 
@@ -185,7 +251,7 @@ bool World::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int
     y = (pos.y + size.y - 1) / blockSize.y;
     for(int x=x0; x<=x1; x++)
     {
-        if(coords[worldSize.y -1 - y][x] != 0)
+        if(mat[worldSize.y -1 - y][x] != 0)
         {
             if(*posY - blockSize.y * y + size.y <= 4)
             {
@@ -207,7 +273,7 @@ bool World::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *
     y = (pos.y + size.y - 1) / blockSize.y;
     for(int x=x0; x<=x1; x++)
     {
-        if(coords[worldSize.y -1 - y][x] != 0)
+        if(mat[worldSize.y -1 - y][x] != 0)
         {
             if(*posY - blockSize.y * y + size.y <= 4)
             {

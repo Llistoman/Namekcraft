@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
+#include <time.h>
 #include "Scene.h"
 #include "Game.h"
 
@@ -50,7 +51,7 @@ void Scene::initbackground() {
 void Scene::init()
 {
 	initShaders();
-    world = World::createWorld(1,glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),texProgram);
+    world = World::createWorld(int(time(NULL)),glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),texProgram);
     initbackground();
     player = new Player();
     player->init(glm::ivec2(0, 0),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);

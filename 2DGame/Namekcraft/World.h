@@ -10,6 +10,7 @@
 #include "Texture.h"
 #include "TexturedQuad.h"
 #include "ShaderProgram.h"
+#include "SimplexNoise.h"
 
 class World
 {
@@ -41,10 +42,12 @@ private:
 
 private:
 
+    mt19937 *generator;
     glm::ivec2 blockSize;
     glm::ivec2 worldSize;
     glm::ivec2 tilesheetSize;
-    vector<vector<int> > coords;
+    vector<vector<int> > mat;
+    vector<vector<float> > coords;
     vector<vector<TexturedQuad *> > tilemap;
     Texture tex;
 
