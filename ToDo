@@ -1,0 +1,15 @@
+BUGS
+
+COLLISIONS IN WORLD
+-collision up
+-fix the rest of the collisions
+
+WORLD
+-something is wrong with coordinates as a whole
+	-in update
+	-in render maybe
+	-in creation maybe
+
+SCENE
+-its a mess, needs to be clearer
+-backgrounds are poorly done
