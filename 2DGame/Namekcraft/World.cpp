@@ -1,4 +1,5 @@
 #include "World.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -37,6 +38,24 @@ void World::rec(int min, int max, int heightmin, int heightmax) {
     }
 }
 
+void World::createBlock(int i, int j, int tile) {
+    glm::vec2 tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+    glm::vec2 halfTexel = glm::vec2(0.5f / tex.width(), 0.5f / tex.height());
+
+    //geom -> position on screen
+    glm::vec2 geom[2];
+    //texCoords -> position on spreadsheet
+    glm::vec2 texCoords[2];
+
+    geom[0] = glm::vec2(j*blockSize.x, (worldSize.y - i - 1)*blockSize.y);
+    geom[1] = glm::vec2(geom[0].x + blockSize.x, geom[0].y + blockSize.y);
+    texCoords[0] = glm::vec2(float((tile-1)%8) / tilesheetSize.x, float((tile-1)/8) / tilesheetSize.y);
+    texCoords[1] = texCoords[0] + tileTexSize;
+    texCoords[1] -= halfTexel;
+    tilemap[i][j] = TexturedQuad::createTexturedQuad(geom,texCoords,shader);
+    mat[i][j] = tile;
+}
+
 void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
     worldSize = wSize;
     coords = vector<vector<float> > (worldSize.y,(vector<float>(worldSize.x,0)));
@@ -59,25 +78,19 @@ void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
             coords[i][j] = simplex->noise(1000*nx,1000*ny);
         }
     }
-   for(int i = worldSize.y-1; i >= 0; --i) {
+   /*for(int i = worldSize.y-1; i >= 0; --i) {
         for(int j = 0; j < worldSize.x; ++j) {
             cout << coords[i][j] << " ";
         }
         cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
 }
 
 void World::prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program) {
     blockSize = bSize;
     tilesheetSize = tSize;
-    glm::vec2 tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
-    glm::vec2 halfTexel = glm::vec2(0.5f / tex.width(), 0.5f / tex.height());
-
-    //geom -> position on screen
-    glm::vec2 geom[2];
-    //texCoords -> position on spreadsheet
-    glm::vec2 texCoords[2];
+    shader = program;
 
     tilemap = vector<vector<TexturedQuad *> >(worldSize.y,vector<TexturedQuad *>(worldSize.x,NULL));
     mat = vector<vector<int> >(worldSize.y,vector<int>(worldSize.x,0));
@@ -90,15 +103,7 @@ void World::prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, Sh
             else if (coords[i][j] < 0.8 and coords[i][j] >= 0.6) tile = 16;
             else if (coords[i][j] < 0.9 and coords[i][j] >= 0.8) tile = 24;
             else tile = 32;
-            if(tile != 0) {
-                geom[0] = glm::vec2(j*blockSize.x, (worldSize.y - i - 1)*blockSize.y);
-                geom[1] = glm::vec2(geom[0].x + blockSize.x, geom[0].y + blockSize.y);
-                texCoords[0] = glm::vec2(float((tile-1)%8) / tilesheetSize.x, float((tile-1)/8) / tilesheetSize.y);
-                texCoords[1] = texCoords[0] + tileTexSize;
-                texCoords[1] -= halfTexel;
-                tilemap[i][j] = TexturedQuad::createTexturedQuad(geom,texCoords,program);
-            }
-            mat[i][j] = tile;
+            if(tile != 0) createBlock(i,j,tile);
         }
     }
 }
@@ -168,6 +173,34 @@ void World::prepareTexQuads2(const glm::ivec2 &bSize, const glm::ivec2 &tSize, S
         }
     }
 }*/
+void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
+    //TESTING
+    //THIS CREATES BLOCKS
+    if(Game::instance().leftClick()) {
+        pair<int,int> mPos = Game::instance().getMousePos();
+        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
+        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        cout << i << " " << j << endl;
+        if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
+            if(mat[(worldSize.y - i - 1)][j] == 0) createBlock((worldSize.y - i - 1),j,8);
+        }
+    }
+    //THIS DESTROYS BLOCKS
+    else if(Game::instance().rightClick()) {
+        pair<int,int> mPos = Game::instance().getMousePos();
+        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        cout << i << " " << j << endl;
+        if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
+            if(mat[(worldSize.y - i - 1)][j] != 0) {
+                delete tilemap[(worldSize.y - i - 1)][j];
+                tilemap[(worldSize.y - i - 1)][j] = NULL;
+                mat[(worldSize.y - i - 1)][j] = 0;
+            }
+        }
+    }
+}
 
 void World::render(glm::ivec2 &pos, glm::ivec2 &screen) {
 

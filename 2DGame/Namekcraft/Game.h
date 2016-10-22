@@ -39,12 +39,17 @@ public:
 	void mousePress(int button);
 	void mouseRelease(int button);
 	
+    std::pair<int,int> getMousePos() const;
+    bool leftClick() const;
+    bool rightClick() const;
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
 
 private:
 	bool bPlay;                       // Continue to play game?
 	Scene scene;                      // Scene to render
+    int mouse_x, mouse_y;             // Mouse position
+    bool mButton[2];                  // Mouse button
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
 

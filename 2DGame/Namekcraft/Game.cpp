@@ -47,14 +47,35 @@ void Game::specialKeyReleased(int key)
 
 void Game::mouseMove(int x, int y)
 {
+    mouse_x = x;
+    mouse_y = y;
 }
 
 void Game::mousePress(int button)
 {
+    if(button == 0) mButton[0] = true;
+    if(button == 2) mButton[1] = true;
 }
 
 void Game::mouseRelease(int button)
 {
+    if(button == 0) mButton[0] = false;
+    if(button == 2) mButton[1] = false;
+}
+
+std::pair<int,int> Game::getMousePos() const
+{
+    return std::make_pair(mouse_x,mouse_y);
+}
+
+bool Game::leftClick() const
+{
+    return mButton[0];
+}
+
+bool Game::rightClick() const
+{
+    return mButton[1];
 }
 
 bool Game::getKey(int key) const

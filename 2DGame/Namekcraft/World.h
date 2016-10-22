@@ -22,6 +22,7 @@ public:
     World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program);
     ~World();
 
+    void update(glm::ivec2 &pos,glm::ivec2 &screen);
     void render(glm::ivec2 &pos,glm::ivec2 &screen);
     void free();
 
@@ -36,6 +37,7 @@ public:
     bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 
 private:
+    void createBlock(int i, int j, int tile);
     void rec(int min, int max, int heightmin, int heightmax);
     void prepareWorld(int sd, const glm::ivec2 &wSize);
     void prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program);
@@ -50,6 +52,7 @@ private:
     vector<vector<float> > coords;
     vector<vector<TexturedQuad *> > tilemap;
     Texture tex;
+    ShaderProgram shader;
 
 };
 
