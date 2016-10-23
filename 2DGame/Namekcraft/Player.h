@@ -6,6 +6,7 @@
 #include "World.h"
 #include "TileMap.h"
 #include "Item.h"
+#include "Inventory.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -30,6 +31,7 @@ private:
     glm::ivec2 tileMapDispl, posPlayer, spriteSize;
 	int jumpAngle, startY;
   Item *item;
+  Inventory *inventory;
   float playerSpeed;
 	Texture spritesheet;
 	Sprite *sprite;

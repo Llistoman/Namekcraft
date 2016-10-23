@@ -18,6 +18,8 @@
 #define INIT_ITEM_X_TILES 4
 #define INIT_ITEM_Y_TILES 25
 
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
 
 enum PlayerAnims
 {
@@ -59,9 +61,14 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
     sprite->setPosition(glm::vec2(posPlayer.x,posPlayer.y));
     
   //Item
-   item = new Item();
-   item->init(position,glm::vec2(ITEM_SIZE_X ,ITEM_SIZE_Y), shaderProgram);
-   item->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32));
+  item = new Item();
+  item->init(position,glm::vec2(ITEM_SIZE_X ,ITEM_SIZE_Y), shaderProgram);
+  item->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32));
+   
+  //Inventory
+  inventory = new Inventory();
+  inventory->init(position, shaderProgram);
+  inventory->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32)); 
 	
 }
 
@@ -156,12 +163,18 @@ void Player::update(int deltaTime)
     if(dir==0)item->setPosition(glm::vec2(float(posPlayer.x - ITEM_DISTANCE), float(posPlayer.y)));
     else item->setPosition(glm::vec2(float(posPlayer.x + ITEM_DISTANCE), float(posPlayer.y)));
     item->update(deltaTime);
+    
+    //INVENTORY
+    inventory->setPosition(glm::vec2(float(posPlayer.x - SCREEN_WIDTH/2 + 48), float(posPlayer.y - SCREEN_HEIGHT/2 + 48)));
+    inventory->update(deltaTime);
 }
 
 void Player::render()
 {
 	sprite->render(dir);
   item->render(dir);
+  inventory->render();
+  
 }
 
 void Player::setWorld(World *w)
