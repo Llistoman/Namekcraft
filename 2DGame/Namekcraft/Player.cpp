@@ -10,6 +10,14 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
+#define ITEM_DISTANCE 18
+
+#define ITEM_SIZE_X 24
+#define ITEM_SIZE_Y 24
+
+#define INIT_ITEM_X_TILES 4
+#define INIT_ITEM_Y_TILES 25
+
 
 enum PlayerAnims
 {
@@ -49,6 +57,11 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
 	sprite->changeAnimation(0);
     posPlayer = position;
     sprite->setPosition(glm::vec2(posPlayer.x,posPlayer.y));
+    
+  //Item
+   item = new Item();
+   item->init(position,glm::vec2(ITEM_SIZE_X ,ITEM_SIZE_Y), shaderProgram);
+   item->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32));
 	
 }
 
@@ -138,11 +151,17 @@ void Player::update(int deltaTime)
 	}
 	
     sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
+    
+    //ITEM
+    if(dir==0)item->setPosition(glm::vec2(float(posPlayer.x - ITEM_DISTANCE), float(posPlayer.y)));
+    else item->setPosition(glm::vec2(float(posPlayer.x + ITEM_DISTANCE), float(posPlayer.y)));
+    item->update(deltaTime);
 }
 
 void Player::render()
 {
 	sprite->render(dir);
+  item->render(dir);
 }
 
 void Player::setWorld(World *w)

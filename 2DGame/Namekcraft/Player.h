@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "World.h"
 #include "TileMap.h"
+#include "Item.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -28,7 +29,7 @@ private:
     bool bJumping;
     glm::ivec2 tileMapDispl, posPlayer, spriteSize;
 	int jumpAngle, startY;
-
+  Item *item;
   float playerSpeed;
 	Texture spritesheet;
 	Sprite *sprite;
