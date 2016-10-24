@@ -106,7 +106,7 @@ void Inventory::setPosition(const glm::vec2 &pos)
 {
   posInventory = pos;
     for(int i = 0; i<INVENTORY_SIZE; ++i){
-      sprites[i]->setPosition(glm::vec2(float(tileMapDispl.x + posInventory.x + i * (INVENTORY_SIZE_X +2)), float(tileMapDispl.y + posInventory.y)));
+      sprites[i]->setPosition(glm::vec2(float(posInventory.x + i * (INVENTORY_SIZE_X +2)), float(posInventory.y)));
     }
   
   

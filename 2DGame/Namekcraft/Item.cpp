@@ -82,7 +82,7 @@ void Item::setTileMap(TileMap *tileMap)
 void Item::setPosition(const glm::vec2 &pos)
 {
 	posItem = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posItem.x), float(tileMapDispl.y + posItem.y)));
+	sprite->setPosition(glm::vec2(float(posItem.x), float(posItem.y)));
 }
 
 glm::ivec2 Item::getPos() {
