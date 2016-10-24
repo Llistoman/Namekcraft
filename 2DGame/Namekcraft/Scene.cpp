@@ -31,11 +31,11 @@ Scene::~Scene()
 
 void Scene::initbackground() {
     glm::ivec2 size = world->getWorldSize();
-    glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2((size.x-1)*BLOCK_X, (size.y-1)*BLOCK_Y)};
+    glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2(size.x*BLOCK_X, size.y*BLOCK_Y)};
     glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom2[2] = {glm::vec2(0.f, (size.y-1)*BLOCK_Y/2), glm::vec2((size.x-1)*BLOCK_X , (size.y-1)*BLOCK_Y)};
+    glm::vec2 geom2[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2), glm::vec2(size.x*BLOCK_X , size.y*BLOCK_Y)};
     glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2((size.x-1)*BLOCK_X/3, (size.y-1)*BLOCK_Y/3)};
+    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(size.x*BLOCK_X/3, size.y*BLOCK_Y/3)};
     glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
 
     background[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
@@ -51,13 +51,26 @@ void Scene::initbackground() {
 void Scene::init()
 {
 	initShaders();
+
+    //WORLD
+    int seed = time(NULL);
     int floorlvl = 50;
-    world = World::createWorld(int(time(NULL)),glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),floorlvl,texProgram);
+    glm::ivec2 worldSize = glm::ivec2(100,100);
+    glm::ivec2 blockSize = glm::ivec2(BLOCK_X,BLOCK_Y);
+    glm::ivec2 tilesheetSize = glm::ivec2(8,4);
+    world = World::createWorld(seed,worldSize,blockSize,tilesheetSize,floorlvl,texProgram);
+
+    //BACKGROUND
     initbackground();
+
+    //PLAYER
     player = new Player();
-    player->init(glm::ivec2(0, 0),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);
-    player->setPosition(glm::vec2(world->getWorldSize().x/2*BLOCK_X,(floorlvl-10)*BLOCK_Y));
+    glm::ivec2 playerPos = glm::ivec2(world->getWorldSize().x/2*BLOCK_X,(floorlvl-10)*BLOCK_Y);
+    glm::vec2 playerSize = glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y);
+    player->init(playerPos, playerSize, texProgram);
     player->setWorld(world);
+
+    //CAMERA
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
