@@ -17,9 +17,9 @@ class World
 
 public:
     // Tile maps can only be created inside an OpenGL context
-    static World *createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program);
+    static World *createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program);
 
-    World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program);
+    World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program);
     ~World();
 
     void update(glm::ivec2 &pos,glm::ivec2 &screen);
@@ -39,7 +39,7 @@ public:
 private:
     void createBlock(int i, int j, int tile);
     void rec(int min, int max, int heightmin, int heightmax);
-    void prepareWorld(int sd, const glm::ivec2 &wSize);
+    void prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl);
     void prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program);
 
 private:
@@ -48,6 +48,7 @@ private:
     glm::ivec2 blockSize;
     glm::ivec2 worldSize;
     glm::ivec2 tilesheetSize;
+    int floor_level;
     vector<vector<int> > mat;
     vector<vector<float> > coords;
     vector<vector<TexturedQuad *> > tilemap;

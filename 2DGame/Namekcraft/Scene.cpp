@@ -51,11 +51,12 @@ void Scene::initbackground() {
 void Scene::init()
 {
 	initShaders();
-    world = World::createWorld(int(time(NULL)),glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),texProgram);
+    int floorlvl = 50;
+    world = World::createWorld(int(time(NULL)),glm::ivec2(100,100),glm::ivec2(BLOCK_X,BLOCK_Y),glm::ivec2(8,4),floorlvl,texProgram);
     initbackground();
     player = new Player();
     player->init(glm::ivec2(0, 0),glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y), texProgram);
-    player->setPosition(glm::vec2(world->getWorldSize().y/2*BLOCK_X,0));
+    player->setPosition(glm::vec2(world->getWorldSize().x/2*BLOCK_X,(floorlvl-10)*BLOCK_Y));
     player->setWorld(world);
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;

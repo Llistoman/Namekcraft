@@ -3,13 +3,13 @@
 
 using namespace std;
 
-World *World::createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program) {
-    World *world = new World(sd,wSize,bSize,tSize,program);
+World *World::createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program) {
+    World *world = new World(sd,wSize,bSize,tSize,floorlvl,program);
     return world;
 }
 
-World::World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program) {
-    prepareWorld(sd,wSize);
+World::World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program) {
+    prepareWorld(sd,wSize,floorlvl);
     prepareTexQuads(bSize,tSize,program);
 }
 
@@ -56,8 +56,9 @@ void World::createBlock(int i, int j, int tile) {
     mat[i][j] = tile;
 }
 
-void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
+void World::prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl) {
     worldSize = wSize;
+    floor_level = floorlvl;
     coords = vector<vector<float> > (worldSize.y,(vector<float>(worldSize.x,0)));
     tex.loadFromFile("images/itemsRelevant.png",TEXTURE_PIXEL_FORMAT_RGBA);
     tex.setWrapS(GL_CLAMP_TO_EDGE);
@@ -69,7 +70,6 @@ void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
     SimplexNoise *simplex = new SimplexNoise(generator,100.f,0.f,1.0f);
     //SimplexNoise *simplex2 = new SimplexNoise(generator,1000.f,0.f,0.4f);
     //SimplexNoise *simplex3 = new SimplexNoise(generator, 100.0f, 0.0f, 1.0f);
-    int floor_level = 50;
     for(int i = 0; i < floor_level; ++i) {
         for(int j = 0; j < coords[0].size(); ++j) {
             float nx = float(i)/float(worldSize.x);
@@ -78,6 +78,7 @@ void World::prepareWorld(int sd, const glm::ivec2 &wSize) {
             coords[i][j] = simplex->noise(1000*nx,1000*ny);
         }
     }
+    //DEBUG
    /*for(int i = worldSize.y-1; i >= 0; --i) {
         for(int j = 0; j < worldSize.x; ++j) {
             cout << coords[i][j] << " ";
@@ -181,7 +182,6 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
         //ALGO D'AQUI NO ESTA BE (el +1 aquest)
         int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
         int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
-        cout << i << " " << j << endl;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
             if(mat[(worldSize.y - i - 1)][j] == 0) createBlock((worldSize.y - i - 1),j,8);
         }
@@ -191,7 +191,6 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
         pair<int,int> mPos = Game::instance().getMousePos();
         int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
         int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
-        cout << i << " " << j << endl;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
             if(mat[(worldSize.y - i - 1)][j] != 0) {
                 delete tilemap[(worldSize.y - i - 1)][j];
