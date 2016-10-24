@@ -3,8 +3,9 @@
 
 
 #include <glm/glm.hpp>
+#include <SFML/Audio.hpp>
 #include "ShaderProgram.h"
-#include "TileMap.h"
+#include "SoundManager.h"
 #include "World.h"
 #include "Player.h"
 #include "TexturedQuad.h"
@@ -37,10 +38,10 @@ private:
     //TileMap *map;
     World *world;
     Player *player;
+    SoundManager *manager;
     ShaderProgram texProgram;
     float currentTime;
     glm::mat4 projection;
-
 };
 
 

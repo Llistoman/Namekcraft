@@ -7,6 +7,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
+#include "SoundManager.h"
 #include "Texture.h"
 #include "TexturedQuad.h"
 #include "ShaderProgram.h"
@@ -17,9 +18,9 @@ class World
 
 public:
     // Tile maps can only be created inside an OpenGL context
-    static World *createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program);
+    static World *createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, SoundManager *man, ShaderProgram &program);
 
-    World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program);
+    World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, SoundManager *man, ShaderProgram &program);
     ~World();
 
     void update(glm::ivec2 &pos,glm::ivec2 &screen);
@@ -39,7 +40,7 @@ public:
 private:
     void createBlock(int i, int j, int tile);
     void rec(int min, int max, int heightmin, int heightmax);
-    void prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl);
+    void prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl, SoundManager *man);
     void prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program);
 
 private:
@@ -54,6 +55,7 @@ private:
     vector<vector<TexturedQuad *> > tilemap;
     Texture tex;
     ShaderProgram shader;
+    SoundManager *manager;
 
 };
 

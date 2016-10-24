@@ -171,7 +171,7 @@ void Player::update(int deltaTime)
 
 void Player::render()
 {
-	sprite->render(dir);
+    sprite->render(dir);
   item->render(dir);
   inventory->render();
   

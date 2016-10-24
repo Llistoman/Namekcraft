@@ -50,7 +50,12 @@ void Scene::initbackground() {
 
 void Scene::init()
 {
+    //SHADERS
 	initShaders();
+
+    //MUSIC
+    manager = new SoundManager();
+    manager->playMusic();
 
     //WORLD
     int seed = time(NULL);
@@ -58,7 +63,7 @@ void Scene::init()
     glm::ivec2 worldSize = glm::ivec2(100,100);
     glm::ivec2 blockSize = glm::ivec2(BLOCK_X,BLOCK_Y);
     glm::ivec2 tilesheetSize = glm::ivec2(8,4);
-    world = World::createWorld(seed,worldSize,blockSize,tilesheetSize,floorlvl,texProgram);
+    world = World::createWorld(seed,worldSize,blockSize,tilesheetSize,floorlvl,manager,texProgram);
 
     //BACKGROUND
     initbackground();
@@ -66,13 +71,16 @@ void Scene::init()
     //PLAYER
     player = new Player();
     glm::ivec2 playerPos = glm::ivec2(world->getWorldSize().x/2*BLOCK_X,(floorlvl-10)*BLOCK_Y);
+    //glm::ivec2 playerPos = glm::ivec2();
     glm::vec2 playerSize = glm::vec2(PLAYER_SIZE_X,PLAYER_SIZE_Y);
+
     player->init(playerPos, playerSize, texProgram);
     player->setWorld(world);
 
     //CAMERA
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+
 }
 
 void Scene::update(int deltaTime)

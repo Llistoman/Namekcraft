@@ -1,15 +1,17 @@
 #include "World.h"
 #include "Game.h"
 
+sf::SoundBuffer buffer;
+
 using namespace std;
 
-World *World::createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program) {
-    World *world = new World(sd,wSize,bSize,tSize,floorlvl,program);
+World *World::createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, SoundManager *man, ShaderProgram &program) {
+    World *world = new World(sd,wSize,bSize,tSize,floorlvl,man,program);
     return world;
 }
 
-World::World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, ShaderProgram &program) {
-    prepareWorld(sd,wSize,floorlvl);
+World::World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, SoundManager *man, ShaderProgram &program) {
+    prepareWorld(sd,wSize,floorlvl,man);
     prepareTexQuads(bSize,tSize,program);
 }
 
@@ -56,9 +58,10 @@ void World::createBlock(int i, int j, int tile) {
     mat[i][j] = tile;
 }
 
-void World::prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl) {
+void World::prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl,SoundManager *man) {
     worldSize = wSize;
     floor_level = floorlvl;
+    manager = man;
     coords = vector<vector<float> > (worldSize.y,(vector<float>(worldSize.x,0)));
     tex.loadFromFile("images/itemsRelevant.png",TEXTURE_PIXEL_FORMAT_RGBA);
     tex.setWrapS(GL_CLAMP_TO_EDGE);
@@ -175,24 +178,29 @@ void World::prepareTexQuads2(const glm::ivec2 &bSize, const glm::ivec2 &tSize, S
     }
 }*/
 void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
+
     //TESTING
     //THIS CREATES BLOCKS
     if(Game::instance().leftClick()) {
+
         pair<int,int> mPos = Game::instance().getMousePos();
         //ALGO D'AQUI NO ESTA BE (el +1 aquest)
         int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
         int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
-        if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
+        if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
+            manager->playCreate();
             if(mat[(worldSize.y - i - 1)][j] == 0) createBlock((worldSize.y - i - 1),j,8);
         }
     }
     //THIS DESTROYS BLOCKS
     else if(Game::instance().rightClick()) {
+
         pair<int,int> mPos = Game::instance().getMousePos();
         int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
         int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
             if(mat[(worldSize.y - i - 1)][j] != 0) {
+                manager->playDestroy();
                 delete tilemap[(worldSize.y - i - 1)][j];
                 tilemap[(worldSize.y - i - 1)][j] = NULL;
                 mat[(worldSize.y - i - 1)][j] = 0;
