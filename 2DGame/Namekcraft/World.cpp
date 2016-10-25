@@ -273,6 +273,7 @@ bool World::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) co
     x = (pos.x + size.x - 1) / blockSize.x;
     y0 = pos.y / blockSize.y;
     y1 = (pos.y + size.y - 1) / blockSize.y;
+
     for(int y=y0; y<=y1; y++)
     {
         if(mat[worldSize.y -1 - y][x] != 0)
@@ -289,11 +290,17 @@ bool World::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int
     x0 = pos.x / blockSize.x;
     x1 = (pos.x + size.x - 1) / blockSize.x;
     y = (pos.y + size.y - 1) / blockSize.y;
+
+    /*cout << "Y+ " << (pos.y + size.y + 2) / blockSize.y << endl;
+    cout << "Y " << (pos.y + size.y) / blockSize.y << endl;
+    cout << "Y- " << (pos.y + size.y - 1) / blockSize.y << endl;*/
+
+    //cout << pos.x << " " << pos.y << endl;
     for(int x=x0; x<=x1; x++)
     {
         if(mat[worldSize.y -1 - y][x] != 0)
         {
-            if(*posY - blockSize.y * y + size.y <= 4)
+            if(*posY - blockSize.y * y + size.y <= 5)
             {
                 *posY = blockSize.y * y - size.y;
                 return true;
@@ -308,14 +315,17 @@ bool World::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *
 {
     int x0, x1, y;
 
+
     x0 = pos.x / blockSize.x;
     x1 = (pos.x + size.x - 1) / blockSize.x;
     y = (pos.y + size.y - 1) / blockSize.y;
+    cout << pos.x << " " << pos.y << endl;
+
     for(int x=x0; x<=x1; x++)
     {
-        if(mat[worldSize.y -1 - y][x] != 0)
+        if(mat[worldSize.y - y][x] != 0)
         {
-            if(*posY - blockSize.y * y + size.y <= 4)
+            if(*posY - blockSize.y * y + size.y > 5)
             {
                 *posY = blockSize.y * y - size.y;
                 return true;
