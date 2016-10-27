@@ -1,12 +1,10 @@
-#ifndef _SCENE_INCLUDE
-#define _SCENE_INCLUDE
+#ifndef _SCENE_MENU_INCLUDE
+#define _SCENE_MENU_INCLUDE
 
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "SoundManager.h"
-#include "World.h"
-#include "Player.h"
 #include "TexturedQuad.h"
 #include "Quad.h"
 
@@ -15,14 +13,13 @@
 // It is responsible for updating and render them.
 
 
-class Scene
+class SceneMenu
 {
 
 public:
-	Scene();
-	~Scene();
+    SceneMenu();
+    ~SceneMenu();
 
-    void initbackground();
 	void init();
 	void update(int deltaTime);
 	void render();
@@ -31,12 +28,12 @@ private:
 	void initShaders();
 
 private:
-    Quad *quad;
-    Texture texs[3]; //vec de textures
-    TexturedQuad *background[3];
-    //TileMap *map;
-    World *world;
-    Player *player;
+    bool menu, cred, instructions;
+    Texture credits;
+    Texture inst;
+    Texture texs[6]; //vec de textures opcions
+    TexturedQuad *screen;
+    TexturedQuad *options[3];
     SoundManager *manager;
     ShaderProgram texProgram;
     float currentTime;
@@ -44,5 +41,5 @@ private:
 };
 
 
-#endif // _SCENE_INCLUDE
+#endif // _SCENE_MENU_INCLUDE
 

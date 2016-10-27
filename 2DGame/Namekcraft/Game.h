@@ -1,7 +1,7 @@
 #ifndef _GAME_INCLUDE
 #define _GAME_INCLUDE
 
-
+#include "SceneMenu.h"
 #include "Scene.h"
 
 #define SCREEN_WIDTH 640
@@ -28,7 +28,8 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
-	
+    void switchScene();
+
 	// Input callback methods
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -43,14 +44,18 @@ public:
     bool rightClick() const;
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
+    bool menuState() const;
+    bool sceneState() const;
 
 private:
+    bool state;
 	bool bPlay;                       // Continue to play game?
+    SceneMenu menu;
 	Scene scene;                      // Scene to render
     int mouse_x, mouse_y;             // Mouse position
     bool mButton[2];                  // Mouse button
 	bool keys[256], specialKeys[256]; // Store key states so that 
-	                                  // we can have access at any time
+                                      // we can have access at any time
 
 };
 
