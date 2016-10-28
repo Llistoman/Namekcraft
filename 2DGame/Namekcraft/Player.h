@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "Item.h"
 #include "Inventory.h"
+#include "Text.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -23,10 +24,15 @@ public:
     int dir;
     void setWorld(World *w);
 	void setPosition(const glm::vec2 &pos);
+  void heal(int h);
+  void damage(int d);
+  void dead();
     glm::ivec2 getPosRender();
     glm::ivec2 getSpSize();
 	
 private:
+  int hp;
+  bool death;
     bool bJumping;
     glm::ivec2 tileMapDispl, posPlayer, spriteSize;
 	int jumpAngle, startY;
@@ -36,6 +42,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
     World *world;
+  Text topText;
 
 };
 
