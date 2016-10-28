@@ -3,6 +3,8 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Text.h"
+
 
 class Inventory
 {
@@ -18,10 +20,12 @@ public:
   
 private:
     glm::ivec2 tileMapDispl, posInventory, spriteSize;
-    glm::vec2 spSize;
-
+    glm::vec2 spSize, spSize2;
+  vector<glm::vec2> mapItems;
   Texture spritesheet;
+  Texture spritesheet2;
   vector<Sprite*> sprites;
+  vector<Sprite*> inventoryItems;
   TileMap *map;
 };
 

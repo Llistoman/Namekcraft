@@ -11,22 +11,41 @@
 #define INVENTORY_SIZE_X 36
 #define INVENTORY_SIZE_Y 36
 
+#define ITEM_INVENTORY_SIZE_X 24
+
 enum ItemAnims
 {
   NORMAL, SELECTED
 };
 
+   vector<int> stocks (10,0);
+   vector<Text> stocksText (10);
+   vector<Text> itemsText (10);
 
-
+   
 void Inventory::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
     spriteSize = glm::ivec2(INVENTORY_SIZE_X,INVENTORY_SIZE_Y);
     spSize = glm::vec2(INVENTORY_SIZE_X,INVENTORY_SIZE_Y);
+    spSize2 = glm::vec2(ITEM_INVENTORY_SIZE_X,ITEM_INVENTORY_SIZE_X);
     spritesheet.loadFromFile("images/inventory_Block.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    spritesheet2.loadFromFile("images/itemsRelevant.png", TEXTURE_PIXEL_FORMAT_RGBA);
     //ALL OF THIS DEPENDS ON SPRITESHEET, MUST BE HARDCODED
     
     tileMapDispl = tileMapPos;
 
+    glm::vec2 mapItems[10] = { 
+     glm::vec2(0., 0.), //Pico
+     glm::vec2(0.125, 0.), //Espasa
+     glm::vec2(0.625, 0.), //Dirt
+     glm::vec2(0.625, 0.25), //Roca
+     glm::vec2(0.25, 0.), //Fusta
+     glm::vec2(0.25, 0.25), //Namekita
+     glm::vec2(0.25, 0.5), //Sulfato Cosmico
+     glm::vec2(0.625, 0.5), //Limonita
+     glm::vec2(0.375, 0.), //Potion
+     glm::vec2(0.375, 0.5)};  //Mongetes Magiques
+    
     for(int i = 0; i<INVENTORY_SIZE; ++i){
       sprites.push_back(Sprite::createSprite(spSize, glm::vec2(0.25, 1.), &spritesheet, &shaderProgram));
       //sprites[i] = Sprite::createSprite(spSize, glm::vec2(1., 1.), &spritesheet, &shaderProgram);
@@ -40,6 +59,21 @@ void Inventory::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
       
       sprites[i]->changeAnimation(NORMAL);
       sprites[i]->setPosition(glm::vec2(float(tileMapDispl.x + posInventory.x), float(tileMapDispl.y + posInventory.y)));
+      
+      //Stocks
+      //Carga Fonts
+      if(!stocksText[i].init("fonts/Andy")) cout << "Could not load font!!!" << endl;
+      if(!itemsText[i].init("fonts/Andy")) cout << "Could not load font!!!" << endl;
+      stocks[0] = 1;  //Inventari inicial
+      stocks[1] = 1;
+      
+      //Sprites items
+      
+      inventoryItems.push_back(Sprite::createSprite(spSize2, glm::vec2(0.125, 0.25), &spritesheet2, &shaderProgram));
+      inventoryItems[i]->setNumberAnimations(1);
+      inventoryItems[i]->setAnimationSpeed(NORMAL, 8);
+      inventoryItems[i]->addKeyframe(NORMAL, mapItems[i]);
+      inventoryItems[i]->changeAnimation(NORMAL); 
     }
 
 }
@@ -94,7 +128,15 @@ void Inventory::render()
 {
   for(int i = 0; i<INVENTORY_SIZE; ++i){
     sprites[i]->render(0);
+    inventoryItems[i]->render(0);
   }
+  for(int i = 0; i<INVENTORY_SIZE; ++i){ //En un mateix bucle hi havia bugs de renderitzat
+    stocksText[i].render(to_string(stocks[i]), glm::vec2(float((INVENTORY_SIZE_X +2)*(1+i) -18), float(INVENTORY_SIZE_Y*1.3)), 14, glm::vec4(1, 1, 1, 1));
+    if(i!=9)itemsText[i].render(to_string(i+1), glm::vec2(float((INVENTORY_SIZE_X +2)*(1+i)) +2, float(INVENTORY_SIZE_Y-6)), 14, glm::vec4(1, 1, 1, 1));
+    else itemsText[i].render(to_string(0), glm::vec2(float((INVENTORY_SIZE_X +2)*(1+i)) +2, float(INVENTORY_SIZE_Y-6)), 14, glm::vec4(1, 1, 1, 1));
+  }
+  
+  
 }
 
 void Inventory::setTileMap(TileMap *tileMap)
@@ -107,6 +149,8 @@ void Inventory::setPosition(const glm::vec2 &pos)
   posInventory = pos;
     for(int i = 0; i<INVENTORY_SIZE; ++i){
       sprites[i]->setPosition(glm::vec2(float(posInventory.x + i * (INVENTORY_SIZE_X +2)), float(posInventory.y)));
+      inventoryItems[i]->setPosition(glm::vec2(float(posInventory.x + i * (INVENTORY_SIZE_X +2) +6), float(posInventory.y +2)+6));
+      
     }
   
   
