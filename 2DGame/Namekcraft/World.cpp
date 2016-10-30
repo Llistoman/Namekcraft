@@ -319,7 +319,6 @@ bool World::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *
     x0 = pos.x / blockSize.x;
     x1 = (pos.x + size.x - 1) / blockSize.x;
     y = (pos.y + size.y - 1) / blockSize.y;
-    cout << pos.x << " " << pos.y << endl;
 
     for(int x=x0; x<=x1; x++)
     {

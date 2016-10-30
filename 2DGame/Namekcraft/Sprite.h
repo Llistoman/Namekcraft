@@ -44,6 +44,7 @@ private:
 	int currentAnimation, currentKeyframe;
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
+    glm::vec2 size;
 	vector<AnimKeyframes> animations;
 
 };

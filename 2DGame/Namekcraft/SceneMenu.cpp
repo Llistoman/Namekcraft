@@ -26,13 +26,13 @@ void SceneMenu::init()
     //manager->playMusic();
 
     //OPTIONS
-    glm::vec2 geom1[2] = {glm::vec2(SCREEN_WIDTH/3.f, SCREEN_HEIGHT/4.f), glm::vec2(2*SCREEN_WIDTH/3.f, 2*SCREEN_HEIGHT/4.f)};
+    glm::vec2 geom1[2] = {glm::vec2(SCREEN_WIDTH/3.f, 4*SCREEN_HEIGHT/8.f), glm::vec2(2*SCREEN_WIDTH/3.f, 5*SCREEN_HEIGHT/8.f)};
     glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
     options[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
-    glm::vec2 geom2[2] = {glm::vec2(SCREEN_WIDTH/3.f, 2*SCREEN_HEIGHT/4.f), glm::vec2(2*SCREEN_WIDTH/3.f, 3*SCREEN_HEIGHT/4.f)};
+    glm::vec2 geom2[2] = {glm::vec2(SCREEN_WIDTH/3.f, 5*SCREEN_HEIGHT/8.f), glm::vec2(2*SCREEN_WIDTH/3.f, 6*SCREEN_HEIGHT/8.f)};
     glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
     options[1] = TexturedQuad::createTexturedQuad(geom2, texCoords2, texProgram);
-    glm::vec2 geom3[2] = {glm::vec2(SCREEN_WIDTH/3.f, 3*SCREEN_HEIGHT/4.f), glm::vec2(2*SCREEN_WIDTH/3.f, 4*SCREEN_HEIGHT/4.f)};
+    glm::vec2 geom3[2] = {glm::vec2(SCREEN_WIDTH/3.f, 6*SCREEN_HEIGHT/8.f), glm::vec2(2*SCREEN_WIDTH/3.f, 7*SCREEN_HEIGHT/8.f)};
     glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
     options[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
 
@@ -73,17 +73,17 @@ void SceneMenu::update(int deltaTime)
         }
     }
     else if(pos.first >= SCREEN_WIDTH/3.f and pos.first <= 2*SCREEN_WIDTH/3.f) {
-        if(pos.second >=  SCREEN_HEIGHT/4.f and pos.second <= 2*SCREEN_HEIGHT/4.f) {
+        if(pos.second >=  4*SCREEN_HEIGHT/8.f and pos.second <= 5*SCREEN_HEIGHT/8.f) {
             if(Game::instance().leftClick()) Game::instance().switchScene();
         }
-        if(pos.second >=  2*SCREEN_HEIGHT/4.f and pos.second <= 3*SCREEN_HEIGHT/4.f) {
+        if(pos.second >= 5*SCREEN_HEIGHT/8.f and pos.second <= 6*SCREEN_HEIGHT/8.f) {
             if(Game::instance().leftClick()) {
                 menu = false;
                 instructions = true;
                 cred = false;
             }
         }
-        if(pos.second >=  3*SCREEN_HEIGHT/4.f and pos.second <= 4*SCREEN_HEIGHT/4.f) {
+        if(pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
             if(Game::instance().leftClick()) {
                 menu = false;
                 instructions = false;
@@ -113,11 +113,11 @@ void SceneMenu::render()
         screen->render(credits);
     }
     else if(pos.first >= SCREEN_WIDTH/3.f and pos.first <= 2*SCREEN_WIDTH/3.f) {
-        if(pos.second >=  SCREEN_HEIGHT/4.f and pos.second <= 2*SCREEN_HEIGHT/4.f) options[0]->render(texs[1]);
+        if(pos.second >=  4*SCREEN_HEIGHT/8.f and pos.second <= 5*SCREEN_HEIGHT/8.f) options[0]->render(texs[1]);
         else options[0]->render(texs[0]);
-        if(pos.second >=  2*SCREEN_HEIGHT/4.f and pos.second <= 3*SCREEN_HEIGHT/4.f) options[1]->render(texs[3]);
+        if(pos.second >=  5*SCREEN_HEIGHT/8.f and pos.second <= 6*SCREEN_HEIGHT/8.f) options[1]->render(texs[3]);
         else options[1]->render(texs[2]);
-        if(pos.second >=  3*SCREEN_HEIGHT/4.f and pos.second <= 4*SCREEN_HEIGHT/4.f) options[2]->render(texs[5]);
+        if(pos.second >=  6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) options[2]->render(texs[5]);
         else options[2]->render(texs[4]);
     }
     else {

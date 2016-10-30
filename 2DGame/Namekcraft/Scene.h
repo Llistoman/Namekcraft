@@ -7,6 +7,7 @@
 #include "SoundManager.h"
 #include "World.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "TexturedQuad.h"
 #include "Quad.h"
 
@@ -37,6 +38,7 @@ private:
     //TileMap *map;
     World *world;
     Player *player;
+    Enemy *enem;
     SoundManager *manager;
     ShaderProgram texProgram;
     float currentTime;
