@@ -80,6 +80,11 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
     inventory = new Inventory();
     inventory->init(position, shaderProgram);
     inventory->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32));
+    
+    //Inventory
+    craft = new Craft();
+    craft->init(position, shaderProgram);
+    craft->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32));
 
 }
 
@@ -89,11 +94,6 @@ void Player::update(int deltaTime)
     sprite->update(deltaTime);
 
     if(!death){ //Si estem morts no tenim control
-      //Borrar a la versio bona
-      if(Game::instance().getKey('d')){
-        damage(1);
-      }
-      
       
       //RUN OR NOT
       if(Game::instance().getKey('z')){
@@ -187,13 +187,18 @@ void Player::update(int deltaTime)
     //INVENTORY
     inventory->setPosition(glm::vec2(float(posPlayer.x - SCREEN_WIDTH/2 + 48), float(posPlayer.y - SCREEN_HEIGHT/2 + 48)));
     inventory->update(deltaTime);
+    
+    //Craft
+    craft->setPosition(glm::vec2(float(posPlayer.x - SCREEN_WIDTH/2 + 48), float(posPlayer.y - SCREEN_HEIGHT/2 + 48)));
+    craft->update(deltaTime);
 }
 
 void Player::render()
 {
     sprite->render(dir);
     item->render(dir);
-    inventory->render();
+    //inventory->render();
+    craft->render();
     topText.render( to_string(hp) + "/" + to_string(MAX_HP), glm::vec2(float(SCREEN_WIDTH/2 -40), float(SCREEN_HEIGHT/2 -38)), HP_SIZE, glm::vec4(1, 1, 1, 1));
 
 }

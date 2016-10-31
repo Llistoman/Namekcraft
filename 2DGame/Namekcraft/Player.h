@@ -6,6 +6,7 @@
 #include "World.h"
 #include "Item.h"
 #include "Inventory.h"
+#include "Craft.h"
 #include "Text.h"
 
 
@@ -37,6 +38,7 @@ private:
 	int jumpAngle, startY;
     Item *item;
     Inventory *inventory;
+    Craft *craft;
     float playerSpeed;
 	Texture spritesheet;
 	Sprite *sprite;

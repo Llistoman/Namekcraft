@@ -13,6 +13,8 @@
 
 #define ITEM_INVENTORY_SIZE_X 24
 
+#define MAX_STOCK 99
+
 enum ItemAnims
 {
   NORMAL, SELECTED
@@ -154,6 +156,24 @@ void Inventory::setPosition(const glm::vec2 &pos)
     }
   
   
+}
+
+void Inventory::decS(int x, int i)
+{
+  if(i >= 0 and INVENTORY_SIZE > i){  //el indice debe estar dentro de rango
+    stocks[i] -= x;
+    if(0 > stocks[i]){ 
+      stocks[i] = 0;
+    }
+  }
+}
+
+void Inventory::incS(int x, int i)
+{
+  if(i >= 0 and INVENTORY_SIZE > i){//el indice debe estar dentro de rango
+    stocks[i] += x;
+    if(stocks[i] > MAX_STOCK) stocks[i] = MAX_STOCK;
+  }
 }
 
 glm::ivec2 Inventory::getPos() {
