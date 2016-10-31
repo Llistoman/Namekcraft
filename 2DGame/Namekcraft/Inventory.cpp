@@ -85,6 +85,13 @@ void Inventory::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Inventory::update(int deltaTime)
 {
+  if(Game::instance().getKey('g'))//MODO DIOS tots els items a tope
+  {
+    for(int i = 0; i<INVENTORY_SIZE; ++i){
+      stocks[i] = 50;
+    }
+  }
+  
   if(Game::instance().getKey('0'))
   {
     sprites[INVENTORY_SIZE-1]->changeAnimation(SELECTED);
