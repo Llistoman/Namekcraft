@@ -8,8 +8,9 @@
 
 enum ItemAnims
 {
-	PICO, SWORD, DIRT, ROCK, NONE
+	PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, SENZU,  NONE
 };
+
 
 
 void Item::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderProgram &shaderProgram)
@@ -20,7 +21,7 @@ void Item::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderPro
     //ALL OF THIS DEPENDS ON SPRITESHEET, MUST BE HARDCODED
 
     sprite = Sprite::createSprite(spSize, glm::vec2(0.125, 0.25), &spritesheet, &shaderProgram);
-    sprite->setNumberAnimations(5);
+    sprite->setNumberAnimations(11);
 	
     sprite->setAnimationSpeed(PICO, 8);
     sprite->addKeyframe(PICO, glm::vec2(0.f, 0.f));
@@ -33,6 +34,24 @@ void Item::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderPro
     
     sprite->setAnimationSpeed(ROCK, 8);
     sprite->addKeyframe(ROCK, glm::vec2(0.625f, 0.25f));
+    
+    sprite->setAnimationSpeed(WOOD, 8);
+    sprite->addKeyframe(WOOD, glm::vec2(0.25, 0.));
+    
+    sprite->setAnimationSpeed(NAMEKITA, 8);
+    sprite->addKeyframe(NAMEKITA, glm::vec2(0.25, 0.25));
+    
+    sprite->setAnimationSpeed(COSMIC, 8);
+    sprite->addKeyframe(COSMIC, glm::vec2(0.25, 0.5));
+    
+    sprite->setAnimationSpeed(LIMONITA, 8);
+    sprite->addKeyframe(LIMONITA, glm::vec2(0.625, 0.5));
+    
+    sprite->setAnimationSpeed(POTION, 8);
+    sprite->addKeyframe(POTION, glm::vec2(0.375, 0.));
+    
+    sprite->setAnimationSpeed(SENZU, 8);
+    sprite->addKeyframe(SENZU, glm::vec2(0.375, 0.5));
     
     sprite->setAnimationSpeed(NONE, 8);
     sprite->addKeyframe(NONE, glm::vec2(0.f, 0.75f));
@@ -63,9 +82,29 @@ void Item::update(int deltaTime)
   {
     sprite->changeAnimation(ROCK);
   }
+    else if(Game::instance().getKey('5'))
+  {
+    sprite->changeAnimation(WOOD);
+  }
+    else if(Game::instance().getKey('6'))
+  {
+    sprite->changeAnimation(NAMEKITA);
+  }
+    else if(Game::instance().getKey('7'))
+  {
+    sprite->changeAnimation(COSMIC);
+  }
+    else if(Game::instance().getKey('8'))
+  {
+    sprite->changeAnimation(LIMONITA);
+  }
+    else if(Game::instance().getKey('9'))
+  {
+    sprite->changeAnimation(POTION);
+  }
     else if(Game::instance().getKey('0'))
   {
-    sprite->changeAnimation(NONE);
+    sprite->changeAnimation(SENZU);
   }
   
   if(Game::instance().leftClick()) {

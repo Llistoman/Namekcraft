@@ -13,9 +13,14 @@
 
 #define ITEM_CRAFT_SIZE_X 24
 
-enum ItemAnims
+enum CraftAnims
 {
   NORMAL, SELECTED
+};
+
+enum ItemAnims
+{
+  PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, SENZU,  NONE
 };
 
    vector<int> qu (3,0);
@@ -71,10 +76,32 @@ void Craft::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
       //Sprites items
       
       craftItems.push_back(Sprite::createSprite(spSize2, glm::vec2(0.125, 0.25), &spritesheet2, &shaderProgram));
-      craftItems[i]->setNumberAnimations(1);
-      craftItems[i]->setAnimationSpeed(NORMAL, 8);
-      craftItems[i]->addKeyframe(NORMAL, glm::vec2(0.0, 0.75));
-      craftItems[i]->changeAnimation(NORMAL); 
+      craftItems[i]->setNumberAnimations(11);  
+      craftItems[i]->setAnimationSpeed(PICO, 8);
+      craftItems[i]->addKeyframe(PICO, glm::vec2(0.f, 0.f));
+      craftItems[i]->setAnimationSpeed(SWORD, 8);
+      craftItems[i]->addKeyframe(SWORD, glm::vec2(0.125f, 0.f));
+      craftItems[i]->setAnimationSpeed(DIRT, 8);
+      craftItems[i]->addKeyframe(DIRT, glm::vec2(0.625f, 0.f));
+      craftItems[i]->setAnimationSpeed(ROCK, 8);
+      craftItems[i]->addKeyframe(ROCK, glm::vec2(0.625f, 0.25f)); 
+      craftItems[i]->setAnimationSpeed(NONE, 8);
+      craftItems[i]->addKeyframe(NONE, glm::vec2(0.f, 0.75f));
+      craftItems[i]->setAnimationSpeed(WOOD, 8);
+      craftItems[i]->addKeyframe(WOOD, glm::vec2(0.25, 0.));
+      craftItems[i]->setAnimationSpeed(NAMEKITA, 8);
+      craftItems[i]->addKeyframe(NAMEKITA, glm::vec2(0.25, 0.25));    
+      craftItems[i]->setAnimationSpeed(COSMIC, 8);
+      craftItems[i]->addKeyframe(COSMIC, glm::vec2(0.25, 0.5));  
+      craftItems[i]->setAnimationSpeed(LIMONITA, 8);
+      craftItems[i]->addKeyframe(LIMONITA, glm::vec2(0.625, 0.5)); 
+      craftItems[i]->setAnimationSpeed(POTION, 8);
+      craftItems[i]->addKeyframe(POTION, glm::vec2(0.375, 0.)); 
+      craftItems[i]->setAnimationSpeed(SENZU, 8);
+      craftItems[i]->addKeyframe(SENZU, glm::vec2(0.375, 0.5));  
+      craftItems[i]->setAnimationSpeed(NONE, 8);
+      craftItems[i]->addKeyframe(NONE, glm::vec2(0.f, 0.75f));
+      craftItems[i]->changeAnimation(NONE); 
     }
     
     sprites.push_back(Sprite::createSprite(spSize, glm::vec2(0.25, 1.), &spritesheet, &shaderProgram));
@@ -128,11 +155,98 @@ void Craft::update(int deltaTime)
   if(craftPosition){
     sprites[1]->changeAnimation(SELECTED);
     sprites[0]->changeAnimation(NORMAL);
+    
+    //Update craftSprites
+    if(Game::instance().getKey('1'))
+    {
+      craftItems[1]->changeAnimation(PICO);
+    }
+    else if(Game::instance().getKey('2'))
+    {
+      craftItems[1]->changeAnimation(SWORD);
+    }
+      else if(Game::instance().getKey('3'))
+    {
+      craftItems[1]->changeAnimation(DIRT);
+    }
+      else if(Game::instance().getKey('4'))
+    {
+      craftItems[1]->changeAnimation(ROCK);
+    }
+      else if(Game::instance().getKey('5'))
+    {
+      craftItems[1]->changeAnimation(WOOD);
+    }
+      else if(Game::instance().getKey('6'))
+    {
+      craftItems[1]->changeAnimation(NAMEKITA);
+    }
+      else if(Game::instance().getKey('7'))
+    {
+      craftItems[1]->changeAnimation(COSMIC);
+    }
+      else if(Game::instance().getKey('8'))
+    {
+      craftItems[1]->changeAnimation(LIMONITA);
+    }
+      else if(Game::instance().getKey('9'))
+    {
+      craftItems[1]->changeAnimation(POTION);
+    }
+      else if(Game::instance().getKey('0'))
+    {
+      craftItems[1]->changeAnimation(SENZU);
+    }
   }
   else {
     sprites[0]->changeAnimation(SELECTED);
     sprites[1]->changeAnimation(NORMAL);
+    
+        //Update craftSprites
+    if(Game::instance().getKey('1'))
+    {
+      craftItems[0]->changeAnimation(PICO);
+    }
+    else if(Game::instance().getKey('2'))
+    {
+      craftItems[0]->changeAnimation(SWORD);
+    }
+      else if(Game::instance().getKey('3'))
+    {
+      craftItems[0]->changeAnimation(DIRT);
+    }
+      else if(Game::instance().getKey('4'))
+    {
+      craftItems[0]->changeAnimation(ROCK);
+    }
+      else if(Game::instance().getKey('5'))
+    {
+      craftItems[0]->changeAnimation(WOOD);
+    }
+      else if(Game::instance().getKey('6'))
+    {
+      craftItems[0]->changeAnimation(NAMEKITA);
+    }
+      else if(Game::instance().getKey('7'))
+    {
+      craftItems[0]->changeAnimation(COSMIC);
+    }
+      else if(Game::instance().getKey('8'))
+    {
+      craftItems[0]->changeAnimation(LIMONITA);
+    }
+      else if(Game::instance().getKey('9'))
+    {
+      craftItems[0]->changeAnimation(POTION);
+    }
+      else if(Game::instance().getKey('0'))
+    {
+      craftItems[0]->changeAnimation(SENZU);
+    }
   }
+  
+  
+  
 
     sprites[0]->update(deltaTime);
     sprites[1]->update(deltaTime);
