@@ -15,6 +15,7 @@ enum ItemAnims
 void Item::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderProgram &shaderProgram)
 {
     spriteSize = spSize;
+    action = false;
     spritesheet.loadFromFile("images/itemsRelevant.png", TEXTURE_PIXEL_FORMAT_RGBA);
     //ALL OF THIS DEPENDS ON SPRITESHEET, MUST BE HARDCODED
 
@@ -45,6 +46,7 @@ void Item::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderPro
 
 void Item::update(int deltaTime)
 {
+  currentTime += deltaTime;
   if(Game::instance().getKey('1'))
   {
     sprite->changeAnimation(PICO);
@@ -66,12 +68,23 @@ void Item::update(int deltaTime)
     sprite->changeAnimation(NONE);
   }
   
+  if(Game::instance().leftClick()) {
+    action = true;
+  }
+  else{
+    action = false;
+  }
+  
 	sprite->update(deltaTime);
 }
 
 void Item::render(int dir)
 {
-	sprite->render((dir+1)%2); //Direccio va de 0 a 1, vui que sigui la inversa del player
+  if(action){
+    float value = (sin(currentTime / 100.f) + 1.0f) * 20.0f;
+    sprite->render((dir+1)%2, value);
+  }
+	else sprite->render((dir+1)%2); //Direccio va de 0 a 1, vui que sigui la inversa del player
 }
 
 void Item::setTileMap(TileMap *tileMap)

@@ -24,8 +24,9 @@ public:
 private:
     glm::ivec2 tileMapDispl, posItem, spriteSize;
 	int jumpAngle, startY;
-
+  bool action;
   float itemSpeed;
+  float currentTime;
 	Texture spritesheet;
  	Sprite *sprite;
 	TileMap *map;

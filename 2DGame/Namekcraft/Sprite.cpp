@@ -54,7 +54,7 @@ void Sprite::render(int dir) const
 	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
   if(dir!= 0){
     modelview = glm::scale(modelview, glm::vec3(-1.0f, 1.0f, 1.0f));
-    modelview = glm::translate(modelview, glm::vec3(-size.x, 0.0f, 0.0f));
+    modelview = glm::translate(modelview, glm::vec3(-32.f, 0.0f, 0.0f));
   }
 	shaderProgram->setUniformMatrix4f("modelview", modelview);
 	shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
@@ -65,6 +65,26 @@ void Sprite::render(int dir) const
 	glEnableVertexAttribArray(texCoordLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDisable(GL_TEXTURE_2D);
+}
+
+void Sprite::render(int dir, float rotation) const
+{
+  glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
+  if(dir!= 0){
+    modelview = glm::scale(modelview, glm::vec3(-1.0f, 1.0f, 1.0f));
+    modelview = glm::translate(modelview, glm::vec3(-32.f, 0.0f, 0.0f));
+  }
+  modelview = glm::translate(modelview, glm::vec3(rotation*0.25, 0.0f, 0.0f));
+  modelview = glm::rotate(modelview, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+  shaderProgram->setUniformMatrix4f("modelview", modelview);
+  shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
+  glEnable(GL_TEXTURE_2D);
+  texture->use();
+  glBindVertexArray(vao);
+  glEnableVertexAttribArray(posLocation);
+  glEnableVertexAttribArray(texCoordLocation);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+  glDisable(GL_TEXTURE_2D);
 }
 
 void Sprite::free()

@@ -24,6 +24,7 @@ public:
 
 	void update(int deltaTime);
 	void render(int dir) const;
+  void render(int dir, float rotation) const;
 	void free();
 
 	void setNumberAnimations(int nAnimations);
