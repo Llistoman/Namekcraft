@@ -17,6 +17,8 @@ public:
   void setPosition(const glm::vec2 &pos);
   void incS(int x, int i);  
   void decS(int x, int i);
+  bool enoughS(int x,int i);
+  int getSelected();
     glm::ivec2 getPos();
     glm::ivec2 getSpSize();
   
@@ -24,6 +26,7 @@ private:
     glm::ivec2 tileMapDispl, posInventory, spriteSize;
     glm::vec2 spSize, spSize2;
   vector<glm::vec2> mapItems;
+  int selected;
   Texture spritesheet;
   Texture spritesheet2;
   vector<Sprite*> sprites;

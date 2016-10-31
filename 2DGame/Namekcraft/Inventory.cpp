@@ -106,6 +106,7 @@ void Inventory::update(int deltaTime)
   for(int i = 1; i<INVENTORY_SIZE; ++i){
     if(Game::instance().getKey(i + '0'))
     {
+      selected = i;
       sprites[i-1]->changeAnimation(SELECTED);
     }
     else if ((Game::instance().getKey('0') or
@@ -166,6 +167,18 @@ void Inventory::decS(int x, int i)
       stocks[i] = 0;
     }
   }
+}
+
+bool Inventory::enoughS(int x, int i)
+{
+  if(i >= 0 and INVENTORY_SIZE > i){  //retorna si tenim més de x del recurs i
+    return stocks[i] >= x;
+  }
+}
+
+int Inventory::getSelected()
+{
+  return selected;
 }
 
 void Inventory::incS(int x, int i)
