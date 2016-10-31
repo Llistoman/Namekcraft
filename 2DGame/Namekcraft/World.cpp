@@ -5,6 +5,11 @@ sf::SoundBuffer buffer;
 
 using namespace std;
 
+enum ItemAnims
+{
+  SENZU, PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, NONE //Ordre alterat
+};
+
 World *World::createWorld(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, SoundManager *man, ShaderProgram &program) {
     World *world = new World(sd,wSize,bSize,tSize,floorlvl,man,program);
     return world;
@@ -178,10 +183,9 @@ void World::prepareTexQuads2(const glm::ivec2 &bSize, const glm::ivec2 &tSize, S
     }
 }*/
 void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
-
     //TESTING
-    //THIS CREATES BLOCKS
-    if(Game::instance().leftClick()) {
+    //THIS CREATES DIRT BLOCKS
+    if(Game::instance().leftClick() and inventory->getSelected() == DIRT and inventory->enoughS(1,DIRT-1)) {
 
         pair<int,int> mPos = Game::instance().getMousePos();
         //ALGO D'AQUI NO ESTA BE (el +1 aquest)
@@ -189,17 +193,75 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
         int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
             manager->playCreate();
-            if(mat[(worldSize.y - i - 1)][j] == 0) createBlock((worldSize.y - i - 1),j,8);
+            if(mat[(worldSize.y - i - 1)][j] == 0){
+              inventory->decS(1,DIRT-1);
+              createBlock((worldSize.y - i - 1),j,8);
+            }
         }
     }
+    
+    //THIS CREATES ROCK BLOCKS
+    if(Game::instance().leftClick() and inventory->getSelected() == ROCK and inventory->enoughS(1,ROCK-1)) {
+
+        pair<int,int> mPos = Game::instance().getMousePos();
+        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
+        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
+            manager->playCreate();
+            if(mat[(worldSize.y - i - 1)][j] == 0){
+              inventory->decS(1,ROCK-1);
+              createBlock((worldSize.y - i - 1),j,16);
+            }
+        }
+    }
+    
+    //THIS CREATES NAMEKITA BLOCKS
+    if(Game::instance().leftClick() and inventory->getSelected() == NAMEKITA and inventory->enoughS(1,NAMEKITA-1)) {
+
+        pair<int,int> mPos = Game::instance().getMousePos();
+        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
+        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
+            manager->playCreate();
+            if(mat[(worldSize.y - i - 1)][j] == 0){
+              inventory->decS(1,NAMEKITA-1);
+              createBlock((worldSize.y - i - 1),j,24);
+            }
+        }
+    }
+    
+    
+    //THIS CREATES COSMIC BLOCKS
+    if(Game::instance().leftClick() and inventory->getSelected() == COSMIC and inventory->enoughS(1,COSMIC-1)) {
+
+        pair<int,int> mPos = Game::instance().getMousePos();
+        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
+        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
+            manager->playCreate();
+            if(mat[(worldSize.y - i - 1)][j] == 0){
+              inventory->decS(1,COSMIC-1);
+              createBlock((worldSize.y - i - 1),j,32);
+            }
+        }
+    }
+    
+    
     //THIS DESTROYS BLOCKS
-    else if(Game::instance().rightClick()) {
+    else if(Game::instance().leftClick() and inventory->getSelected() == PICO) {
 
         pair<int,int> mPos = Game::instance().getMousePos();
         int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
         int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
             if(mat[(worldSize.y - i - 1)][j] != 0) {
+                if(mat[(worldSize.y - i - 1)][j] == 8)inventory->incS(1,DIRT-1);  //DIRT
+                else if(mat[(worldSize.y - i - 1)][j] == 16)inventory->incS(1,ROCK-1); //ROCK
+                else if(mat[(worldSize.y - i - 1)][j] == 24)inventory->incS(1,NAMEKITA-1); //NAMEKITA
+                else if(mat[(worldSize.y - i - 1)][j] == 32)inventory->incS(1,COSMIC-1); //COSMIC
                 manager->playDestroy();
                 delete tilemap[(worldSize.y - i - 1)][j];
                 tilemap[(worldSize.y - i - 1)][j] = NULL;
@@ -244,6 +306,13 @@ glm::ivec2 World::getBlockSize() {
 int World::position(int i, int j) {
     return coords[i][j];
 }
+
+
+void World::setInventory(Inventory *i)
+{
+    inventory = i;
+}
+
 
 //WARNING! KEEP IN MIND THAT COORD Y IS ALWAYS INVERTED
 

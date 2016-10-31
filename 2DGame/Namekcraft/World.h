@@ -12,6 +12,7 @@
 #include "TexturedQuad.h"
 #include "ShaderProgram.h"
 #include "SimplexNoise.h"
+#include "Inventory.h"
 
 class World
 {
@@ -36,6 +37,7 @@ public:
     bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
     bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
     bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
+    void setInventory(Inventory *i);
 
 private:
     void createBlock(int i, int j, int tile);
@@ -46,6 +48,7 @@ private:
 private:
 
     mt19937 *generator;
+    Inventory *inventory;
     glm::ivec2 blockSize;
     glm::ivec2 worldSize;
     glm::ivec2 tilesheetSize;

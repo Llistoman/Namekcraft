@@ -29,6 +29,7 @@ public:
     void dead();
     glm::ivec2 getPosRender();
     glm::ivec2 getSpSize();
+    Inventory *inventory;
 	
 private:
     int hp;
@@ -37,7 +38,7 @@ private:
     glm::ivec2 posPlayer, spriteSize;
 	int jumpAngle, startY;
     Item *item;
-    Inventory *inventory;
+
     Craft *craft;
     float playerSpeed;
 	Texture spritesheet;

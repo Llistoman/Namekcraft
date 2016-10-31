@@ -78,6 +78,7 @@ void Scene::init()
 
     player->init(playerPos, playerSize, texProgram);
     player->setWorld(world);
+    world->setInventory(player->inventory);
 
     //ENEMY
     enem = new Enemy();

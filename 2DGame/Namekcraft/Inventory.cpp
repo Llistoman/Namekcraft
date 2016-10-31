@@ -27,6 +27,7 @@ enum ItemAnims
    
 void Inventory::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+    selected = 0;
     spriteSize = glm::ivec2(INVENTORY_SIZE_X,INVENTORY_SIZE_Y);
     spSize = glm::vec2(INVENTORY_SIZE_X,INVENTORY_SIZE_Y);
     spSize2 = glm::vec2(ITEM_INVENTORY_SIZE_X,ITEM_INVENTORY_SIZE_X);
@@ -85,6 +86,7 @@ void Inventory::update(int deltaTime)
   if(Game::instance().getKey('0'))
   {
     sprites[INVENTORY_SIZE-1]->changeAnimation(SELECTED);
+    selected = 0;
   }
   else if ((Game::instance().getKey('0') or
             Game::instance().getKey('1') or
