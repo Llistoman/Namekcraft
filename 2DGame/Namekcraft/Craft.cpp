@@ -144,6 +144,11 @@ void Craft::render()
     sprites[i]->render(0);
     craftItems[i]->render(0);
   }
+}
+
+void Craft::renderTexts()
+{
+
   for(int i = 0; i<CRAFT_SIZE-1; ++i){ //En un mateix bucle hi havia bugs de renderitzat
     stocksCraftText[i].render(to_string(qu[i]), glm::vec2(float((CRAFT_SIZE_X +2)*(1+i) -18), float(CRAFT_SIZE_Y*1.9 + (CRAFT_SIZE_Y +2))), 14, glm::vec4(1, 1, 1, 1));
   }

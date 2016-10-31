@@ -197,8 +197,9 @@ void Player::render()
 {
     sprite->render(dir);
     item->render(dir);
-    //inventory->render();
     craft->render();
+    inventory->render();
+    craft->renderTexts();
     topText.render( to_string(hp) + "/" + to_string(MAX_HP), glm::vec2(float(SCREEN_WIDTH/2 -40), float(SCREEN_HEIGHT/2 -38)), HP_SIZE, glm::vec4(1, 1, 1, 1));
 
 }

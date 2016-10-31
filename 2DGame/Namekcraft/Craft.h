@@ -13,6 +13,7 @@ public:
   void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
   void update(int deltaTime);
   void render();
+  void renderTexts();
   void setTileMap(TileMap *tileMap);
   void setPosition(const glm::vec2 &pos);
   void decC0(int x);

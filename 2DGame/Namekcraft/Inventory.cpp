@@ -133,6 +133,7 @@ void Inventory::render()
     sprites[i]->render(0);
     inventoryItems[i]->render(0);
   }
+  
   for(int i = 0; i<INVENTORY_SIZE; ++i){ //En un mateix bucle hi havia bugs de renderitzat
     stocksText[i].render(to_string(stocks[i]), glm::vec2(float((INVENTORY_SIZE_X +2)*(1+i) -18), float(INVENTORY_SIZE_Y*1.3)), 14, glm::vec4(1, 1, 1, 1));
     if(i!=9)itemsText[i].render(to_string(i+1), glm::vec2(float((INVENTORY_SIZE_X +2)*(1+i)) +2, float(INVENTORY_SIZE_Y-6)), 14, glm::vec4(1, 1, 1, 1));
