@@ -33,6 +33,7 @@ public:
 	
 private:
     int hp;
+    bool usat;
     bool death;
     bool bJumping;
     glm::ivec2 posPlayer, spriteSize;

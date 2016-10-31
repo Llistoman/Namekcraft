@@ -69,6 +69,8 @@ void Inventory::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
       if(!itemsText[i].init("fonts/Andy")) cout << "Could not load font!!!" << endl;
       stocks[0] = 1;  //Inventari inicial
       stocks[1] = 1;
+      stocks[9] = 1;
+      stocks[8] = 1;
       
       //Sprites items
       

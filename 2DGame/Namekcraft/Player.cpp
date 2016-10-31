@@ -29,9 +29,15 @@ enum PlayerAnims
     STAND, MOVE, RUN, JUMP, DEATH
 };
 
+enum ItemAnims
+{
+  SENZU, PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, NONE //Ordre alterat
+};
+
 
 void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderProgram &shaderProgram)
 {
+    usat = true;
     //Carga Fonts del HP TEXT
     if(!topText.init("fonts/Andy")) cout << "Could not load font!!!" << endl;
     hp = MAX_HP;
@@ -175,7 +181,22 @@ void Player::update(int deltaTime)
           }
           if(sprite->animation() != JUMP and bJumping) sprite->changeAnimation(JUMP);
       }
+      
+      if(Game::instance().leftClick() and inventory->getSelected() == POTION and inventory->enoughS(1,POTION-1) and !usat) {
+        heal(20);
+        usat = true;
+        inventory->decS(1,POTION-1);
+      }
     }
+    
+    if(Game::instance().leftClick() and inventory->getSelected() == SENZU and inventory->enoughS(1,9) and !usat){  //Les mongetes magiques es poden pendre inclus mort
+      heal(MAX_HP);
+      death = false;
+      usat = true;
+      inventory->decS(1,9);
+    }
+    
+    if(usat and !Game::instance().leftClick()) usat = false;
 
     sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
     
