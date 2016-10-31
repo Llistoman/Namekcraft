@@ -20,7 +20,7 @@ enum CraftAnims
 
 enum ItemAnims
 {
-  PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, SENZU,  NONE
+  PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, SENZU,  NONE, NAMEKPICO, COSMICPICO, NAMEKSWORD, COSMICSWORD
 };
 
    vector<int> qu (3,0);
@@ -76,7 +76,7 @@ void Craft::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
       //Sprites items
       
       craftItems.push_back(Sprite::createSprite(spSize2, glm::vec2(0.125, 0.25), &spritesheet2, &shaderProgram));
-      craftItems[i]->setNumberAnimations(11);  
+      craftItems[i]->setNumberAnimations(15);  
       craftItems[i]->setAnimationSpeed(PICO, 8);
       craftItems[i]->addKeyframe(PICO, glm::vec2(0.f, 0.f));
       craftItems[i]->setAnimationSpeed(SWORD, 8);
@@ -101,6 +101,14 @@ void Craft::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
       craftItems[i]->addKeyframe(SENZU, glm::vec2(0.375, 0.5));  
       craftItems[i]->setAnimationSpeed(NONE, 8);
       craftItems[i]->addKeyframe(NONE, glm::vec2(0.f, 0.75f));
+      craftItems[i]->setAnimationSpeed(NAMEKPICO, 8);
+      craftItems[i]->addKeyframe(NAMEKPICO, glm::vec2(0.f, 0.25f));
+      craftItems[i]->setAnimationSpeed(COSMICPICO, 8); 
+      craftItems[i]->addKeyframe(COSMICPICO, glm::vec2(0.f, 0.5f));
+      craftItems[i]->setAnimationSpeed(NAMEKSWORD, 8);
+      craftItems[i]->addKeyframe(NAMEKSWORD, glm::vec2(0.125f, 0.25f));
+      craftItems[i]->setAnimationSpeed(COSMICSWORD, 8); 
+      craftItems[i]->addKeyframe(COSMICSWORD, glm::vec2(0.125f, 0.5f));
       craftItems[i]->changeAnimation(NONE); 
     }
     
@@ -118,8 +126,23 @@ void Craft::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Craft::update(int deltaTime)
 {
   //UPDATE ITEM CRAFT
-    if (craftItems[i]->animation() == LIMONITA and enoughQ(0,2)){
+  if (craftItems[0]->animation() == LIMONITA and qu[0]==1 and craftItems[1]->animation() == LIMONITA and qu[1]==1){ //POTION 
     craftItems[2]->changeAnimation(POTION);
+  }
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == NAMEKITA and qu[1]==5){ //POTION 
+    craftItems[2]->changeAnimation(NAMEKPICO);
+  }
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == COSMIC and qu[1]==5){ //POTION 
+    craftItems[2]->changeAnimation(COSMICPICO);
+  }
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == NAMEKITA and qu[1]==10){ //POTION 
+    craftItems[2]->changeAnimation(NAMEKSWORD);
+  }
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == COSMIC and qu[1]==10){ //POTION 
+    craftItems[2]->changeAnimation(COSMICSWORD);
+  }
+  else{
+    craftItems[2]->changeAnimation(NONE);
   }
   
   
@@ -325,14 +348,42 @@ void Craft::incC1(int x)
 bool Craft::enoughQ(int x, int i)
 {
   if(i >= 0 and 2 > i){  //retorna si tenim més de x del recurs i
-    return stocks[i] >= x;
+    cout << (qu[i] >= x) << endl;
+    return qu[i] >= x;
   }
+  return false;
 }
 
+
+
 int  Craft::craftear(){ //Retorna l'objecte que crafteja, o -1 si no es una cmb valida
-  if (craftItems[i]->animation() == LIMONITA and enoughQ(0,2)){
+  if (craftItems[0]->animation() == LIMONITA and qu[0]==1 and craftItems[1]->animation() == LIMONITA and qu[1]==1){ //POTION 
+    decC0(1);
+    decC1(1);
     return POTION;
   }
+  else if (craftItems[0]->animation() == PICO and qu[0]==1 and craftItems[1]->animation() == NAMEKITA and qu[1]==5){ //POTION 
+    decC0(1);
+    decC1(5);
+    return NAMEKPICO;
+  }
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == COSMIC and qu[1]==5){ //POTION 
+    decC0(1);
+    decC1(5);
+    return COSMICPICO;
+  }
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == NAMEKITA and qu[1]==10){ //POTION 
+    decC0(1);
+    decC1(10);
+    return NAMEKSWORD;
+  }
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == COSMIC and qu[1]==10){ //POTION 
+    decC0(1);
+    decC1(10);
+    return COSMICSWORD;
+  }
+  return -1;
+
 }
 
 glm::ivec2 Craft::getPos() {

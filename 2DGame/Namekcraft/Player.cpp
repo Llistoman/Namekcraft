@@ -109,6 +109,15 @@ void Player::update(int deltaTime)
           playerSpeed = 2;
       }
 
+      //Craft
+      if(Game::instance().getKey('r')){
+          int c = craft->craftear();
+          if(c == POTION-1 and inventory->enoughS(2,LIMONITA-1)){
+            inventory->decS(2,LIMONITA-1);
+            inventory->incS(1,POTION-1);
+          }
+      }
+      
       if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
       {
           dir = 0;
