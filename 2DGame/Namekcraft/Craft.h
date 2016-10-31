@@ -20,6 +20,8 @@ public:
   void decC1(int x);
   void incC0(int x);
   void incC1(int x);
+  int craftear();  //retorna l'objecte que es pot craftejar 
+  bool enoughQ(int x, int i);
     glm::ivec2 getPos();
     glm::ivec2 getSpSize();
   

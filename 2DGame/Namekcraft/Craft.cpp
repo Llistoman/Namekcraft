@@ -117,6 +117,13 @@ void Craft::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Craft::update(int deltaTime)
 {
+  //UPDATE ITEM CRAFT
+    if (craftItems[i]->animation() == LIMONITA and enoughQ(0,2)){
+    craftItems[2]->changeAnimation(POTION);
+  }
+  
+  
+  //ITEM CRAFT MENU
   if(Game::instance().getKey('a'))
   {
     craftPosition = false;
@@ -284,7 +291,6 @@ void Craft::setPosition(const glm::vec2 &pos)
       craftItems[i]->setPosition(glm::vec2(float(posCraft.x + i * (CRAFT_SIZE_X +2) +6), float(posCraft.y +2)+6 + (CRAFT_SIZE_Y*1.5 +2)));
     }
   
-  
 }
 
 
@@ -316,7 +322,18 @@ void Craft::incC1(int x)
     if(qu[1] > MAX_STOCK) qu[1] = MAX_STOCK;
 }
 
+bool Craft::enoughQ(int x, int i)
+{
+  if(i >= 0 and 2 > i){  //retorna si tenim més de x del recurs i
+    return stocks[i] >= x;
+  }
+}
 
+int  Craft::craftear(){ //Retorna l'objecte que crafteja, o -1 si no es una cmb valida
+  if (craftItems[i]->animation() == LIMONITA and enoughQ(0,2)){
+    return POTION;
+  }
+}
 
 glm::ivec2 Craft::getPos() {
     return posCraft;
