@@ -113,16 +113,16 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
     for(int i = 0; i < enemies.size(); ++i) {
         if(enemies[i] != NULL) {
             if(enemies[i]->isDead()) {
-//                 delete enemies[i];
-//                 enemies[i] = NULL;
+                delete enemies[i];
+                enemies[i] = NULL;
             }
             else enemies[i]->update(deltaTime);
         }
     }
+    player->update(deltaTime);
     
     
 //     //NUBES TROLLS QUE SE ANIMAN Y DEFORMAN COMO QUIEREN
