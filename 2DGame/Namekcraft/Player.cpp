@@ -283,8 +283,11 @@ void Player::update(int deltaTime)
     //Marges del mapa
     if(0. >= posPlayer.x) posPlayer.x = 0;
     if( posPlayer.x >= 100*32) posPlayer.x = 100*32;
-    if(20. >= posPlayer.y) posPlayer.y = 5;
-    if( posPlayer.y >= 100*32) posPlayer.y = 100*32;
+    if(0. >= posPlayer.y) posPlayer.y = 100*32 -36;
+    if(posPlayer.y >= (100*32 -36)){ 
+      posPlayer.y = 100*32 -36;
+      dead();
+    }
     
     sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
     
