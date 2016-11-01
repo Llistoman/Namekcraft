@@ -40,7 +40,7 @@ void Scene::initbackground() {
     glm::vec2 geom2[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2), glm::vec2(size.x*BLOCK_X , size.y*BLOCK_Y)};
     glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
     glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(size.x*BLOCK_X/3, size.y*BLOCK_Y/3)};
-    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
+    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(2.f, 2.f)};
 
     background[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
     background[1] = TexturedQuad::createTexturedQuad(geom2, texCoords2, texProgram);
