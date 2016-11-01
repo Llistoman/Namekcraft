@@ -117,8 +117,8 @@ void Scene::update(int deltaTime)
     for(int i = 0; i < enemies.size(); ++i) {
         if(enemies[i] != NULL) {
             if(enemies[i]->isDead()) {
-                delete enemies[i];
-                enemies[i] = NULL;
+//                 delete enemies[i];
+//                 enemies[i] = NULL;
             }
             else enemies[i]->update(deltaTime);
         }
