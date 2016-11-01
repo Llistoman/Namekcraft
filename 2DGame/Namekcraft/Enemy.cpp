@@ -6,6 +6,7 @@
 #include <GL/glut.h>
 #include "Enemy.h"
 #include "Game.h"
+#include <time.h>       /* time */
 
 
 #define JUMP_ANGLE_STEP 4
@@ -18,8 +19,14 @@ enum EnemyAnims
 };
 
 
+enum ItemAnims
+{
+  PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, SENZU,  NONE, NAMEKPICO, COSMICPICO, NAMEKSWORD, COSMICSWORD
+};
+
 void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &shaderProgram)
 {
+    srand (time(NULL));
     type = t;
     death = false;
     bpatrol = false;
@@ -284,7 +291,13 @@ void Enemy::damage(int d)
 void Enemy::dead()
 {
   death = true;
-    //DO SOMETHING
+  if(type==0)player->inventory->incS(1,WOOD); //DROP LIMO 
+  else{                                       //DROP ALIEN
+    int p = rand() % 10 + 1;
+    cout << p << endl;
+    if(p == 1) player->inventory->incS(1,SENZU); //Amb baixa probabilitat drop de senzus
+    player->inventory->incS(1,LIMONITA);
+  }
 }
 
 bool Enemy::isDead()
