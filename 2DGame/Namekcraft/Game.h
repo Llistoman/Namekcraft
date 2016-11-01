@@ -2,6 +2,7 @@
 #define _GAME_INCLUDE
 
 #include "SceneMenu.h"
+#include "SceneOver.h"
 #include "Scene.h"
 
 #define SCREEN_WIDTH 640
@@ -15,8 +16,8 @@ class Game
 {
 
 public:
-	Game() {}
-	
+    Game();
+    ~Game();
 	
 	static Game &instance()
 	{
@@ -28,7 +29,9 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
+    void reestart();
     void switchScene();
+    void switchOver();
 
 	// Input callback methods
 	void keyPressed(int key);
@@ -48,10 +51,11 @@ public:
     bool sceneState() const;
 
 private:
-    bool state;
+    bool state, gameover;
 	bool bPlay;                       // Continue to play game?
-    SceneMenu menu;
-	Scene scene;                      // Scene to render
+    SceneMenu *menu;
+    SceneOver *over;
+    Scene *scene;                      // Scene to render
     int mouse_x, mouse_y;             // Mouse position
     bool mButton[2];                  // Mouse button
 	bool keys[256], specialKeys[256]; // Store key states so that 

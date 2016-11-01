@@ -1,5 +1,5 @@
-#ifndef _SCENE_MENU_INCLUDE
-#define _SCENE_MENU_INCLUDE
+#ifndef _SCENE_OVER_INCLUDE
+#define _SCENE_OVER_INCLUDE
 
 
 #include <glm/glm.hpp>
@@ -13,12 +13,12 @@
 // It is responsible for updating and render them.
 
 
-class SceneMenu
+class SceneOver
 {
 
 public:
-    SceneMenu();
-    ~SceneMenu();
+    SceneOver();
+    ~SceneOver();
 
 	void init();
 	void update(int deltaTime);
@@ -28,10 +28,8 @@ private:
 	void initShaders();
 
 private:
-    bool menu, cred, instructions;
-    Texture credits;
-    Texture inst;
-    Texture texs[6]; //vec de textures opcions
+    Texture gameover;
+    Texture texs[4]; //vec de textures opcions
     TexturedQuad *screen;
     TexturedQuad *options[3];
     ShaderProgram texProgram;
@@ -40,5 +38,5 @@ private:
 };
 
 
-#endif // _SCENE_MENU_INCLUDE
+#endif // _SCENE_OVER_INCLUDE
 

@@ -21,10 +21,6 @@ void SceneMenu::init()
     //SHADERS
 	initShaders();
 
-    //MUSIC
-    manager = new SoundManager();
-    //manager->playMusic();
-
     //OPTIONS
     glm::vec2 geom1[2] = {glm::vec2(SCREEN_WIDTH/3.f, 4*SCREEN_HEIGHT/8.f), glm::vec2(2*SCREEN_WIDTH/3.f, 5*SCREEN_HEIGHT/8.f)};
     glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};

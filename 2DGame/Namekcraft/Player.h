@@ -10,6 +10,7 @@
 #include "Text.h"
 #include "Enemy.h"
 #include "SoundManager.h"
+#include "SceneOver.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has

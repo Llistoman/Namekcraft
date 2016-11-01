@@ -134,9 +134,6 @@ void Player::update(int deltaTime)
                       if(enemies[i] != NULL) {
                           int x = enemies[i]->getPosRender().x;
                           int y = enemies[i]->getPosRender().y;
-                          /*cout << "POS " << posPlayer.x << " " << posPlayer.y << endl;
-                          cout << "RNG0 " << x0 << " " << y0 << endl;
-                          cout << "RNG1 " << x1 << " " << y1 << endl;*/
                           if(x > x0 and x <= x1 and y > y0 and y <= y1) {
                               enemies[i]->damage(dmg);
                           }
@@ -355,7 +352,9 @@ void Player::dead()
 {
   death = true;
   sprite->changeAnimation(DEATH);
-    //DO SOMETHING
+
+  Game::instance().switchOver();
+  //DO SOMETHING
 }
 
 void Player::heal(int h)

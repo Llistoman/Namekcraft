@@ -2,29 +2,68 @@
 #include <GL/glut.h>
 #include "Game.h"
 
+Game::Game() {
+    scene = NULL;
+    menu = NULL;
+    over = NULL;
+}
+
+Game::~Game() {
+    if(scene != NULL)
+        delete scene;
+    if(menu != NULL)
+        delete menu;
+    if(over != NULL)
+        delete over;
+}
 
 void Game::init()
 {
 	bPlay = true;
     glClearColor(0.f, 0.f, 0.f, 1.0f);
-	scene.init();
-    menu.init();
+    scene = new Scene();
+    scene->init();
+    menu = new SceneMenu();
+    menu->init();
+    over = new SceneOver();
+    over->init();
+    gameover = false;
     state = false;
+}
+
+void Game::reestart()
+{
+    Scene *aux = scene;
+    scene = new Scene();
+    scene->init();
+    state = true;
+    delete aux;
+}
+
+void Game::switchOver()
+{
+    gameover = !gameover;
 }
 
 bool Game::update(int deltaTime)
 {
-    if(state == false) menu.update(deltaTime);
-    else scene.update(deltaTime);
-	
-	return bPlay;
+    if(gameover) over->update(deltaTime);
+    else {
+        if(state == false) menu->update(deltaTime);
+        else scene->update(deltaTime);
+    }
+
+    return bPlay;
 }
 
 void Game::render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if(state == false) menu.render();
-    else scene.render();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if(gameover) over->render();
+    else {
+        if(state == false) menu->render();
+        else scene->render();
+    }
 }
 
 void Game::keyPressed(int key)

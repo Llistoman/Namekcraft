@@ -18,6 +18,7 @@ Scene::Scene()
 {
     world = NULL;
 	player = NULL;
+    manager = NULL;
 }
 
 Scene::~Scene()
@@ -26,12 +27,13 @@ Scene::~Scene()
         delete world;
 	if(player != NULL)
 		delete player;
+    if(manager != NULL)
+        delete manager;
     for(int i = 0; i < enemies.size(); ++i) {
         if(enemies[i] != NULL)
             delete enemies[i];
     }
 }
-
 
 void Scene::initbackground() {
     glm::ivec2 size = world->getWorldSize();
