@@ -239,7 +239,15 @@ void Player::update(int deltaTime)
           }
           else
           {
-              posPlayer.y = int(startY - (spriteSize.y*3) * sin(3.14159f * jumpAngle / 180.f));
+              //Aqui
+              //cout << world->collisionMoveUp(posPlayer, spriteSize, &posPlayer.y) << endl;
+              if(world->collisionMoveUp(posPlayer, spriteSize, &posPlayer.y)){
+                    startY = posPlayer.y;
+                    bJumping = false;
+                    jumpAngle = 0;
+                    //sprite->changeAnimation(STAND);
+                  }
+              else posPlayer.y = int(startY - (spriteSize.y*3) * sin(3.14159f * jumpAngle / 180.f));
               if(jumpAngle > 90) {
                   bJumping = !world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y);
               }
@@ -260,6 +268,7 @@ void Player::update(int deltaTime)
           }
           if(sprite->animation() != JUMP and bJumping) sprite->changeAnimation(JUMP);
       }
+      
       
       if(Game::instance().leftClick() and inventory->getSelected() == POTION and inventory->enoughS(1,POTION-1) and !usat) {
         heal(20);

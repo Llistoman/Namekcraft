@@ -336,6 +336,7 @@ bool World::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) con
     return false;
 }
 
+
 bool World::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
 
@@ -386,15 +387,16 @@ bool World::collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *
 {
     int x0, x1, y;
 
-
+    //MEH
     x0 = pos.x / blockSize.x;
-    x1 = (pos.x + size.x - 1) / blockSize.x;
+    x1 = (pos.x + size.x) / blockSize.x;
     y = (pos.y + size.y - 1) / blockSize.y;
 
     for(int x=x0; x<=x1; x++)
     {
         if(mat[worldSize.y - y][x] != 0)
         {
+            return true;
             if(*posY - blockSize.y * y + size.y > 5)
             {
                 *posY = blockSize.y * y - size.y;
