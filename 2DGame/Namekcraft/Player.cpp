@@ -192,10 +192,10 @@ void Player::update(int deltaTime)
       {
           dir = 0;
           if(playerSpeed == 2){
-              if(sprite->animation() != MOVE and sprite->animation() != JUMP) sprite->changeAnimation(MOVE);
+              if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
           }
           else{
-              if(sprite->animation() != RUN and sprite->animation() != JUMP) sprite->changeAnimation(RUN);
+              if(sprite->animation() != RUN) sprite->changeAnimation(RUN);
           }
           posPlayer.x -= playerSpeed;
           if(world->collisionMoveLeft(posPlayer, spriteSize))
@@ -208,10 +208,10 @@ void Player::update(int deltaTime)
       {
           dir = 1;
           if(playerSpeed == 2){
-              if(sprite->animation() != MOVE and sprite->animation() != JUMP) sprite->changeAnimation(MOVE);
+              if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
           }
           else{
-              if(sprite->animation() != RUN and sprite->animation() != JUMP) sprite->changeAnimation(RUN);
+              if(sprite->animation() != RUN) sprite->changeAnimation(RUN);
           }
           posPlayer.x += playerSpeed;
           if(world->collisionMoveRight(posPlayer, spriteSize))
@@ -235,7 +235,6 @@ void Player::update(int deltaTime)
           {
               bJumping = false;
               posPlayer.y = startY;
-              sprite->changeAnimation(STAND);
           }
           else
           {
@@ -266,7 +265,6 @@ void Player::update(int deltaTime)
                   startY = posPlayer.y;
               }
           }
-          if(sprite->animation() != JUMP and bJumping) sprite->changeAnimation(JUMP);
       }
       
       
@@ -294,6 +292,11 @@ void Player::update(int deltaTime)
       posPlayer.y = 100*32 -36;
       dead();
     }
+    
+    //FINAL PLAYER
+    if(!world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y) and sprite->animation() != JUMP )sprite->changeAnimation(JUMP);
+    else if(sprite->animation() == JUMP and world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y))sprite->changeAnimation(STAND);
+    //cout <<   world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y)<< endl;
     
     sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
     
@@ -361,9 +364,7 @@ void Player::dead()
 {
   death = true;
   sprite->changeAnimation(DEATH);
-
   Game::instance().switchOver();
-  //DO SOMETHING
 }
 
 void Player::heal(int h)

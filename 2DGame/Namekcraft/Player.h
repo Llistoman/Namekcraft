@@ -45,7 +45,7 @@ private:
     bool bJumping;
     int pico, sword;
     glm::ivec2 posPlayer, spriteSize;
-	int jumpAngle, startY;
+    int jumpAngle, startY;
     Item *item;
     time_t timer;
 
