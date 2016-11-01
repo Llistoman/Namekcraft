@@ -37,7 +37,7 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
     //ALL OF THIS DEPENDS ON SPRITESHEET, MUST BE HARDCODED
 
     if(type == 0) {
-        hp = 60;
+        hp = 100;
         spriteSize.x = 42;
         spriteSize.y = 46;
         glm::vec2 spSize;
@@ -56,7 +56,7 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
         sprite->addKeyframe(ATK, glm::vec2(0.f, 0.25f));
         sprite->addKeyframe(ATK, glm::vec2(0.f, 0.50f));
 
-        sprite->setAnimationSpeed(HURT, 12);
+        sprite->setAnimationSpeed(HURT, 20);
         sprite->addKeyframe(HURT, glm::vec2(0.f, 0.f));
         sprite->addKeyframe(HURT, glm::vec2(0.f, 0.75f));
         sprite->addKeyframe(HURT, glm::vec2(0.f, 0.25f));
@@ -67,7 +67,7 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
         sprite->changeAnimation(MOVE);
     }
     else {
-        hp = 100;
+        hp = 80;
         spriteSize.x = 56;
         spriteSize.y = 46;
         glm::vec2 spSize;
@@ -214,10 +214,18 @@ void Enemy::update1() {
     glm::ivec2 playerPos = player->getPosRender();
     glm::ivec2 playerDist = glm::ivec2(abs(playerPos.x-posEnemy.x), abs(playerPos.y-posEnemy.y));
 
+    if(sprite->animation() == HURT) {
+        int duration = difftime(time(0),hurtTim);
+        if(duration >= 1) {
+            sprite->changeAnimation(MOVE);
+            hurtTim = time(0);
+        }
+    }
+
     //ATTACK
     if (playerDist.x <= 15 and playerDist.y <= 15) {
         onPatrol = false;
-        if(sprite->animation() != ATK) sprite->changeAnimation(ATK);
+        if(sprite->animation() != ATK and sprite->animation() != HURT) sprite->changeAnimation(ATK);
         int duration = difftime(time(0),timer);
         if(duration >= 1) {
             player->damage(10);
@@ -226,18 +234,18 @@ void Enemy::update1() {
     }
     else {
         if(playerDist.x < 100 and playerDist.y < 100 and player->getPosRender().x < posEnemy.x) { //LEFT
-            if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+            if(sprite->animation() != MOVE and sprite->animation() != HURT) sprite->changeAnimation(MOVE);
             onPatrol = false;
             moveLeft();
         }
         else if(playerDist.x < 100 and playerDist.y < 100 and player->getPosRender().x >= posEnemy.x) { //RIGHT
-            if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+            if(sprite->animation() != MOVE and sprite->animation() != HURT) sprite->changeAnimation(MOVE);
             onPatrol = false;
             moveRight();
         }
         else {
             if(not onPatrol) {
-                if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+                if(sprite->animation() != MOVE and sprite->animation() != HURT) sprite->changeAnimation(MOVE);
                 bpatrol = false;
                 pmax = posEnemy.x + 100;
                 pmin = posEnemy.x - 100;
@@ -249,7 +257,7 @@ void Enemy::update1() {
     jump();
 }
 
-void Enemy::update2() { //MAKE HIM RUN!
+void Enemy::update2() {
 
     glm::ivec2 playerPos = player->getPosRender();
     glm::ivec2 playerDist = glm::ivec2(abs(playerPos.x-posEnemy.x), abs(playerPos.y-posEnemy.y));
@@ -329,6 +337,7 @@ void Enemy::damage(int d)
     else {
         if(type == 0) {
             manager->playDmg1();
+            hurtTim = time(0);
         }
         else {
             manager->playDmg2();

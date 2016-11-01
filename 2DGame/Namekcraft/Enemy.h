@@ -41,7 +41,7 @@ private:
     void update1();
     void update2();
 
-    time_t timer;
+    time_t timer, hurtTim;
     int hp, pmin, pmax, type, fleeDist;
     bool death, bJumping, bpatrol, onPatrol;
     glm::ivec2 posEnemy, spriteSize;

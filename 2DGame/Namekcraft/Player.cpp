@@ -120,10 +120,10 @@ void Player::update(int deltaTime)
               else dmg = 5; //UNSELECTED
               if(dir == 0) { //LEFT
                   x0 = posPlayer.x - 20 - spriteSize.x;
-                  x1 = posPlayer.x ;
+                  x1 = posPlayer.x + 10;
               }
               else { //RIGHT
-                  x0 = posPlayer.x ;
+                  x0 = posPlayer.x - 10;
                   x1 = posPlayer.x + 20;
               }
               y0 = posPlayer.y - 20 - spriteSize.y;
