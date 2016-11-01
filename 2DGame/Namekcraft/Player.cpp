@@ -158,6 +158,7 @@ void Player::update(int deltaTime)
           if(c == POTION-1 and inventory->enoughS(2,LIMONITA-1)){
             inventory->decS(2,LIMONITA-1);
             inventory->incS(1,POTION-1);
+            manager->playCraft();
           }
           else if(c == NAMEKPICO and inventory->enoughS(1,WOOD-1) and inventory->enoughS(5,NAMEKITA-1)){
             inventory->decS(5,NAMEKITA-1);
@@ -165,6 +166,7 @@ void Player::update(int deltaTime)
             inventory->setPico(1);
             item->setPico(1);
             pico = 1;
+            manager->playCraft();
           }
           else if(c == NAMEKSWORD and inventory->enoughS(1,WOOD-1) and inventory->enoughS(10,NAMEKITA-1)){
             inventory->decS(10,NAMEKITA-1);
@@ -172,6 +174,7 @@ void Player::update(int deltaTime)
             inventory->setSword(1);
             item->setSword(1);
             sword = 1;
+            manager->playCraft();
           }
           else if(c == COSMICPICO and inventory->enoughS(1,WOOD-1) and inventory->enoughS(5,COSMIC-1)){
             inventory->decS(5,COSMIC-1);
@@ -179,6 +182,7 @@ void Player::update(int deltaTime)
             inventory->setPico(2);
             item->setPico(2);
             pico = 2;
+            manager->playCraft();
           }
           else if(c == COSMICSWORD and inventory->enoughS(1,WOOD-1) and inventory->enoughS(10,COSMIC-1)){
             inventory->decS(10,COSMIC-1);
@@ -186,6 +190,7 @@ void Player::update(int deltaTime)
             inventory->setSword(2);
             item->setSword(2);
             sword = 2;
+            manager->playCraft();
           }
       }
       

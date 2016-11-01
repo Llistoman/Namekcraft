@@ -9,6 +9,7 @@ SoundManager::SoundManager() {
     if(!death2Buff.loadFromFile("sound/Death Screams/Android/sfx_deathscream_android8.wav")) std::cout << "error loading death2 sound" << std::endl;
     if(!dmg2Buff.loadFromFile("sound/Death Screams/Android/sfx_deathscream_android1.wav")) std::cout << "error loading dmg2 sound" << std::endl;
     if(!dmgBuff.loadFromFile("sound/Death Screams/Human/sfx_deathscream_human9.wav")) std::cout << "error loading playerdmg sound" << std::endl;
+    if(!craftBuff.loadFromFile("sound/General Sounds/Positive Sounds/sfx_sounds_powerup3.wav")) std::cout << "error loading playerdmg sound" << std::endl;
 }
 
 void SoundManager::playMusic() {
@@ -50,3 +51,9 @@ void SoundManager::playDmg2() {
     enemy2.setBuffer(dmg2Buff);
     enemy2.play();
 }
+
+void SoundManager::playCraft() {
+    player.setBuffer(craftBuff);
+    player.play();
+}
+

@@ -18,6 +18,7 @@ public:
     void playDmg1();
     void playDeath2();
     void playDmg2();
+    void playCraft();
 
 private:
     sf::Music music;
@@ -33,6 +34,8 @@ private:
     sf::SoundBuffer dmg2Buff;
     sf::SoundBuffer death2Buff;
     sf::Sound enemy2;
+    sf::SoundBuffer craftBuff;
+    sf::Sound craft;
 
 };
 
