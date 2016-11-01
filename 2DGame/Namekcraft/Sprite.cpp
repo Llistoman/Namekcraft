@@ -33,6 +33,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
 	currentAnimation = -1;
     size = quadSize;
 	position = glm::vec2(0.f);
+  halfTexel = glm::vec2(sizeInSpritesheet.x / spritesheet->width(), sizeInSpritesheet.y  / spritesheet->height()); 
 }
 
 void Sprite::update(int deltaTime)
@@ -45,8 +46,22 @@ void Sprite::update(int deltaTime)
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
 			currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
 		}
-		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
+		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe]; //+ halftexel Correccio de halftexel
 	}
+}
+
+void Sprite::updateHTC(int deltaTime) //With Half Texel Correction
+{
+  if(currentAnimation >= 0)
+  {
+    timeAnimation += deltaTime;
+    while(timeAnimation > animations[currentAnimation].millisecsPerKeyframe)
+    {
+      timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
+      currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
+    }
+    texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe] + halfTexel; // Correccio de halftexel
+  }
 }
 
 void Sprite::render(int dir) const
@@ -118,8 +133,19 @@ void Sprite::changeAnimation(int animId)
 		currentAnimation = animId;
 		currentKeyframe = 0;
 		timeAnimation = 0.f;
-		texCoordDispl = animations[animId].keyframeDispl[0];
+		texCoordDispl = animations[animId].keyframeDispl[0]; // - halfTexel;
 	}
+}
+
+void Sprite::changeAnimationHTC(int animId) //With Half Texel Correction
+{
+  if(animId < int(animations.size()))
+  {
+    currentAnimation = animId;
+    currentKeyframe = 0;
+    timeAnimation = 0.f;
+    texCoordDispl = animations[animId].keyframeDispl[0]  + halfTexel;
+  }
 }
 
 int Sprite::animation() const

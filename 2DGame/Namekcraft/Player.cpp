@@ -74,7 +74,7 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
     sprite->addKeyframe(DEATH, glm::vec2(0.75f, 0.25f));
 
 
-    sprite->changeAnimation(0);
+    sprite->changeAnimationHTC(0);
     posPlayer = position;
     sprite->setPosition(glm::vec2(posPlayer.x,posPlayer.y));
     
@@ -99,7 +99,7 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
 void Player::update(int deltaTime)
 {
     if(0 >= hp) dead();
-    sprite->update(deltaTime);
+    sprite->updateHTC(deltaTime);
 
     if(!death){ //Si estem morts no tenim control
 
@@ -192,38 +192,38 @@ void Player::update(int deltaTime)
       {
           dir = 0;
           if(playerSpeed == 2){
-              if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+              if(sprite->animation() != MOVE) sprite->changeAnimationHTC(MOVE);
           }
           else{
-              if(sprite->animation() != RUN) sprite->changeAnimation(RUN);
+              if(sprite->animation() != RUN) sprite->changeAnimationHTC(RUN);
           }
           posPlayer.x -= playerSpeed;
           if(world->collisionMoveLeft(posPlayer, spriteSize))
           {
               posPlayer.x += playerSpeed;
-              sprite->changeAnimation(STAND);
+              sprite->changeAnimationHTC(STAND);
           }
       }
       else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
       {
           dir = 1;
           if(playerSpeed == 2){
-              if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+              if(sprite->animation() != MOVE) sprite->changeAnimationHTC(MOVE);
           }
           else{
-              if(sprite->animation() != RUN) sprite->changeAnimation(RUN);
+              if(sprite->animation() != RUN) sprite->changeAnimationHTC(RUN);
           }
           posPlayer.x += playerSpeed;
           if(world->collisionMoveRight(posPlayer, spriteSize))
           {
               posPlayer.x -= playerSpeed;
-              sprite->changeAnimation(STAND);
+              sprite->changeAnimationHTC(STAND);
           }
       }
       else
       {
           if(sprite->animation() == MOVE or sprite->animation() == RUN )
-              sprite->changeAnimation(STAND);
+              sprite->changeAnimationHTC(STAND);
       }
 
       if(bJumping)
@@ -242,7 +242,7 @@ void Player::update(int deltaTime)
                     startY = posPlayer.y;
                     bJumping = false;
                     jumpAngle = 0;
-                    //sprite->changeAnimation(STAND);
+                    //sprite->changeAnimationHTC(STAND);
                   }
               else posPlayer.y = int(startY - (spriteSize.y*3) * sin(3.14159f * jumpAngle / 180.f));
               if(jumpAngle > 90) {
@@ -258,7 +258,7 @@ void Player::update(int deltaTime)
               if(Game::instance().getSpecialKey(GLUT_KEY_UP) or Game::instance().getKey(32))
               {
                   bJumping = true;
-                  //if(sprite->animation() != JUMP) sprite->changeAnimation(JUMP);
+                  //if(sprite->animation() != JUMP) sprite->changeAnimationHTC(JUMP);
                   jumpAngle = 0;
                   startY = posPlayer.y;
               }
@@ -292,8 +292,8 @@ void Player::update(int deltaTime)
     }
     
     //FINAL PLAYER
-    if(!world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y) and sprite->animation() != JUMP )sprite->changeAnimation(JUMP);
-    else if(sprite->animation() == JUMP and world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y))sprite->changeAnimation(STAND);
+    if(!world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y) and sprite->animation() != JUMP )sprite->changeAnimationHTC(JUMP);
+    else if(sprite->animation() == JUMP and world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y))sprite->changeAnimationHTC(STAND);
     //cout <<   world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y)<< endl;
     
     sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
@@ -361,7 +361,7 @@ void Player::damage(int d)
 void Player::dead()
 {
   death = true;
-  sprite->changeAnimation(DEATH);
+  sprite->changeAnimationHTC(DEATH);
   Game::instance().switchOver();
 }
 
