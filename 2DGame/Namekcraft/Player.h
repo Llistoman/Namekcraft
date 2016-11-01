@@ -9,6 +9,7 @@
 #include "Craft.h"
 #include "Text.h"
 #include "Enemy.h"
+#include "SoundManager.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -25,6 +26,7 @@ public:
 	void render();
     void free();
     int dir;
+    void setSoundManager(SoundManager *m);
     void setWorld(World *w);
     void setEnemies(vector<Enemy *> &vec);
 	void setPosition(const glm::vec2 &pos);
@@ -53,6 +55,7 @@ private:
     Text topText;
 
     vector<Enemy *> enemies;
+    SoundManager *manager;
 
 };
 

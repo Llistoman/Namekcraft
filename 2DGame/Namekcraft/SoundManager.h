@@ -13,6 +13,11 @@ public:
     void playMusic();
     void playCreate();
     void playDestroy();
+    void playPlayerDmg();
+    void playDeath1();
+    void playDmg1();
+    void playDeath2();
+    void playDmg2();
 
 private:
     sf::Music music;
@@ -20,6 +25,14 @@ private:
     sf::Sound create;
     sf::SoundBuffer destroyBuff;
     sf::Sound destroy;
+    sf::Sound player;
+    sf::SoundBuffer dmgBuff;
+    sf::SoundBuffer death1Buff;
+    sf::SoundBuffer dmg1Buff;
+    sf::Sound enemy1;
+    sf::SoundBuffer dmg2Buff;
+    sf::SoundBuffer death2Buff;
+    sf::Sound enemy2;
 
 };
 

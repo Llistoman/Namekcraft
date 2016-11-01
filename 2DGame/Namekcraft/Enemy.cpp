@@ -251,6 +251,11 @@ void Enemy::free()
     sprite->free();
 }
 
+void Enemy::setSoundManager(SoundManager *m)
+{
+    manager = m;
+}
+
 void Enemy::setWorld(World *w)
 {
     world = w;
@@ -265,25 +270,21 @@ void Enemy::setPosition(const glm::vec2 &pos)
 void Enemy::damage(int d)
 {
     hp -= d;
-    /*if(dir == 0) {
-        posEnemy.x -= 10;
-        if(world->collisionMoveLeft(posEnemy, spriteSize))
-            posEnemy.x += 10;
-    }
-    else {
-        posEnemy.x += 10;
-        if(world->collisionMoveRight(posEnemy, spriteSize))
-            posEnemy.x -= 10;
-    }*/
     if(0 > hp){ 
       hp = 0;
       dead();
+    }
+    else {
+        if(type == 0) manager->playDmg1();
+        else manager->playDmg2();
     }
 }
 
 void Enemy::dead()
 {
   death = true;
+  if(type == 0) manager->playDeath1();
+  else manager->playDeath2();
     //DO SOMETHING
 }
 

@@ -79,6 +79,7 @@ void Scene::init()
 
     player->init(playerPos, playerSize, texProgram);
     player->setWorld(world);
+    player->setSoundManager(manager);
     world->setInventory(player->inventory);
 
     //ENEMY
@@ -87,6 +88,7 @@ void Scene::init()
         glm::ivec2 enemyPos = glm::ivec2((20*i)*BLOCK_X,(floorlvl-10)*BLOCK_Y);
         enem->init(player, 0, enemyPos, texProgram);
         enem->setWorld(world);
+        enem->setSoundManager(manager);
         enemies.push_back(enem);
     }
 
@@ -96,6 +98,7 @@ void Scene::init()
             glm::ivec2 enemyPos = glm::ivec2((25*j)*BLOCK_X,(25*k)*BLOCK_Y);
             enem->init(player, 1, enemyPos, texProgram);
             enem->setWorld(world);
+            enem->setSoundManager(manager);
             enemies.push_back(enem);
         }
     }
