@@ -15,7 +15,7 @@
 
 enum EnemyAnims
 {
-    ATK,MOVE
+    ATK,MOVE,HURT
 };
 
 
@@ -28,6 +28,7 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
 {
     srand (time(NULL));
     type = t;
+    fleeDist = 0;
     death = false;
     bpatrol = false;
     onPatrol = false;
@@ -36,37 +37,44 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
     //ALL OF THIS DEPENDS ON SPRITESHEET, MUST BE HARDCODED
 
     if(type == 0) {
-        hp = 60;
+        hp = 100;
         spriteSize.x = 42;
         spriteSize.y = 46;
         glm::vec2 spSize;
         spSize = spriteSize;
         spritesheet.loadFromFile("images/alien.png", TEXTURE_PIXEL_FORMAT_RGBA);
         sprite = Sprite::createSprite(spSize, glm::vec2(1, 0.25), &spritesheet, &shaderProgram);
-        sprite->setNumberAnimations(2);
+        sprite->setNumberAnimations(3);
 
         sprite->setAnimationSpeed(MOVE, 6);
         sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.f));
         sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.25f));
         sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.50f));
 
-        //FER ALGO MILLOR
         sprite->setAnimationSpeed(ATK, 6);
         sprite->addKeyframe(ATK, glm::vec2(0.f, 0.f));
         sprite->addKeyframe(ATK, glm::vec2(0.f, 0.25f));
         sprite->addKeyframe(ATK, glm::vec2(0.f, 0.50f));
 
+        sprite->setAnimationSpeed(HURT, 20);
+        sprite->addKeyframe(HURT, glm::vec2(0.f, 0.f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f, 0.75f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f, 0.25f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f, 0.75f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f, 0.50f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f, 0.75f));
+
         sprite->changeAnimation(MOVE);
     }
     else {
-        hp = 40;
+        hp = 80;
         spriteSize.x = 56;
         spriteSize.y = 46;
         glm::vec2 spSize;
         spSize = spriteSize;
         spritesheet.loadFromFile("images/jelly.png", TEXTURE_PIXEL_FORMAT_RGBA);
         sprite = Sprite::createSprite(spSize, glm::vec2(1, 0.125), &spritesheet, &shaderProgram);
-        sprite->setNumberAnimations(2);
+        sprite->setNumberAnimations(3);
 
         sprite->setAnimationSpeed(MOVE, 8);
         sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.f));
@@ -78,6 +86,17 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
         sprite->addKeyframe(ATK, glm::vec2(0.f,4.f*0.125f));
         sprite->addKeyframe(ATK, glm::vec2(0.f,5.f*0.125f));
         sprite->addKeyframe(ATK, glm::vec2(0.f,6.f*0.125f));
+
+        sprite->setAnimationSpeed(HURT, 20);
+        sprite->addKeyframe(HURT, glm::vec2(0.f, 0.f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f,7.f*0.125f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f,0.125f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f,7.f*0.125f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f,2*0.125f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f,7.f*0.125f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f,3*0.125f));
+        sprite->addKeyframe(HURT, glm::vec2(0.f,7.f*0.125f));
+
         sprite->changeAnimation(MOVE);
     }
 
@@ -156,6 +175,25 @@ void Enemy::patrol() {
     }
 }
 
+void Enemy::run() {
+    glm::ivec2 playerPos = player->getPosRender();
+    glm::ivec2 playerDist = glm::ivec2(abs(playerPos.x-posEnemy.x), abs(playerPos.y-posEnemy.y));
+    if(player->getPosRender().x > posEnemy.x) {
+        posEnemy.x -= enemySpeed;
+    }
+    else if(player->getPosRender().x <= posEnemy.x) {
+        posEnemy.x += enemySpeed;
+    }
+    if(player->getPosRender().y-2 > posEnemy.y) {
+        posEnemy.y -= enemySpeed;
+    }
+    else if(player->getPosRender().y+2 <= posEnemy.y) {
+        posEnemy.y += enemySpeed;
+    }
+    int flee = abs(posEnemy.x - fleeDist);
+    if(flee >= 300 or playerDist.y >= 300) sprite->changeAnimation(MOVE);
+}
+
 void Enemy::follow() {
     if(player->getPosRender().x > posEnemy.x) {
         posEnemy.x += enemySpeed;
@@ -176,10 +214,18 @@ void Enemy::update1() {
     glm::ivec2 playerPos = player->getPosRender();
     glm::ivec2 playerDist = glm::ivec2(abs(playerPos.x-posEnemy.x), abs(playerPos.y-posEnemy.y));
 
+    if(sprite->animation() == HURT) {
+        int duration = difftime(time(0),hurtTim);
+        if(duration >= 1) {
+            sprite->changeAnimation(MOVE);
+            hurtTim = time(0);
+        }
+    }
+
     //ATTACK
     if (playerDist.x <= 15 and playerDist.y <= 15) {
         onPatrol = false;
-        if(sprite->animation() != ATK) sprite->changeAnimation(ATK);
+        if(sprite->animation() != ATK and sprite->animation() != HURT) sprite->changeAnimation(ATK);
         int duration = difftime(time(0),timer);
         if(duration >= 1) {
             player->damage(10);
@@ -188,18 +234,18 @@ void Enemy::update1() {
     }
     else {
         if(playerDist.x < 100 and playerDist.y < 100 and player->getPosRender().x < posEnemy.x) { //LEFT
-            if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+            if(sprite->animation() != MOVE and sprite->animation() != HURT) sprite->changeAnimation(MOVE);
             onPatrol = false;
             moveLeft();
         }
         else if(playerDist.x < 100 and playerDist.y < 100 and player->getPosRender().x >= posEnemy.x) { //RIGHT
-            if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+            if(sprite->animation() != MOVE and sprite->animation() != HURT) sprite->changeAnimation(MOVE);
             onPatrol = false;
             moveRight();
         }
         else {
             if(not onPatrol) {
-                if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+                if(sprite->animation() != MOVE and sprite->animation() != HURT) sprite->changeAnimation(MOVE);
                 bpatrol = false;
                 pmax = posEnemy.x + 100;
                 pmin = posEnemy.x - 100;
@@ -211,28 +257,35 @@ void Enemy::update1() {
     jump();
 }
 
-void Enemy::update2() { //MAKE HIM RUN!
-    enemySpeed = 1;
+void Enemy::update2() {
+
     glm::ivec2 playerPos = player->getPosRender();
     glm::ivec2 playerDist = glm::ivec2(abs(playerPos.x-posEnemy.x), abs(playerPos.y-posEnemy.y));
 
     if(playerPos.x > posEnemy.x) dir = 1;
     else dir = 0;
 
-    if(playerDist.x <= 10 and playerDist.y <= 10) {
-        if(sprite->animation() != ATK) sprite->changeAnimation(ATK);
-        int duration = difftime(time(0),timer);
-        if(duration >= 1) {
-            player->damage(10);
-            timer = time(0);
+    if(sprite->animation() != HURT) {
+        enemySpeed = 1;
+        if(playerDist.x <= 10 and playerDist.y <= 10) {
+            if(sprite->animation() != ATK) sprite->changeAnimation(ATK);
+            int duration = difftime(time(0),timer);
+            if(duration >= 1) {
+                player->damage(10);
+                timer = time(0);
+            }
+        }
+        else if(player->dir == dir and playerDist.x <= 300 and playerDist.y <= 300) {
+            if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+            follow();
+        }
+        else {
+            if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
         }
     }
-    else if(player->dir == dir and playerDist.x <= 300 and playerDist.y <= 300) {
-        if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
-        follow();
-    }
     else {
-        if(sprite->animation() != MOVE) sprite->changeAnimation(MOVE);
+        enemySpeed = 3;
+        run();
     }
 }
 
@@ -282,8 +335,17 @@ void Enemy::damage(int d)
       dead();
     }
     else {
-        if(type == 0) manager->playDmg1();
-        else manager->playDmg2();
+        if(type == 0) {
+            manager->playDmg1();
+            hurtTim = time(0);
+        }
+        else {
+            manager->playDmg2();
+            fleeDist = player->getPosRender().x;
+        }
+        if(sprite->animation()!=HURT) {
+            sprite->changeAnimation(HURT);
+        }
     }
 }
 

@@ -35,14 +35,14 @@ private:
     void moveLeft();
     void moveRight();
     void jump();
-
+    void run();
     void follow();
 
     void update1();
     void update2();
 
-    time_t timer;
-    int hp, pmin, pmax, type;
+    time_t timer, hurtTim;
+    int hp, pmin, pmax, type, fleeDist;
     bool death, bJumping, bpatrol, onPatrol;
     glm::ivec2 posEnemy, spriteSize;
 	int jumpAngle, startY;
