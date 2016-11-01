@@ -219,6 +219,11 @@ void Inventory::setPico(int i){
     else if(pico ==2) inventoryItems[0]->changeAnimation(pico);
 }
 
+int Inventory::getPico(){
+    return pico;
+}
+
+
 void Inventory::setSword(int i){
     sword = i;
     if(sword == 0) inventoryItems[1]->changeAnimation(sword); //UPGRADES

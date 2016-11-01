@@ -24,7 +24,7 @@ public:
     World(int sd, const glm::ivec2 &wSize, const glm::ivec2 &bSize, const glm::ivec2 &tSize, int floorlvl, SoundManager *man, ShaderProgram &program);
     ~World();
 
-    void update(glm::ivec2 &pos,glm::ivec2 &screen);
+    void update(glm::ivec2 &pos,glm::ivec2 &screen, float time);
     void render(glm::ivec2 &pos,glm::ivec2 &screen);
     void free();
 
@@ -54,6 +54,7 @@ private:
     glm::ivec2 tilesheetSize;
     int floor_level;
     vector<vector<int> > mat;
+    float currentTime;
     vector<vector<float> > coords;
     vector<vector<TexturedQuad *> > tilemap;
     Texture tex;

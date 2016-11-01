@@ -182,9 +182,10 @@ void World::prepareTexQuads2(const glm::ivec2 &bSize, const glm::ivec2 &tSize, S
         }
     }
 }*/
-void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
+void World::update(glm::ivec2 &pos,glm::ivec2 &screen, float time) {
     //TESTING
     //THIS CREATES DIRT BLOCKS
+    currentTime += time;
     if(Game::instance().leftClick() and inventory->getSelected() == DIRT and inventory->enoughS(1,DIRT-1)) {
 
         pair<int,int> mPos = Game::instance().getMousePos();
@@ -257,7 +258,8 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen) {
         int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
         int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
-            if(mat[(worldSize.y - i - 1)][j] != 0) {
+            if(mat[(worldSize.y - i - 1)][j] != 0  and currentTime >= (500./(inventory->getPico()+1))) {
+                currentTime = 0;
                 if(mat[(worldSize.y - i - 1)][j] == 8)inventory->incS(1,DIRT-1);  //DIRT
                 else if(mat[(worldSize.y - i - 1)][j] == 16)inventory->incS(1,ROCK-1); //ROCK
                 else if(mat[(worldSize.y - i - 1)][j] == 24)inventory->incS(1,NAMEKITA-1); //NAMEKITA

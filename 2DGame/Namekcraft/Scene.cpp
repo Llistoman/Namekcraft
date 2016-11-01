@@ -125,7 +125,7 @@ void Scene::update(int deltaTime)
     }
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
-    world->update(newpos,screen);
+    world->update(newpos,screen,deltaTime);
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
     projection = glm::translate(projection, glm::vec3(-newpos.x+SCREEN_WIDTH/2 - PLAYER_SIZE_X, -newpos.y+SCREEN_HEIGHT/2 - PLAYER_SIZE_Y, 0.f));
 }

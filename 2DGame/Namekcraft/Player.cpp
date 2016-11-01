@@ -116,9 +116,8 @@ void Player::update(int deltaTime)
       if(Game::instance().leftClick()) {
           if(inventory->getSelected() == 2) {
               int x0, x1, y0, y1, dmg;
-              if(inventory->getSelected() == 2) dmg = 20;
+              if(inventory->getSelected() == 2) dmg = 20 + 20*sword; //Mal proporcional al arma
               else dmg = 5; //UNSELECTED
-
               if(dir == 0) { //LEFT
                   x0 = posPlayer.x - 20 - spriteSize.x;
                   x1 = posPlayer.x ;
@@ -186,7 +185,7 @@ void Player::update(int deltaTime)
             inventory->decS(1, WOOD-1);
             inventory->setSword(2);
             item->setSword(2);
-            pico = 2;
+            sword = 2;
           }
       }
       
