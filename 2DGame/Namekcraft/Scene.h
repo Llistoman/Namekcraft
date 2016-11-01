@@ -38,7 +38,7 @@ private:
     //TileMap *map;
     World *world;
     Player *player;
-    Enemy *enem;
+    vector<Enemy *> enemies;
     SoundManager *manager;
     ShaderProgram texProgram;
     float currentTime;

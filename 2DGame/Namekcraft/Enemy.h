@@ -8,6 +8,8 @@
 #include "Player.h"
 #include "Text.h"
 
+class Player; //forward declaration
+
 class Enemy
 {
 
@@ -16,12 +18,13 @@ public:
     void init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
+    void free();
     int dir;
     void setWorld(World *w);
 	void setPosition(const glm::vec2 &pos);
-    void heal(int h);
     void damage(int d);
     void dead();
+    bool isDead();
     glm::ivec2 getPosRender();
     glm::ivec2 getSpSize();
 	

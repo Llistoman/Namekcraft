@@ -18,7 +18,6 @@ Scene::Scene()
 {
     world = NULL;
 	player = NULL;
-    enem = NULL;
 }
 
 Scene::~Scene()
@@ -27,8 +26,10 @@ Scene::~Scene()
         delete world;
 	if(player != NULL)
 		delete player;
-    if(enem != NULL)
-        delete enem;
+    for(int i = 0; i < enemies.size(); ++i) {
+        if(enemies[i] != NULL)
+            delete enemies[i];
+    }
 }
 
 
@@ -81,10 +82,24 @@ void Scene::init()
     world->setInventory(player->inventory);
 
     //ENEMY
-    enem = new Enemy();
-    glm::ivec2 enemyPos = glm::ivec2((world->getWorldSize().x/2+2)*BLOCK_X,(floorlvl-10)*BLOCK_Y);
-    enem->init(player, 0, enemyPos, texProgram);
-    enem->setWorld(world);
+    for (int i = 0; i < worldSize.x/20; ++i) {
+        Enemy *enem = new Enemy();
+        glm::ivec2 enemyPos = glm::ivec2((20*i)*BLOCK_X,(floorlvl-10)*BLOCK_Y);
+        enem->init(player, 0, enemyPos, texProgram);
+        enem->setWorld(world);
+        enemies.push_back(enem);
+    }
+
+    for (int j = 0; j < worldSize.x/25; ++j) {
+        for (int k = 0; k < worldSize.y/25; ++k) {
+            Enemy *enem = new Enemy();
+            glm::ivec2 enemyPos = glm::ivec2((25*j)*BLOCK_X,(25*k)*BLOCK_Y);
+            enem->init(player, 1, enemyPos, texProgram);
+            enem->setWorld(world);
+            enemies.push_back(enem);
+        }
+    }
+    player->setEnemies(enemies);
 
     //CAMERA
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -96,7 +111,15 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-    enem->update(deltaTime);
+    for(int i = 0; i < enemies.size(); ++i) {
+        if(enemies[i] != NULL) {
+            if(enemies[i]->isDead()) {
+                delete enemies[i];
+                enemies[i] = NULL;
+            }
+            else enemies[i]->update(deltaTime);
+        }
+    }
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
     world->update(newpos,screen);
@@ -120,7 +143,11 @@ void Scene::render()
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
     world->render(newpos,screen);
-    enem->render();
+    for(int i = 0; i < enemies.size(); ++i) {
+        if(enemies[i] != NULL) {
+            enemies[i]->render();
+        }
+    }
     player->render();
 }
 

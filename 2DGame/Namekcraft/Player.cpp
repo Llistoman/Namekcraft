@@ -92,6 +92,8 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
     craft->init(position, shaderProgram);
     craft->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32));
 
+    timer = time(0);
+
 }
 
 void Player::update(int deltaTime)
@@ -100,13 +102,55 @@ void Player::update(int deltaTime)
     sprite->update(deltaTime);
 
     if(!death){ //Si estem morts no tenim control
-      
+
+
       //RUN OR NOT
       if(Game::instance().getKey('z')){
           playerSpeed = 5;
       }
       else{
           playerSpeed = 2;
+      }
+
+      //Attk
+      if(Game::instance().leftClick()) {
+          if(inventory->getSelected() == 2) {
+              int x0, x1, y0, y1, dmg;
+              if(inventory->getSelected() == 2) dmg = 20;
+              else dmg = 5; //UNSELECTED
+
+              if(dir == 0) { //LEFT
+                  x0 = posPlayer.x - 20 - spriteSize.x;
+                  x1 = posPlayer.x ;
+              }
+              else { //RIGHT
+                  x0 = posPlayer.x ;
+                  x1 = posPlayer.x + 20;
+              }
+              y0 = posPlayer.y - 10 - spriteSize.y;
+              y1 = posPlayer.y + 10 + spriteSize.y;
+              int duration = difftime(time(0),timer);
+              if(duration >= 1) {
+                  for(int i = 0; i < enemies.size(); ++i) {
+                      if(enemies[i] != NULL) {
+                          int x = enemies[i]->getPosRender().x;
+                          int y = enemies[i]->getPosRender().y;
+                          /*cout << "EPOS " << x << " " << y << endl;
+                          cout << "RNG0 " << x0 << " " << y0 << endl;
+                          cout << "RNG1 " << x1 << " " << y1 << endl;*/
+                          if(x > x0 and x <= x1 and y > y0 and y <= y1) {
+                              enemies[i]->damage(dmg);
+                              /*if(enemies[i]->isDead()) { //MAYBE CHANGE
+                                  cout << "dead" << endl;
+                                  delete enemies[i];
+                                  enemies[i] = NULL;
+                              }*/
+                          }
+                      }
+                  }
+                  timer = time(0);
+              }
+          }
       }
 
       //Craft
@@ -231,7 +275,16 @@ void Player::render()
     inventory->render();
     craft->renderTexts();
     topText.render( to_string(hp) + "/" + to_string(MAX_HP), glm::vec2(float(SCREEN_WIDTH/2 -40), float(SCREEN_HEIGHT/2 -38)), HP_SIZE, glm::vec4(1, 1, 1, 1));
+}
 
+void Player::free()
+{
+    sprite->free();
+}
+
+void Player::setEnemies(vector<Enemy *> &vec)
+{
+    enemies = vec;
 }
 
 void Player::setWorld(World *w)

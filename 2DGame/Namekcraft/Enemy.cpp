@@ -12,10 +12,6 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-
-#define MAX_HP 50
-#define HP_SIZE 14
-
 enum EnemyAnims
 {
     ATK,MOVE
@@ -24,10 +20,7 @@ enum EnemyAnims
 
 void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &shaderProgram)
 {
-    //Carga Fonts del HP TEXT
-    //if(!topText.init("fonts/Andy")) cout << "Could not load font!!!" << endl;
     type = t;
-    hp = MAX_HP;
     death = false;
     bpatrol = false;
     onPatrol = false;
@@ -36,6 +29,7 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
     //ALL OF THIS DEPENDS ON SPRITESHEET, MUST BE HARDCODED
 
     if(type == 0) {
+        hp = 60;
         spriteSize.x = 42;
         spriteSize.y = 46;
         glm::vec2 spSize;
@@ -58,6 +52,7 @@ void Enemy::init(Player *pl, int t, const glm::ivec2 &position, ShaderProgram &s
         sprite->changeAnimation(MOVE);
     }
     else {
+        hp = 40;
         spriteSize.x = 56;
         spriteSize.y = 46;
         glm::vec2 spSize;
@@ -209,7 +204,7 @@ void Enemy::update1() {
     jump();
 }
 
-void Enemy::update2() {
+void Enemy::update2() { //MAKE HIM RUN!
     enemySpeed = 1;
     glm::ivec2 playerPos = player->getPosRender();
     glm::ivec2 playerDist = glm::ivec2(abs(playerPos.x-posEnemy.x), abs(playerPos.y-posEnemy.y));
@@ -246,9 +241,14 @@ void Enemy::update(int deltaTime)
     }
 }
 
-void Enemy::render() {
+void Enemy::render()
+{
     sprite->render(dir);
-    //topText.render( to_string(hp) + "/" + to_string(MAX_HP), glm::vec2(float(SCREEN_WIDTH/2 -40), float(SCREEN_HEIGHT/2 -38)), HP_SIZE, glm::vec4(1, 1, 1, 1));
+}
+
+void Enemy::free()
+{
+    sprite->free();
 }
 
 void Enemy::setWorld(World *w)
@@ -265,6 +265,16 @@ void Enemy::setPosition(const glm::vec2 &pos)
 void Enemy::damage(int d)
 {
     hp -= d;
+    /*if(dir == 0) {
+        posEnemy.x -= 10;
+        if(world->collisionMoveLeft(posEnemy, spriteSize))
+            posEnemy.x += 10;
+    }
+    else {
+        posEnemy.x += 10;
+        if(world->collisionMoveRight(posEnemy, spriteSize))
+            posEnemy.x -= 10;
+    }*/
     if(0 > hp){ 
       hp = 0;
       dead();
@@ -277,10 +287,9 @@ void Enemy::dead()
     //DO SOMETHING
 }
 
-void Enemy::heal(int h)
+bool Enemy::isDead()
 {
-    hp += h;
-    if(hp > MAX_HP) hp = MAX_HP;
+    return death;
 }
 
 glm::ivec2 Enemy::getPosRender() {
