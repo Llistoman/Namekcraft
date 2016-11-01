@@ -126,24 +126,19 @@ void Player::update(int deltaTime)
                   x0 = posPlayer.x ;
                   x1 = posPlayer.x + 20;
               }
-              y0 = posPlayer.y - 10 - spriteSize.y;
-              y1 = posPlayer.y + 10 + spriteSize.y;
+              y0 = posPlayer.y - 20 - spriteSize.y;
+              y1 = posPlayer.y + 20 + spriteSize.y;
               int duration = difftime(time(0),timer);
               if(duration >= 1) {
                   for(int i = 0; i < enemies.size(); ++i) {
                       if(enemies[i] != NULL) {
                           int x = enemies[i]->getPosRender().x;
                           int y = enemies[i]->getPosRender().y;
-                          /*cout << "EPOS " << x << " " << y << endl;
+                          /*cout << "POS " << posPlayer.x << " " << posPlayer.y << endl;
                           cout << "RNG0 " << x0 << " " << y0 << endl;
                           cout << "RNG1 " << x1 << " " << y1 << endl;*/
                           if(x > x0 and x <= x1 and y > y0 and y <= y1) {
                               enemies[i]->damage(dmg);
-                              /*if(enemies[i]->isDead()) { //MAYBE CHANGE
-                                  cout << "dead" << endl;
-                                  delete enemies[i];
-                                  enemies[i] = NULL;
-                              }*/
                           }
                       }
                   }
