@@ -39,10 +39,10 @@ void Scene::initbackground() {
     glm::ivec2 size = world->getWorldSize();
     glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2(size.x*BLOCK_X, size.y*BLOCK_Y)};
     glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom2[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2), glm::vec2(size.x*BLOCK_X , size.y*BLOCK_Y)};
-    glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(size.x*BLOCK_X/3, size.y*BLOCK_Y/3)};
-    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
+    glm::vec2 geom2[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2), glm::vec2(size.x*BLOCK_X*2 , size.y*BLOCK_Y)};
+    glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(2.f, 1.f)};
+    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(10*size.x*BLOCK_X/3, size.y*BLOCK_Y/3)};
+    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(5.f, 1.f)};
 
     background[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
     background[1] = TexturedQuad::createTexturedQuad(geom2, texCoords2, texProgram);
@@ -115,7 +115,6 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
     for(int i = 0; i < enemies.size(); ++i) {
         if(enemies[i] != NULL) {
             if(enemies[i]->isDead()) {
@@ -125,6 +124,16 @@ void Scene::update(int deltaTime)
             else enemies[i]->update(deltaTime);
         }
     }
+    player->update(deltaTime);
+    
+    
+//     //NUBES TROLLS QUE SE ANIMAN Y DEFORMAN COMO QUIEREN
+//     glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1000*BLOCK_X/3, 100*BLOCK_Y/3)};
+//     glm::vec2 texCoords3[2] = {glm::vec2(float(int((currentTime *0.001)*99)%500)*0.001, 0.f), glm::vec2(5.f, 1.f)};
+//     background[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
+    
+    
+    
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
     world->update(newpos,screen,deltaTime);
