@@ -137,7 +137,10 @@ void Item::update(int deltaTime)
 void Item::render(int dir)
 {
   if(action){
-    float value = (sin(currentTime / 100.f) + 1.0f) * 20.0f;
+    float freq = currentTime;
+    if(sprite->animation() == PICO or sprite->animation() == NAMEKPICO or sprite->animation() == COSMICPICO) freq *= (pico+1);
+    else if(sprite->animation() == SWORD or sprite->animation() == NAMEKSWORD or sprite->animation() == COSMICSWORD) freq *= (sword+1);
+    float value = (sin(freq / 100.f) + 1.0f) * 20.0f;
     sprite->render((dir+1)%2, value);
   }
 	else sprite->render((dir+1)%2); //Direccio va de 0 a 1, vui que sigui la inversa del player

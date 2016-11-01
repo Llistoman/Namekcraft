@@ -26,6 +26,7 @@ public:
 private:
     glm::ivec2 tileMapDispl, posItem, spriteSize;
   int pico, sword;
+  int selected;
 	int jumpAngle, startY;
   bool action;
   float itemSpeed;
