@@ -222,9 +222,7 @@ void Player::update(int deltaTime)
       }
       else
       {
-          if(sprite->animation() == MOVE)
-              sprite->changeAnimation(STAND);
-          else if(sprite->animation() == MOVE)
+          if(sprite->animation() == MOVE or sprite->animation() == RUN )
               sprite->changeAnimation(STAND);
       }
 
