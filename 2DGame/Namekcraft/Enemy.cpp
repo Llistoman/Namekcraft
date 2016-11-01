@@ -351,15 +351,15 @@ void Enemy::damage(int d)
 
 void Enemy::dead()
 {
-  death = true;
   if(type == 0) manager->playDeath1();
   else manager->playDeath2();
-  if(type==0)player->inventory->incS(1,WOOD); //DROP LIMO 
+  if(type==1)player->inventory->incS(1,LIMONITA); //DROP LIMO 
   else{                                       //DROP ALIEN
     int p = rand() % 10 + 1;
     if(p == 1) player->inventory->incS(1,SENZU); //Amb baixa probabilitat drop de senzus
-    player->inventory->incS(1,LIMONITA);
+    player->inventory->incS(1,WOOD);
   }
+  death = true;
 }
 
 bool Enemy::isDead()
