@@ -317,6 +317,11 @@ void Player::setEnemies(vector<Enemy *> &vec)
     enemies = vec;
 }
 
+void Player::setSoundManager(SoundManager *m)
+{
+    manager = m;
+}
+
 void Player::setWorld(World *w)
 {
     world = w;
@@ -331,6 +336,7 @@ void Player::setPosition(const glm::vec2 &pos)
 void Player::damage(int d)
 {
     hp -= d;
+    manager->playPlayerDmg();
     if(0 > hp){ 
       hp = 0;
       dead();

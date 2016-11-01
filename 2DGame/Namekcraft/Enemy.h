@@ -7,6 +7,7 @@
 #include "Inventory.h"
 #include "Player.h"
 #include "Text.h"
+#include "SoundManager.h"
 
 class Player; //forward declaration
 
@@ -20,6 +21,7 @@ public:
 	void render();
     void free();
     int dir;
+    void setSoundManager(SoundManager *m);
     void setWorld(World *w);
 	void setPosition(const glm::vec2 &pos);
     void damage(int d);
@@ -50,6 +52,8 @@ private:
     World *world;
     Player *player;
     Text topText;
+
+    SoundManager *manager;
 
 };
 
