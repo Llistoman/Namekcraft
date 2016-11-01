@@ -40,6 +40,7 @@ private:
     bool usat;
     bool death;
     bool bJumping;
+    int pico, sword;
     glm::ivec2 posPlayer, spriteSize;
 	int jumpAngle, startY;
     Item *item;

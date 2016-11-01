@@ -8,20 +8,21 @@
 
 enum ItemAnims
 {
-	PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, SENZU,  NONE
+  PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, SENZU,  NONE, NAMEKPICO, COSMICPICO, NAMEKSWORD, COSMICSWORD
 };
 
 
 
 void Item::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderProgram &shaderProgram)
 {
+    pico = sword =  0;   //Pico upgradejat 0
     spriteSize = spSize;
     action = false;
     spritesheet.loadFromFile("images/itemsRelevant.png", TEXTURE_PIXEL_FORMAT_RGBA);
     //ALL OF THIS DEPENDS ON SPRITESHEET, MUST BE HARDCODED
 
     sprite = Sprite::createSprite(spSize, glm::vec2(0.125, 0.25), &spritesheet, &shaderProgram);
-    sprite->setNumberAnimations(11);
+    sprite->setNumberAnimations(15);
 	
     sprite->setAnimationSpeed(PICO, 8);
     sprite->addKeyframe(PICO, glm::vec2(0.f, 0.f));
@@ -55,6 +56,18 @@ void Item::init(const glm::ivec2 &tileMapPos, const glm::vec2 &spSize, ShaderPro
     
     sprite->setAnimationSpeed(NONE, 8);
     sprite->addKeyframe(NONE, glm::vec2(0.f, 0.75f));
+    
+    sprite->setAnimationSpeed(NAMEKPICO, 8);
+    sprite->addKeyframe(NAMEKPICO, glm::vec2(0.f, 0.25f));
+    
+    sprite->setAnimationSpeed(COSMICPICO, 8); 
+    sprite->addKeyframe(COSMICPICO, glm::vec2(0.f, 0.5f));
+    
+    sprite->setAnimationSpeed(NAMEKSWORD, 8);
+    sprite->addKeyframe(NAMEKSWORD, glm::vec2(0.125f, 0.25f));
+    
+    sprite->setAnimationSpeed(COSMICSWORD, 8); 
+    sprite->addKeyframe(COSMICSWORD, glm::vec2(0.125f, 0.5f));
 
 
 
@@ -68,11 +81,15 @@ void Item::update(int deltaTime)
   currentTime += deltaTime;
   if(Game::instance().getKey('1'))
   {
-    sprite->changeAnimation(PICO);
+    if(pico ==0) sprite->changeAnimation(PICO);
+    else if(pico ==1) sprite->changeAnimation(NAMEKPICO);
+    else if(pico ==2) sprite->changeAnimation(COSMICPICO);
   }
   else if(Game::instance().getKey('2'))
   {
-    sprite->changeAnimation(SWORD);
+    if(sword == 0) sprite->changeAnimation(SWORD);
+    else if(sword ==1) sprite->changeAnimation(NAMEKSWORD);
+    else if(sword ==2) sprite->changeAnimation(COSMICSWORD);
   }
     else if(Game::instance().getKey('3'))
   {
@@ -135,6 +152,14 @@ void Item::setPosition(const glm::vec2 &pos)
 {
 	posItem = pos;
 	sprite->setPosition(glm::vec2(float(posItem.x), float(posItem.y)));
+}
+
+void Item::setPico(int i){
+    pico = i;
+}
+
+void Item::setSword(int i){
+    sword = i;
 }
 
 glm::ivec2 Item::getPos() {

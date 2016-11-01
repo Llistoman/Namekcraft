@@ -31,12 +31,13 @@ enum PlayerAnims
 
 enum ItemAnims
 {
-  SENZU, PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, NONE //Ordre alterat
+  SENZU, PICO, SWORD, DIRT, ROCK, WOOD, NAMEKITA, COSMIC, LIMONITA, POTION, NONE, NAMEKPICO, COSMICPICO, NAMEKSWORD, COSMICSWORD //Ordre alterat
 };
 
 
 void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderProgram &shaderProgram)
 {
+    pico = sword =  0;   //Pico upgradejat 0
     usat = true;
     //Carga Fonts del HP TEXT
     if(!topText.init("fonts/Andy")) cout << "Could not load font!!!" << endl;
@@ -91,7 +92,6 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
     craft = new Craft();
     craft->init(position, shaderProgram);
     craft->setPosition(glm::vec2(INIT_ITEM_X_TILES * 32, INIT_ITEM_Y_TILES * 32));
-
     timer = time(0);
 
 }
@@ -160,7 +160,37 @@ void Player::update(int deltaTime)
             inventory->decS(2,LIMONITA-1);
             inventory->incS(1,POTION-1);
           }
+          else if(c == NAMEKPICO and inventory->enoughS(1,WOOD-1) and inventory->enoughS(5,NAMEKITA-1)){
+            inventory->decS(5,NAMEKITA-1);
+            inventory->decS(1, WOOD-1);
+            inventory->setPico(1);
+            item->setPico(1);
+            pico = 1;
+          }
+          else if(c == NAMEKSWORD and inventory->enoughS(1,WOOD-1) and inventory->enoughS(10,NAMEKITA-1)){
+            inventory->decS(10,NAMEKITA-1);
+            inventory->decS(1, WOOD-1);
+            inventory->setSword(1);
+            item->setSword(1);
+            sword = 1;
+          }
+          else if(c == COSMICPICO and inventory->enoughS(1,WOOD-1) and inventory->enoughS(5,COSMIC-1)){
+            inventory->decS(5,COSMIC-1);
+            inventory->decS(1, WOOD-1);
+            inventory->setPico(2);
+            item->setPico(2);
+            pico = 2;
+          }
+          else if(c == COSMICSWORD and inventory->enoughS(1,WOOD-1) and inventory->enoughS(10,COSMIC-1)){
+            inventory->decS(10,COSMIC-1);
+            inventory->decS(1, WOOD-1);
+            inventory->setSword(2);
+            item->setSword(2);
+            pico = 2;
+          }
       }
+      
+      //FI CRAFT
       
       if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
       {

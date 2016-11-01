@@ -19,6 +19,8 @@ public:
   void decS(int x, int i);
   bool enoughS(int x,int i);
   int getSelected();
+  void setPico(int i);
+  void setSword(int i);
     glm::ivec2 getPos();
     glm::ivec2 getSpSize();
   
@@ -27,6 +29,7 @@ private:
     glm::vec2 spSize, spSize2;
   vector<glm::vec2> mapItems;
   int selected;
+  int pico, sword;
   Texture spritesheet;
   Texture spritesheet2;
   vector<Sprite*> sprites;

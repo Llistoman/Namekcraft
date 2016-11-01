@@ -348,7 +348,7 @@ void Craft::incC1(int x)
 bool Craft::enoughQ(int x, int i)
 {
   if(i >= 0 and 2 > i){  //retorna si tenim més de x del recurs i
-    cout << (qu[i] >= x) << endl;
+    //cout << (qu[i] >= x) << endl;
     return qu[i] >= x;
   }
   return false;
@@ -362,7 +362,7 @@ int  Craft::craftear(){ //Retorna l'objecte que crafteja, o -1 si no es una cmb 
     decC1(1);
     return POTION;
   }
-  else if (craftItems[0]->animation() == PICO and qu[0]==1 and craftItems[1]->animation() == NAMEKITA and qu[1]==5){ //POTION 
+  else if (craftItems[0]->animation() == WOOD and qu[0]==1 and craftItems[1]->animation() == NAMEKITA and qu[1]==5){ //POTION 
     decC0(1);
     decC1(5);
     return NAMEKPICO;

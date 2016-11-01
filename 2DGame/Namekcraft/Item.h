@@ -18,11 +18,14 @@ public:
 	void render(int dir);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+  void setPico(int i);
+  void setSword(int i);
     glm::ivec2 getPos();
     glm::ivec2 getSpSize();
 	
 private:
     glm::ivec2 tileMapDispl, posItem, spriteSize;
+  int pico, sword;
 	int jumpAngle, startY;
   bool action;
   float itemSpeed;

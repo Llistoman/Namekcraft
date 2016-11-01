@@ -294,7 +294,6 @@ void Enemy::dead()
   if(type==0)player->inventory->incS(1,WOOD); //DROP LIMO 
   else{                                       //DROP ALIEN
     int p = rand() % 10 + 1;
-    cout << p << endl;
     if(p == 1) player->inventory->incS(1,SENZU); //Amb baixa probabilitat drop de senzus
     player->inventory->incS(1,LIMONITA);
   }

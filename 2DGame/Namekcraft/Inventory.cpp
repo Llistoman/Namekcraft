@@ -27,6 +27,7 @@ enum ItemAnims
    
 void Inventory::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
+    pico = sword =  0;   //Pico upgradejat 0
     selected = 0;
     spriteSize = glm::ivec2(INVENTORY_SIZE_X,INVENTORY_SIZE_Y);
     spSize = glm::vec2(INVENTORY_SIZE_X,INVENTORY_SIZE_Y);
@@ -75,11 +76,21 @@ void Inventory::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
       //Sprites items
       
       inventoryItems.push_back(Sprite::createSprite(spSize2, glm::vec2(0.125, 0.25), &spritesheet2, &shaderProgram));
-      inventoryItems[i]->setNumberAnimations(1);
+      inventoryItems[i]->setNumberAnimations(3);
       inventoryItems[i]->setAnimationSpeed(NORMAL, 8);
       inventoryItems[i]->addKeyframe(NORMAL, mapItems[i]);
       inventoryItems[i]->changeAnimation(NORMAL); 
     }
+    
+    //HARDCODE PER UPGRADEJAR ITEMS
+    inventoryItems[0]->setAnimationSpeed(1, 8); //Pics
+    inventoryItems[0]->addKeyframe(1, glm::vec2(0.f, 0.25f));
+    inventoryItems[0]->setAnimationSpeed(2, 8);
+    inventoryItems[0]->addKeyframe(2, glm::vec2(0.f, 0.5f));
+    inventoryItems[1]->setAnimationSpeed(1, 8); //Espases
+    inventoryItems[1]->addKeyframe(1, glm::vec2(0.125f, 0.25f));
+    inventoryItems[1]->setAnimationSpeed(2, 8);
+    inventoryItems[1]->addKeyframe(2, glm::vec2(0.125f, 0.5f));
 
 }
 
@@ -199,6 +210,20 @@ void Inventory::incS(int x, int i)
     stocks[i] += x;
     if(stocks[i] > MAX_STOCK) stocks[i] = MAX_STOCK;
   }
+}
+
+void Inventory::setPico(int i){
+    pico = i;
+    if(pico == 0) inventoryItems[0]->changeAnimation(pico); //UPGRADES
+    else if(pico ==1) inventoryItems[0]->changeAnimation(pico);
+    else if(pico ==2) inventoryItems[0]->changeAnimation(pico);
+}
+
+void Inventory::setSword(int i){
+    sword = i;
+    if(sword == 0) inventoryItems[1]->changeAnimation(sword); //UPGRADES
+    else if(sword ==1) inventoryItems[1]->changeAnimation(sword);
+    else if(sword ==2) inventoryItems[1]->changeAnimation(sword);
 }
 
 glm::ivec2 Inventory::getPos() {
