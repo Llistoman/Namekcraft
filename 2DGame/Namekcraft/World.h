@@ -41,7 +41,6 @@ public:
 
 private:
     void createBlock(int i, int j, int tile);
-    void rec(int min, int max, int heightmin, int heightmax);
     void prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl, SoundManager *man);
     void prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program);
 

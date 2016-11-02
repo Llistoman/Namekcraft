@@ -24,27 +24,6 @@ World::~World(){
 
 }
 
-//THIS CAN BE BETTER
-void World::rec(int min, int max, int heightmin, int heightmax) {
-    int mid = (max+min)/2;
-    int m = (heightmax-heightmin+1);
-    int y = rand()%m + heightmin;
-
-    //assign block
-    coords[y][mid] = 8;
-    for(int i = 0; i < y; ++i) {
-        int p = rand()%10;
-        if(p < 4) coords[i][mid] = 8;
-        else if (p < 8) coords[i][mid] = 16;
-        else if (p < 9) coords[i][mid] = 24;
-        else coords[i][mid] = 32;
-    }
-    if(max-1 != min) {
-        rec(mid,max,y,heightmax);
-        rec(min,mid,heightmin,y);
-    }
-}
-
 void World::createBlock(int i, int j, int tile) {
     glm::vec2 tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
     glm::vec2 halfTexel = glm::vec2(0.5f / tex.width(), 0.5f / tex.height());
@@ -117,81 +96,22 @@ void World::prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, Sh
     }
 }
 
-/*void World::prepareWorld2(int sd, const glm::ivec2 &wSize) {
-
-    worldSize = wSize;
-    coords = vector<vector<int> > (worldSize.y,(vector<int>(worldSize.x,0)));
-    tex.loadFromFile("images/itemsRelevant.png",TEXTURE_PIXEL_FORMAT_RGBA);
-    tex.setWrapS(GL_CLAMP_TO_EDGE);
-    tex.setWrapT(GL_CLAMP_TO_EDGE);
-    tex.setMinFilter(GL_NEAREST);
-    tex.setMagFilter(GL_NEAREST);
-    srand(sd);
-    int mid = worldSize.x/2;
-    //minus 1 tile to evade y = Size.y, minimum 1
-    int y = (rand()%(worldSize.y-1))+1;
-    //assign block
-    coords[y][mid] = 8;
-    for(int i = 0; i < y; ++i) {
-        int p = rand()%10;
-        if(p < 4) coords[i][mid] = 8;
-        else if (p < 8) coords[i][mid] = 16;
-        else if (p < 9) coords[i][mid] = 24;
-        else coords[i][mid] = 32;
-    }
-    int maxheight = (rand()%(worldSize.y-1))+1;
-    int minheight = (rand()%(maxheight))+1;
-
-    rec(mid,worldSize.x-1,minheight,y);
-    rec(0,mid,minheight,y);
-
-    //DEBUG
-    for(int i = worldSize.y-1; i >= 0; --i) {
-        for(int j = 0; j < worldSize.x; ++j) {
-            cout << coords[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-void World::prepareTexQuads2(const glm::ivec2 &bSize, const glm::ivec2 &tSize, ShaderProgram &program) {
-    blockSize = bSize;
-    tilesheetSize = tSize;
-    glm::vec2 tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
-    glm::vec2 halfTexel = glm::vec2(0.5f / tex.width(), 0.5f / tex.height());
-
-    //geom -> position on screen
-    glm::vec2 geom[2];
-    //texCoords -> position on spreadsheet
-    glm::vec2 texCoords[2];
-
-    tilemap = vector<vector<TexturedQuad *> >(worldSize.y,vector<TexturedQuad *>(worldSize.x,NULL));
-
-    for(int i = 0; i < worldSize.y; ++i) {
-        for(int j = 0; j < worldSize.x; ++j) {
-            int tile = coords[i][j];
-            if(tile != 0) {
-                geom[0] = glm::vec2(j*blockSize.x, (worldSize.y - i - 1)*blockSize.y);
-                geom[1] = glm::vec2(geom[0].x + blockSize.x, geom[0].y + blockSize.y);
-                texCoords[0] = glm::vec2(float((tile-1)%8) / tilesheetSize.x, float((tile-1)/8) / tilesheetSize.y);
-                texCoords[1] = texCoords[0] + tileTexSize;
-                texCoords[1] -= halfTexel;
-                tilemap[i][j] = TexturedQuad::createTexturedQuad(geom,texCoords,program);
-            }
-        }
-    }
-}*/
 void World::update(glm::ivec2 &pos,glm::ivec2 &screen, float time) {
-    //TESTING
-    //THIS CREATES DIRT BLOCKS
-    currentTime += time;
-    if(Game::instance().leftClick() and inventory->getSelected() == DIRT and inventory->enoughS(1,DIRT-1)) {
 
-        pair<int,int> mPos = Game::instance().getMousePos();
-        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
-        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
-        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+    currentTime += time;
+    pair<int,int> mousePos = Game::instance().getMousePos();
+    glm::vec2 mPos = glm::vec2(pos.x- screen.x/2 + mousePos.first, pos.y- screen.y/2 + mousePos.second);
+    int x0, x1, y0, y1;
+    x0 = pos.x - 64;
+    x1 = pos.x + 64 - blockSize.x;
+    y0 = pos.y - blockSize.y;
+    y1 = pos.y + blockSize.y;
+
+    //THIS CREATES DIRT BLOCKS
+    if(Game::instance().leftClick() and inventory->getSelected() == DIRT and inventory->enoughS(1,DIRT-1) and mPos.x >= x0 and mPos.x <= x1 and mPos.y >= y0 and mPos.y <= y1) {
+
+        int i = (pos.y- screen.y/2 + mousePos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mousePos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
             manager->playCreate();
             if(mat[(worldSize.y - i - 1)][j] == 0){
@@ -202,12 +122,10 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen, float time) {
     }
     
     //THIS CREATES ROCK BLOCKS
-    if(Game::instance().leftClick() and inventory->getSelected() == ROCK and inventory->enoughS(1,ROCK-1)) {
+    if(Game::instance().leftClick() and inventory->getSelected() == ROCK and inventory->enoughS(1,ROCK-1) and mPos.x >= x0 and mPos.x <= x1 and mPos.y >= y0 and mPos.y <= y1) {
 
-        pair<int,int> mPos = Game::instance().getMousePos();
-        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
-        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
-        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        int i = (pos.y- screen.y/2 + mousePos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mousePos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
             manager->playCreate();
             if(mat[(worldSize.y - i - 1)][j] == 0){
@@ -218,12 +136,10 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen, float time) {
     }
     
     //THIS CREATES NAMEKITA BLOCKS
-    if(Game::instance().leftClick() and inventory->getSelected() == NAMEKITA and inventory->enoughS(1,NAMEKITA-1)) {
+    if(Game::instance().leftClick() and inventory->getSelected() == NAMEKITA and inventory->enoughS(1,NAMEKITA-1) and mPos.x >= x0 and mPos.x <= x1 and mPos.y >= y0 and mPos.y <= y1) {
 
-        pair<int,int> mPos = Game::instance().getMousePos();
-        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
-        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
-        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        int i = (pos.y- screen.y/2 + mousePos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mousePos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
             manager->playCreate();
             if(mat[(worldSize.y - i - 1)][j] == 0){
@@ -235,12 +151,10 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen, float time) {
     
     
     //THIS CREATES COSMIC BLOCKS
-    if(Game::instance().leftClick() and inventory->getSelected() == COSMIC and inventory->enoughS(1,COSMIC-1)) {
+    if(Game::instance().leftClick() and inventory->getSelected() == COSMIC and inventory->enoughS(1,COSMIC-1) and mPos.x >= x0 and mPos.x <= x1 and mPos.y >= y0 and mPos.y <= y1) {
 
-        pair<int,int> mPos = Game::instance().getMousePos();
-        //ALGO D'AQUI NO ESTA BE (el +1 aquest)
-        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
-        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        int i = (pos.y- screen.y/2 + mousePos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mousePos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x and mat[(worldSize.y - i - 1)][j] == 0) {
             manager->playCreate();
             if(mat[(worldSize.y - i - 1)][j] == 0){
@@ -252,11 +166,10 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen, float time) {
     
     
     //THIS DESTROYS BLOCKS
-    else if(Game::instance().leftClick() and inventory->getSelected() == PICO) {
+    else if(Game::instance().leftClick() and inventory->getSelected() == PICO and mPos.x >= x0 and mPos.x <= x1 and mPos.y >= y0 and mPos.y <= y1) {
 
-        pair<int,int> mPos = Game::instance().getMousePos();
-        int i = (pos.y- screen.y/2 + mPos.second)/blockSize.y + 1;
-        int j = (pos.x- screen.x/2 + mPos.first)/blockSize.x + 1;
+        int i = (pos.y- screen.y/2 + mousePos.second)/blockSize.y + 1;
+        int j = (pos.x- screen.x/2 + mousePos.first)/blockSize.x + 1;
         if (i >= 0 and i < worldSize.y and j >= 0 and j < worldSize.x) {
             if(mat[(worldSize.y - i - 1)][j] != 0  and currentTime >= (500./(inventory->getPico()+1))) {
                 currentTime = 0;
