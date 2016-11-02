@@ -106,6 +106,15 @@ void Scene::init()
     }
     player->setEnemies(enemies);
 
+    //SHIP
+    glm::ivec2 size = world->getWorldSize();
+    glm::ivec2 shipPos = world->getShipPos();
+    glm::vec2 geom[2] = (glm::vec2((shipPos.x)*blockSize.x, (worldSize.y - shipPos.y - 1)*blockSize.y),glm::vec2(geom[0].x + 3*blockSize.x, geom[0].y + 3*blockSize.y));
+    //glm::vec2 geom[2] = {glm::vec2(world->getWorldSize().x/2*BLOCK_X,(floorlvl-10)*BLOCK_Y), glm::vec2(geom[0].x + 3*blockSize.x, geom[0].y + 3*blockSize.y)};
+    glm::vec2 texCoords[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
+    shipTex.loadFromFile("images/ship.png",TEXTURE_PIXEL_FORMAT_RGBA);
+    ship = TexturedQuad::createTexturedQuad(geom,texCoords,texProgram);
+
     //CAMERA
     projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -154,6 +163,7 @@ void Scene::render()
     background[0]->render(texs[0]);
     background[1]->render(texs[1]);
     background[2]->render(texs[2]);
+    ship->render(shipTex);
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
     world->render(newpos,screen);

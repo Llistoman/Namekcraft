@@ -29,6 +29,7 @@ public:
     void free();
 
     int position(int i, int j);
+    glm::ivec2 getShipPos();
     glm::ivec2 getWorldSize();
     glm::ivec2 getBlockSize();
     glm::ivec2 getTileSheetSize();
@@ -46,6 +47,8 @@ private:
 
 private:
 
+    bool ship;
+    glm::ivec2 shipPos;
     mt19937 *generator;
     Inventory *inventory;
     glm::ivec2 blockSize;

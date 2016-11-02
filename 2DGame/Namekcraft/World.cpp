@@ -46,6 +46,7 @@ void World::prepareWorld(int sd, const glm::ivec2 &wSize, int floorlvl,SoundMana
     worldSize = wSize;
     floor_level = floorlvl;
     manager = man;
+    ship = false;
     coords = vector<vector<float> > (worldSize.y,(vector<float>(worldSize.x,0)));
     tex.loadFromFile("images/itemsRelevant.png",TEXTURE_PIXEL_FORMAT_RGBA);
     tex.setWrapS(GL_CLAMP_TO_EDGE);
@@ -86,7 +87,14 @@ void World::prepareTexQuads(const glm::ivec2 &bSize, const glm::ivec2 &tSize, Sh
 
     for(int i = 0; i < worldSize.y; ++i) {
         for(int j = 0; j < worldSize.x; ++j) {
-            if(coords[i][j] < 0.4) tile = 0; //empty
+            if(coords[i][j] < 0.01 and not ship) {
+                mat[i][j] = 0;
+                shipPos.x = i;
+                shipPos.y = j;
+                tile = 0;
+                ship = true;
+            }
+            else if (coords[i][j] < 0.4) tile = 0; //empty
             else if (coords[i][j] < 0.6 and coords[i][j] >= 0.4) tile = 8;
             else if (coords[i][j] < 0.8 and coords[i][j] >= 0.6) tile = 16;
             else if (coords[i][j] < 0.9 and coords[i][j] >= 0.8) tile = 24;
@@ -208,6 +216,10 @@ void World::free() {
             if(tilemap[i][j] != NULL) tilemap[i][j]->free();
         }
     }
+}
+
+glm::ivec2 World::getShipPos() {
+    return shipPos;
 }
 
 glm::ivec2 World::getWorldSize() {
