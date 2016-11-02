@@ -102,10 +102,10 @@ void World::update(glm::ivec2 &pos,glm::ivec2 &screen, float time) {
     pair<int,int> mousePos = Game::instance().getMousePos();
     glm::vec2 mPos = glm::vec2(pos.x- screen.x/2 + mousePos.first, pos.y- screen.y/2 + mousePos.second);
     int x0, x1, y0, y1;
-    x0 = pos.x - 64;
-    x1 = pos.x + 64 - blockSize.x;
-    y0 = pos.y - blockSize.y;
-    y1 = pos.y + blockSize.y;
+    x0 = pos.x - 60;
+    x1 = pos.x + 32;
+    y0 = pos.y - 60;
+    y1 = pos.y + 32;
 
     //THIS CREATES DIRT BLOCKS
     if(Game::instance().leftClick() and inventory->getSelected() == DIRT and inventory->enoughS(1,DIRT-1) and mPos.x >= x0 and mPos.x <= x1 and mPos.y >= y0 and mPos.y <= y1) {
