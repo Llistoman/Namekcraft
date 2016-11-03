@@ -46,6 +46,12 @@ void Game::win()
     over->switchState();
 }
 
+void Game::killed()
+{
+    gameover = true;
+    over->killed();
+}
+
 void Game::switchOver()
 {
     gameover = !gameover;

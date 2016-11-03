@@ -94,6 +94,10 @@ void SceneOver::render()
     }
 }
 
+void SceneOver::killed() {
+    state = false;
+}
+
 void SceneOver::switchState()
 {
     state = !state;

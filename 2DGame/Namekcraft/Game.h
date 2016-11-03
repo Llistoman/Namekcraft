@@ -31,6 +31,7 @@ public:
 	void render();
     void win();
     void reestart();
+    void killed();
     void switchScene();
     void switchOver();
 

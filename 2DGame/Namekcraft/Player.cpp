@@ -368,7 +368,7 @@ void Player::dead()
 {
     death = true;
     sprite->changeAnimationHTC(DEATH);
-    Game::instance().switchOver();
+    Game::instance().killed();
 }
 
 void Player::heal(int h)

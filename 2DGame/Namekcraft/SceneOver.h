@@ -23,6 +23,7 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+    void killed();
     void switchState();
 
 private:
