@@ -10,6 +10,7 @@ class SoundManager
 
 public:
     SoundManager();
+    void stopAll();
     void playMenuMusic();
     void playWinMusic();
     void playOverMusic();

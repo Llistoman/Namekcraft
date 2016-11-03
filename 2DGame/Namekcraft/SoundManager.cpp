@@ -15,28 +15,27 @@ SoundManager::SoundManager() {
     if(!craftBuff.loadFromFile("sound/General Sounds/Positive Sounds/sfx_sounds_powerup3.wav")) std::cout << "error loading playerdmg sound" << std::endl;
 }
 
-void SoundManager::playMenuMusic() {
+void SoundManager::stopAll() {
     music.stop();
     over.stop();
     win.stop();
+    menu.stop();
+}
+
+void SoundManager::playMenuMusic() {
     menu.setLoop(true);
     menu.play();
 }
 
 void SoundManager::playOverMusic() {
-    music.stop();
     over.play();
 }
 
 void SoundManager::playWinMusic() {
-    music.stop();
     win.play();
 }
 
 void SoundManager::playMusic() {
-    menu.stop();
-    over.stop();
-    win.stop();
     music.setLoop(true);
     music.play();
 }

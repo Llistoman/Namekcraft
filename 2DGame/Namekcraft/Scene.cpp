@@ -207,10 +207,11 @@ void Scene::render()
 
 void Scene::changeMusic(int i)
 {
+    manager->stopAll();
     if(i == 0) manager->playMusic();
     else if(i == 1) manager->playOverMusic();
     else if(i == 2) manager->playWinMusic();
-    else manager->playMenuMusic();
+    else if(i == 3) manager->playMenuMusic();
 }
 
 void Scene::initShaders()

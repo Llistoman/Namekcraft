@@ -57,6 +57,7 @@ void Game::killed()
 void Game::switchOver()
 {
     gameover = !gameover;
+    scene->changeMusic(0);
 }
 
 bool Game::update(int deltaTime)
