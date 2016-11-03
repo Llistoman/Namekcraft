@@ -31,11 +31,11 @@ Sergi Sáncez Centelles
     MONGETA MAGICA    Cura la vida al maxim
     
 
---Instruccions del joc--
+Instruccions del joc:
 Control personatge:
 W   		Saltar
 A/D             Moures dreta esquerra
-SPACE           RUN
+SPACE           Correr
 Mouse 		Apunta on picar o colocar blocks
 
 Inventari:
