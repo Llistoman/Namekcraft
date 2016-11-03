@@ -14,16 +14,16 @@ Made by: Josep Llistosella and Sergi Sánchez
 
 #Items
     
-    PIKE allows to extract blocks of map (Different frequencies have different peaks extraction)
-    SWORD Apply evil enemies (Various swords apply different mal)
-    DIRT allows to place block of land
-    ROCK allows placing blocks of rock
-    WOOD Item for craftejar
-    NAMEKITA allows placing blocks NAMEKITA
-    COSMIC SULFATE allows placing blocks cosmic sulfate
-    LIMONITE Craft Item
-    POTION Heal Potion 
-    MAGIC BEAN Max Heal
+- PIKE allows to extract blocks of map (Different frequencies have different peaks extraction)
+- SWORD Apply evil enemies (Various swords apply different mal)
+- DIRT allows to place block of land
+- ROCK allows placing blocks of rock
+- WOOD Item for craftejar
+- NAMEKITA allows placing blocks NAMEKITA
+- COSMIC SULFATE allows placing blocks cosmic sulfate
+- LIMONITE Craft Item
+- POTION Heal Potion 
+- MAGIC BEAN Max Heal
     
 
 #Controls
