@@ -33,7 +33,7 @@ Player:
 - Mouse : Put/destroy blocks, hurt enemies, etc
 
 #Inventory
-1,2,3,4,5,6,7,8,9,0  Select Item
+- 1,2,3,4,5,6,7,8,9,0 : Select Item
 
 #Craft
 - LEFT/RIGHT : Select crafting position
