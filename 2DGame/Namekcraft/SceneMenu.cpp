@@ -68,7 +68,7 @@ void SceneMenu::update(int deltaTime)
 	currentTime += deltaTime;
     std::pair<int,int> pos = Game::instance().getMousePos();
     if(instructions or cred) {
-        if(Game::instance().leftClick() or Game::instance().getKey('q')) {
+        if(Game::instance().leftClick() and pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
             menu = true;
             instructions = false;
             cred = false;
@@ -108,7 +108,8 @@ void SceneMenu::render()
 
     std::pair<int,int> pos = Game::instance().getMousePos();
     if(instructions) {
-        screen->render(inst);if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
+        screen->render(inst);
+        if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
             options[3]->render(texs[7]);
         }
         else options[3]->render(texs[6]);
