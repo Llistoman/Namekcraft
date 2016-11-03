@@ -24,24 +24,23 @@ Made by: Josep Llistosella and Sergi Sánchez
 - LIMONITE Craft Item
 - POTION Heal Potion 
 - MAGIC BEAN Max Heal
-    
 
 #Controls
 Player:
-W   		Jump
-A/D             Left/Right
-SPACE           Run
-Mouse 		Put/destroy blocks, hurt enemies, etc
+- W : Jump
+- A/D : Left/Right
+- SPACE : Run
+- Mouse : Put/destroy blocks, hurt enemies, etc
 
 #Inventory
 1,2,3,4,5,6,7,8,9,0  Select Item
 
 #Craft
-LEFT/RIGHT   Select crafting position
-UP   	     Increment quantity
-DOWN   	     Decrement quantity
-R   	     Craft Item
+- LEFT/RIGHT : Select crafting position
+- UP : Increment quantity
+- DOWN : Decrement quantity
+- R : Craft Item
 
 #Cheats
-G   All items get +50 stock
+- G : All items get +50 stock
 
