@@ -10,6 +10,9 @@ class SoundManager
 
 public:
     SoundManager();
+    void playMenuMusic();
+    void playWinMusic();
+    void playOverMusic();
     void playMusic();
     void playCreate();
     void playDestroy();
@@ -21,6 +24,9 @@ public:
     void playCraft();
 
 private:
+    sf::Music menu;
+    sf::Music win;
+    sf::Music over;
     sf::Music music;
     sf::SoundBuffer createBuff;
     sf::Sound create;

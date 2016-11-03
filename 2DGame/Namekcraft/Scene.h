@@ -27,6 +27,7 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+    void changeMusic(int i);
 
 private:
 	void initShaders();

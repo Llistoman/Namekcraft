@@ -29,11 +29,12 @@ private:
 
 private:
     bool menu, cred, instructions;
+    Texture menuScreen;
     Texture credits;
     Texture inst;
-    Texture texs[6];
+    Texture texs[8];
     TexturedQuad *screen;
-    TexturedQuad *options[3];
+    TexturedQuad *options[4];
     ShaderProgram texProgram;
     float currentTime;
     glm::mat4 projection;

@@ -44,12 +44,14 @@ void Game::win()
 {
     gameover = !gameover;
     over->switchState();
+    scene->changeMusic(2);
 }
 
 void Game::killed()
 {
     gameover = true;
     over->killed();
+    scene->changeMusic(1);
 }
 
 void Game::switchOver()
@@ -156,6 +158,8 @@ bool Game::sceneState() const
 void Game::switchScene()
 {
     state = !state;
+    if(state) scene->changeMusic(0);
+    else scene->changeMusic(3);
 }
 
 

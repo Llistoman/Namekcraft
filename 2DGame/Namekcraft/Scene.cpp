@@ -75,7 +75,7 @@ void Scene::init()
 
     //MUSIC
     manager = new SoundManager();
-    manager->playMusic();
+    manager->playMenuMusic();
 
     //WORLD
     int seed = time(NULL);
@@ -139,10 +139,6 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
     glm::ivec2 shipPos = world->getShipPos();
-    //cout << abs(shipPos.x - player->getPosRender().x) << " " << abs(shipPos.y - player->getPosRender().y) << endl;
-    //cout << shipPos.x << " " << shipPos.y << endl;
-    //cout << player->getPosRender().x/BLOCK_X << " " << player->getPosRender().y/BLOCK_Y << endl;
-
 
     for(int i = 0; i < enemies.size(); ++i) {
         if(enemies[i] != NULL) {
@@ -154,15 +150,9 @@ void Scene::update(int deltaTime)
         }
     }
     player->update(deltaTime);
-    
-    
-     //NUBES TROLLS QUE SE ANIMAN Y DEFORMAN COMO QUIEREN
-     /*glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1000*BLOCK_X/3, 100*BLOCK_Y/3)};
-     glm::vec2 texCoords3[2] = {glm::vec2(float(int((currentTime *0.001)*99)%500)*0.001, 0.f), glm::vec2(5.f, 1.f)};
-     background[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);*/
         
      // BACK BACKGROUND
-    float dipBack = player->getPosRender().x*00.1;
+    float dipBack = player->getPosRender().x*0.1;
      
     glm::vec2 geom5[2] = {glm::vec2(-(100*BLOCK_X -dipBack) - dipBack, 100*BLOCK_Y/2 -(540.f) +400.f), glm::vec2((100*BLOCK_X -dipBack)*2 , 100*BLOCK_Y/2 +400.f)};
     glm::vec2 texCoords5[2] = {glm::vec2(0.f, 0.f), glm::vec2(3.f, 1.f)};
@@ -177,8 +167,6 @@ void Scene::update(int deltaTime)
     glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(9.f, 1.f)};
 
     background[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
-
-    
     
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
@@ -215,6 +203,14 @@ void Scene::render()
     }
     player->render();
 
+}
+
+void Scene::changeMusic(int i)
+{
+    if(i == 0) manager->playMusic();
+    else if(i == 1) manager->playOverMusic();
+    else if(i == 2) manager->playWinMusic();
+    else manager->playMenuMusic();
 }
 
 void Scene::initShaders()

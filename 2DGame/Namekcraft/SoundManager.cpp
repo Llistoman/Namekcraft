@@ -2,6 +2,9 @@
 
 SoundManager::SoundManager() {
     if(!music.openFromFile("sound/garden.WAV")) std::cout << "error loading music" << std::endl;
+    if(!menu.openFromFile("sound/menu.wav")) std::cout << "error loading music" << std::endl;
+    if(!over.openFromFile("sound/over.wav")) std::cout << "error loading music" << std::endl;
+    if(!win.openFromFile("sound/win.wav")) std::cout << "error loading music" << std::endl;
     if(!createBuff.loadFromFile("sound/General Sounds/Neutral Sounds/sfx_sound_neutral8.wav")) std::cout << "error loading create sound" << std::endl;
     if(!destroyBuff.loadFromFile("sound/General Sounds/Neutral Sounds/sfx_sound_neutral11.wav")) std::cout << "error loading destroy sound" << std::endl;
     if(!death1Buff.loadFromFile("sound/Death Screams/Alien/sfx_deathscream_alien1.wav")) std::cout << "error loading death1 sound" << std::endl;
@@ -12,7 +15,28 @@ SoundManager::SoundManager() {
     if(!craftBuff.loadFromFile("sound/General Sounds/Positive Sounds/sfx_sounds_powerup3.wav")) std::cout << "error loading playerdmg sound" << std::endl;
 }
 
+void SoundManager::playMenuMusic() {
+    music.stop();
+    over.stop();
+    win.stop();
+    menu.setLoop(true);
+    menu.play();
+}
+
+void SoundManager::playOverMusic() {
+    music.stop();
+    over.play();
+}
+
+void SoundManager::playWinMusic() {
+    music.stop();
+    win.play();
+}
+
 void SoundManager::playMusic() {
+    menu.stop();
+    over.stop();
+    win.stop();
     music.setLoop(true);
     music.play();
 }

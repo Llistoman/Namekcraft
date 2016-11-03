@@ -31,6 +31,9 @@ void SceneMenu::init()
     glm::vec2 geom3[2] = {glm::vec2(SCREEN_WIDTH/3.f, 6*SCREEN_HEIGHT/8.f), glm::vec2(2*SCREEN_WIDTH/3.f, 7*SCREEN_HEIGHT/8.f)};
     glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
     options[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
+    glm::vec2 geom4[2] = {glm::vec2(2*SCREEN_WIDTH/3.f, 6*SCREEN_HEIGHT/8.f), glm::vec2(3*SCREEN_WIDTH/3.f, 7*SCREEN_HEIGHT/8.f)};
+    glm::vec2 texCoords4[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
+    options[3] = TexturedQuad::createTexturedQuad(geom4, texCoords4, texProgram);
 
     //OPTIONS
     menu = true;
@@ -42,6 +45,9 @@ void SceneMenu::init()
     texs[3].loadFromFile("images/inst2.png", TEXTURE_PIXEL_FORMAT_RGBA);
     texs[4].loadFromFile("images/credits1.png", TEXTURE_PIXEL_FORMAT_RGBA);
     texs[5].loadFromFile("images/credits2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    texs[6].loadFromFile("images/back1.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    texs[7].loadFromFile("images/back2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    menuScreen.loadFromFile("images/menuscreen.png",TEXTURE_PIXEL_FORMAT_RGBA);
     credits.loadFromFile("images/credits.png",TEXTURE_PIXEL_FORMAT_RGBA);
     inst.loadFromFile("images/inst.png",TEXTURE_PIXEL_FORMAT_RGBA);
 
@@ -100,15 +106,22 @@ void SceneMenu::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-    //render
     std::pair<int,int> pos = Game::instance().getMousePos();
     if(instructions) {
-        screen->render(inst);
+        screen->render(inst);if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
+            options[3]->render(texs[7]);
+        }
+        else options[3]->render(texs[6]);
     }
     else if(cred) {
         screen->render(credits);
+        if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
+            options[3]->render(texs[7]);
+        }
+        else options[3]->render(texs[6]);
     }
     else if(pos.first >= SCREEN_WIDTH/3.f and pos.first <= 2*SCREEN_WIDTH/3.f) {
+        screen->render(menuScreen);
         if(pos.second >=  4*SCREEN_HEIGHT/8.f and pos.second <= 5*SCREEN_HEIGHT/8.f) options[0]->render(texs[1]);
         else options[0]->render(texs[0]);
         if(pos.second >=  5*SCREEN_HEIGHT/8.f and pos.second <= 6*SCREEN_HEIGHT/8.f) options[1]->render(texs[3]);
@@ -117,6 +130,7 @@ void SceneMenu::render()
         else options[2]->render(texs[4]);
     }
     else {
+        screen->render(menuScreen);
         options[0]->render(texs[0]);
         options[1]->render(texs[2]);
         options[2]->render(texs[4]);
