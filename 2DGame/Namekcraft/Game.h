@@ -29,6 +29,7 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
+    void win();
     void reestart();
     void switchScene();
     void switchOver();

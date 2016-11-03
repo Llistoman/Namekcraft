@@ -18,6 +18,8 @@ SceneOver::~SceneOver()
 
 void SceneOver::init()
 {
+    state = false;
+
     //SHADERS
 	initShaders();
 
@@ -33,6 +35,7 @@ void SceneOver::init()
     options[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
 
     //OPTIONS
+    congrats.loadFromFile("images/congrats.png",TEXTURE_PIXEL_FORMAT_RGBA);
     gameover.loadFromFile("images/gameover.png", TEXTURE_PIXEL_FORMAT_RGBA);
     texs[0].loadFromFile("images/yes1.png", TEXTURE_PIXEL_FORMAT_RGBA);
     texs[1].loadFromFile("images/yes2.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -74,7 +77,8 @@ void SceneOver::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-    options[0]->render(gameover);
+    if(not state) options[0]->render(gameover);
+    else options[0]->render(congrats);
 
     //render
     std::pair<int,int> pos = Game::instance().getMousePos();
@@ -88,6 +92,11 @@ void SceneOver::render()
         options[1]->render(texs[0]);
         options[2]->render(texs[2]);
     }
+}
+
+void SceneOver::switchState()
+{
+    state = !state;
 }
 
 void SceneOver::initShaders()

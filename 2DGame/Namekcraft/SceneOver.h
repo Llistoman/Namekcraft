@@ -23,11 +23,14 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+    void switchState();
 
 private:
 	void initShaders();
 
 private:
+    bool state;
+    Texture congrats;
     Texture gameover;
     Texture texs[4]; //vec de textures opcions
     TexturedQuad *screen;

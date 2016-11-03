@@ -107,11 +107,11 @@ void Scene::init()
     player->setEnemies(enemies);
 
     //SHIP
-    glm::ivec2 size = world->getWorldSize();
-    glm::ivec2 shipPos = world->getShipPos();
-    glm::vec2 geom[2] = (glm::vec2((shipPos.x)*blockSize.x, (worldSize.y - shipPos.y - 1)*blockSize.y),glm::vec2(geom[0].x + 3*blockSize.x, geom[0].y + 3*blockSize.y));
-    //glm::vec2 geom[2] = {glm::vec2(world->getWorldSize().x/2*BLOCK_X,(floorlvl-10)*BLOCK_Y), glm::vec2(geom[0].x + 3*blockSize.x, geom[0].y + 3*blockSize.y)};
+    glm::ivec2 pos = glm::ivec2(world->getWorldSize().x/2*BLOCK_X,(world->getWorldSize().y - 10)*BLOCK_Y);
+    glm::vec2 geom[2] = {glm::vec2(pos.x,pos.y), glm::vec2(geom[0].x + 3*blockSize.x, geom[0].y + 3*blockSize.y)};
     glm::vec2 texCoords[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
+
+    world->setShipPos(pos);
     shipTex.loadFromFile("images/ship.png",TEXTURE_PIXEL_FORMAT_RGBA);
     ship = TexturedQuad::createTexturedQuad(geom,texCoords,texProgram);
 
@@ -124,6 +124,12 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+    glm::ivec2 shipPos = world->getShipPos();
+    cout << abs(shipPos.x - player->getPosRender().x) << " " << abs(shipPos.y - player->getPosRender().y) << endl;
+    //cout << shipPos.x << " " << shipPos.y << endl;
+    //cout << player->getPosRender().x/BLOCK_X << " " << player->getPosRender().y/BLOCK_Y << endl;
+
+
     for(int i = 0; i < enemies.size(); ++i) {
         if(enemies[i] != NULL) {
             if(enemies[i]->isDead()) {
@@ -163,16 +169,17 @@ void Scene::render()
     background[0]->render(texs[0]);
     background[1]->render(texs[1]);
     background[2]->render(texs[2]);
-    ship->render(shipTex);
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
     world->render(newpos,screen);
+    ship->render(shipTex);
     for(int i = 0; i < enemies.size(); ++i) {
         if(enemies[i] != NULL) {
             enemies[i]->render();
         }
     }
     player->render();
+
 }
 
 void Scene::initShaders()

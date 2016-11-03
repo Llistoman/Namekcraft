@@ -31,7 +31,7 @@ private:
     bool menu, cred, instructions;
     Texture credits;
     Texture inst;
-    Texture texs[6]; //vec de textures opcions
+    Texture texs[6];
     TexturedQuad *screen;
     TexturedQuad *options[3];
     ShaderProgram texProgram;

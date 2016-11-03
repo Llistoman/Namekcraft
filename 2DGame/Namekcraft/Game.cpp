@@ -40,6 +40,12 @@ void Game::reestart()
     delete aux;
 }
 
+void Game::win()
+{
+    gameover = !gameover;
+    over->switchState();
+}
+
 void Game::switchOver()
 {
     gameover = !gameover;
