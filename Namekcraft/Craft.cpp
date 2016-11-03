@@ -146,37 +146,37 @@ void Craft::update(int deltaTime)
   
   
   //ITEM CRAFT MENU
-  if(Game::instance().getKey('a'))
+  if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
   {
     craftPosition = false;
   }
-  else if(Game::instance().getKey('d'))
+  else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
   {
     craftPosition = true;
   }
   
-  if(Game::instance().getKey('w') and !craftPosition and !sumat)
+  if(Game::instance().getSpecialKey(GLUT_KEY_UP) and !craftPosition and !sumat)
   {
     incC0(1);
     sumat = true;
   }
-  else  if(Game::instance().getKey('s') and !craftPosition and !sumat)
+  else  if(Game::instance().getSpecialKey(GLUT_KEY_DOWN) and !craftPosition and !sumat)
   {
     decC0(1);
     sumat = true;
   }
-  if(Game::instance().getKey('w') and craftPosition and !sumat)
+  if(Game::instance().getSpecialKey(GLUT_KEY_UP) and craftPosition and !sumat)
   {
     incC1(1);
     sumat = true;
   }
-  else  if(Game::instance().getKey('s') and craftPosition and !sumat)
+  else  if(Game::instance().getSpecialKey(GLUT_KEY_DOWN) and craftPosition and !sumat)
   {
     decC1(1);
     sumat = true;
   }
   
-  if(sumat and !Game::instance().getKey('w') and !Game::instance().getKey('s')){ //tornem a permetres sumar o decrementar contadors
+  if(sumat and !Game::instance().getSpecialKey(GLUT_KEY_UP) and !Game::instance().getSpecialKey(GLUT_KEY_DOWN)){ //tornem a permetres sumar o decrementar contadors
     sumat = false;
   }
   
@@ -274,9 +274,6 @@ void Craft::update(int deltaTime)
     }
   }
   
-  
-  
-
     sprites[0]->update(deltaTime);
     sprites[1]->update(deltaTime);
 }
@@ -296,7 +293,6 @@ void Craft::renderTexts()
     stocksCraftText[i].render(to_string(qu[i]), glm::vec2(float((CRAFT_SIZE_X +2)*(1+i) -18), float(CRAFT_SIZE_Y*1.9 + (CRAFT_SIZE_Y +2))), 14, glm::vec4(1, 1, 1, 1));
   }
   craftText.render("Crafting W,A,S,D", glm::vec2(float((CRAFT_SIZE_X +2) -18), float(CRAFT_SIZE_Y*1.9f)), 14, glm::vec4(1, 1, 1, 1));
-  
   
 }
 

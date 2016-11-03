@@ -24,7 +24,7 @@ void SceneMenu::init()
     glm::vec2 geom3[2] = {glm::vec2(SCREEN_WIDTH/3.f, 6*SCREEN_HEIGHT/8.f), glm::vec2(2*SCREEN_WIDTH/3.f, 7*SCREEN_HEIGHT/8.f)};
     glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
     options[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
-    glm::vec2 geom4[2] = {glm::vec2(2*SCREEN_WIDTH/3.f, 6*SCREEN_HEIGHT/8.f), glm::vec2(3*SCREEN_WIDTH/3.f, 7*SCREEN_HEIGHT/8.f)};
+    glm::vec2 geom4[2] = {glm::vec2(2*SCREEN_WIDTH/3.f, 7*SCREEN_HEIGHT/8.f), glm::vec2(3*SCREEN_WIDTH/3.f, 8*SCREEN_HEIGHT/8.f)};
     glm::vec2 texCoords4[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
     options[3] = TexturedQuad::createTexturedQuad(geom4, texCoords4, texProgram);
 
@@ -61,7 +61,7 @@ void SceneMenu::update(int deltaTime)
 	currentTime += deltaTime;
     std::pair<int,int> pos = Game::instance().getMousePos();
     if(instructions or cred) {
-        if(Game::instance().leftClick() and pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
+        if(Game::instance().leftClick() and pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 7*SCREEN_HEIGHT/8.f and pos.second <= 8*SCREEN_HEIGHT/8.f) {
             menu = true;
             instructions = false;
             cred = false;
@@ -102,14 +102,14 @@ void SceneMenu::render()
     std::pair<int,int> pos = Game::instance().getMousePos();
     if(instructions) {
         screen->render(inst);
-        if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
+        if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 7*SCREEN_HEIGHT/8.f and pos.second <= 8*SCREEN_HEIGHT/8.f) {
             options[3]->render(texs[7]);
         }
         else options[3]->render(texs[6]);
     }
     else if(cred) {
         screen->render(credits);
-        if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 6*SCREEN_HEIGHT/8.f and pos.second <= 7*SCREEN_HEIGHT/8.f) {
+        if (pos.first >= 2*SCREEN_WIDTH/3.f and pos.first <= 3*SCREEN_WIDTH/3.f and pos.second >= 7*SCREEN_HEIGHT/8.f and pos.second <= 8*SCREEN_HEIGHT/8.f) {
             options[3]->render(texs[7]);
         }
         else options[3]->render(texs[6]);

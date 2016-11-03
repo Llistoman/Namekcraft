@@ -114,7 +114,7 @@ void Player::update(int deltaTime)
             else dir = 0;
 
             //RUN OR NOT
-            if(Game::instance().getKey('z')){
+            if(Game::instance().getKey(32)){
                 playerSpeed = 5;
             }
             else{
@@ -197,7 +197,7 @@ void Player::update(int deltaTime)
 
             //FI CRAFT
 
-            if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+            if(Game::instance().getKey('a'))
             {
                 dir = 0;
                 if(playerSpeed == 2){
@@ -213,7 +213,7 @@ void Player::update(int deltaTime)
                     sprite->changeAnimationHTC(STAND);
                 }
             }
-            else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+            else if(Game::instance().getKey('d'))
             {
                 dir = 1;
                 if(playerSpeed == 2){
@@ -261,7 +261,7 @@ void Player::update(int deltaTime)
                 posPlayer.y += FALL_STEP;
                 if(world->collisionMoveDown(posPlayer, spriteSize, &posPlayer.y))
                 {
-                    if(Game::instance().getSpecialKey(GLUT_KEY_UP) or Game::instance().getKey(32))
+                    if(Game::instance().getKey('w'))
                     {
                         bJumping = true;
                         jumpAngle = 0;
