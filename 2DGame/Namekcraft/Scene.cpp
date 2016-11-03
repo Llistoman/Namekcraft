@@ -36,22 +36,36 @@ Scene::~Scene()
 }
 
 void Scene::initbackground() {
+    animateClouds = 0;
     glm::ivec2 size = world->getWorldSize();
+    //SKY
     glm::vec2 geom1[2] = {glm::vec2(0.f, 0.f), glm::vec2(size.x*BLOCK_X, size.y*BLOCK_Y)};
     glm::vec2 texCoords1[2] = {glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f)};
-    glm::vec2 geom2[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2), glm::vec2(size.x*BLOCK_X*2 , size.y*BLOCK_Y)};
-    glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(2.f, 1.f)};
-    glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(10*size.x*BLOCK_X/3, size.y*BLOCK_Y/3)};
-    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(5.f, 1.f)};
-
+    //BACKGROUND
+    glm::vec2 geom2[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2 -(224.f *2.) +160.f), glm::vec2(size.x*BLOCK_X , size.y*BLOCK_Y/2 +160.f)};
+    glm::vec2 texCoords2[2] = {glm::vec2(0.f, 0.f), glm::vec2(2.85f, 1.f)};
+    //CLOUDS
+    glm::vec2 geom3[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2 -(224.f *2.) ), glm::vec2(10*size.x*BLOCK_X/3, size.y*BLOCK_Y/2)};
+    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(10.f, 1.f)};
+    //Ground
+    glm::vec2 geom4[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2), glm::vec2(size.x*BLOCK_X*2 , size.y*BLOCK_Y)};
+    glm::vec2 texCoords4[2] = {glm::vec2(0.f, 0.f), glm::vec2(13.f, 17.f)};
+    //BACK BACK
+    glm::vec2 geom5[2] = {glm::vec2(0.f, size.y*BLOCK_Y/2 -(224.f *2.) +160.f), glm::vec2(size.x*BLOCK_X , size.y*BLOCK_Y/2 +160.f)};
+    glm::vec2 texCoords5[2] = {glm::vec2(0.f, 0.f), glm::vec2(2.85f, 1.f)};
+    
     background[0] = TexturedQuad::createTexturedQuad(geom1, texCoords1, texProgram);
     background[1] = TexturedQuad::createTexturedQuad(geom2, texCoords2, texProgram);
     background[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
+    background[3] = TexturedQuad::createTexturedQuad(geom4, texCoords4, texProgram);
+    background[4] = TexturedQuad::createTexturedQuad(geom5, texCoords5, texProgram); 
 
     // Load textures
     texs[0].loadFromFile("images/Sky.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    texs[1].loadFromFile("images/backgroundsimetric.png",TEXTURE_PIXEL_FORMAT_RGBA);
+    texs[1].loadFromFile("images/backgroundsimetric_rework.png",TEXTURE_PIXEL_FORMAT_RGBA);
     texs[2].loadFromFile("images/clouds.png",TEXTURE_PIXEL_FORMAT_RGBA);
+    texs[3].loadFromFile("images/background_ground_sim.png",TEXTURE_PIXEL_FORMAT_RGBA);
+    texs[4].loadFromFile("images/Background_15.png",TEXTURE_PIXEL_FORMAT_RGBA);
 }
 
 void Scene::init()
@@ -146,7 +160,24 @@ void Scene::update(int deltaTime)
      /*glm::vec2 geom3[2] = {glm::vec2(0.f, 0.f), glm::vec2(1000*BLOCK_X/3, 100*BLOCK_Y/3)};
      glm::vec2 texCoords3[2] = {glm::vec2(float(int((currentTime *0.001)*99)%500)*0.001, 0.f), glm::vec2(5.f, 1.f)};
      background[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);*/
+        
+     // BACK BACKGROUND
+    float dipBack = player->getPosRender().x*00.1;
+     
+    glm::vec2 geom5[2] = {glm::vec2(-(100*BLOCK_X -dipBack) - dipBack, 100*BLOCK_Y/2 -(540.f) +400.f), glm::vec2((100*BLOCK_X -dipBack)*2 , 100*BLOCK_Y/2 +400.f)};
+    glm::vec2 texCoords5[2] = {glm::vec2(0.f, 0.f), glm::vec2(3.f, 1.f)};
     
+    background[4] = TexturedQuad::createTexturedQuad(geom5, texCoords5, texProgram);
+     
+    //CLOUDS UPDATE
+    animateClouds += deltaTime *0.05;
+    if (animateClouds >= 10*100*BLOCK_X/3) animateClouds = 0;
+    
+    glm::vec2 geom3[2] = {glm::vec2(-(10*100*BLOCK_X/3) + animateClouds, 100*BLOCK_Y/2 -(224.f *2.) ), glm::vec2(10*100*BLOCK_X/3 + animateClouds, 100*BLOCK_Y/2)};
+    glm::vec2 texCoords3[2] = {glm::vec2(0.f, 0.f), glm::vec2(9.f, 1.f)};
+
+    background[2] = TexturedQuad::createTexturedQuad(geom3, texCoords3, texProgram);
+
     
     
     glm::ivec2 newpos = player->getPosRender();
@@ -166,9 +197,13 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
     background[0]->render(texs[0]);
-    background[1]->render(texs[1]);
+    background[4]->render(texs[4]);
     background[2]->render(texs[2]);
+    background[1]->render(texs[1]);
+    background[3]->render(texs[3]);
+
     glm::ivec2 newpos = player->getPosRender();
     glm::ivec2 screen = glm::ivec2(SCREEN_WIDTH,SCREEN_HEIGHT);
     world->render(newpos,screen);

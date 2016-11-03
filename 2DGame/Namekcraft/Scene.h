@@ -35,8 +35,9 @@ private:
     Quad *quad;
     Texture shipTex;
     TexturedQuad *ship;
-    Texture texs[3]; //vec de textures
-    TexturedQuad *background[3];
+    Texture texs[5]; //vec de textures
+    TexturedQuad *background[5];
+    float animateClouds;
     //TileMap *map;
     World *world;
     Player *player;
