@@ -241,9 +241,9 @@ void World::setInventory(Inventory *i)
 
 bool World::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {	
-
+    if(0. >= pos.x) return true;
     int x, y0, y1;
-
+    
     x = pos.x / blockSize.x;
     y0 = pos.y / blockSize.y;
     y1 = (pos.y + size.y - 1) / blockSize.y;
@@ -260,7 +260,7 @@ bool World::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) con
 
 bool World::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
-
+    if( pos.x >= 99*32) return true;
     int x, y0, y1;
 
     x = (pos.x + size.x - 1) / blockSize.x;

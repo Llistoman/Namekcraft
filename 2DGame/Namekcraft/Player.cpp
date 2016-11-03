@@ -288,10 +288,10 @@ void Player::update(int deltaTime)
 
         if(usat and !Game::instance().leftClick()) usat = false;
 
-        //Marges del mapa
-        if(0. >= posPlayer.x) posPlayer.x = 0;
-        if( posPlayer.x >= 100*32) posPlayer.x = 100*32;
-        if(0. >= posPlayer.y) posPlayer.y = 0.;
+//         //Marges del mapa
+//         if(0. >= posPlayer.x) posPlayer.x = 0.;
+//         if( posPlayer.x >= 99*32) posPlayer.x = 199*32;
+        if(32. >= posPlayer.y) posPlayer.y = 32.;
         if(posPlayer.y >= (100*32 -36)){
             posPlayer.y = 100*32 -36;
             dead();

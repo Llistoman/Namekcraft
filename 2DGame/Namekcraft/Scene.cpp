@@ -125,7 +125,7 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
     glm::ivec2 shipPos = world->getShipPos();
-    cout << abs(shipPos.x - player->getPosRender().x) << " " << abs(shipPos.y - player->getPosRender().y) << endl;
+    //cout << abs(shipPos.x - player->getPosRender().x) << " " << abs(shipPos.y - player->getPosRender().y) << endl;
     //cout << shipPos.x << " " << shipPos.y << endl;
     //cout << player->getPosRender().x/BLOCK_X << " " << player->getPosRender().y/BLOCK_Y << endl;
 
