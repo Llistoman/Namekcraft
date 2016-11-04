@@ -177,7 +177,7 @@ void World::render(glm::ivec2 &pos, glm::ivec2 &screen) {
 
     int i = max(0,int(((worldSize.y-1) - pos.y) - (screen.y/2)-blockSize.y)/blockSize.y);
     int j = max(0,int(pos.x - (screen.x/2)-blockSize.x)/blockSize.x);
-    int iend = min(worldSize.y-1,int(pos.y + (screen.y/2)+blockSize.y)/blockSize.y);
+    int iend = worldSize.y-1;
     int jend = min(worldSize.x-1,int(pos.x + (screen.x/2)+blockSize.x)/blockSize.x);
 
     for(int k = i; k<=iend; ++k) {
