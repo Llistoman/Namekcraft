@@ -287,7 +287,7 @@ void Player::update(int deltaTime)
 
         if(usat and !Game::instance().leftClick()) usat = false;
 
-        if(32. >= posPlayer.y) posPlayer.y = 32.;
+        if(40. >= posPlayer.y) posPlayer.y = 40.;
         if(posPlayer.y >= (100*32 -36)){
             posPlayer.y = 100*32 -36;
             dead();
