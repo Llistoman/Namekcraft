@@ -364,6 +364,8 @@ void Player::dead()
 {
     death = true;
     sprite->changeAnimationHTC(DEATH, dir);
+    inventory->resetStocks();
+    hp = 100;
     Game::instance().killed();
 }
 

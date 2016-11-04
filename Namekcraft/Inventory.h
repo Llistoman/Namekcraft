@@ -20,6 +20,7 @@ public:
   int getSelected();
   void setPico(int i);
   int getPico();
+  void resetStocks();
   void setSword(int i);
     glm::ivec2 getPos();
     glm::ivec2 getSpSize();

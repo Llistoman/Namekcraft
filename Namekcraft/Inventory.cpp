@@ -230,6 +230,12 @@ void Inventory::setSword(int i){
     else if(sword ==2) inventoryItems[1]->changeAnimation(sword);
 }
 
+void Inventory::resetStocks(){
+      stocks[0] = 1;  //Inventari inicial
+      stocks[1] = 1;
+      for(int i = 2; i<INVENTORY_SIZE; i++) stocks[i] = 0;
+}
+
 glm::ivec2 Inventory::getPos() {
     return posInventory;
 }

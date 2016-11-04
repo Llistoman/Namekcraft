@@ -2,6 +2,11 @@
 Josep Llistosella Rodríguez
 Sergi Sáncez Centelles
 
+--Instruccions per compilar i executar en Linux: --
+Per compilar cada exemple heu d'entra via terminal al subdirectori build corresponent i fer:
+   cmake ..
+   make
+
 --Funcionalitats implementades--
 - Mapa generat proceduralment
 - Interfície gràfica que mostra inventari, menu de crafteix, objectes equipats, vida del personatge, etc
@@ -49,4 +54,5 @@ R   	     Craftejar item que apareix a vista previa
 
 Cheats:
 G   Stocks de tots els items a 50
+
 

@@ -24,6 +24,7 @@ void SoundManager::stopAll() {
 
 void SoundManager::playMenuMusic() {
     menu.setLoop(true);
+    menu.setVolume(40);
     menu.play();
 }
 
