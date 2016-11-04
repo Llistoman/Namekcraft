@@ -20,7 +20,7 @@ public:
 	Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program);
 
 	void update(int deltaTime);
-  void updateHTC(int deltaTime);
+  void updateHTC(int deltaTime, int dir);
 	void render(int dir) const;
   void render(int dir, float rotation) const;
 	void free();
@@ -29,7 +29,7 @@ public:
 	void setAnimationSpeed(int animId, int keyframesPerSec);
 	void addKeyframe(int animId, const glm::vec2 &frame);
 	void changeAnimation(int animId);
-  void changeAnimationHTC(int animId);
+  void changeAnimationHTC(int animId, int dir);
 	int animation() const;
 	
 	void setPosition(const glm::vec2 &pos);

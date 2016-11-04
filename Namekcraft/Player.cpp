@@ -73,7 +73,7 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
     sprite->addKeyframe(DEATH, glm::vec2(0.75f, 0.25f));
 
 
-    sprite->changeAnimationHTC(0);
+    sprite->changeAnimationHTC(0, dir);
     posPlayer = position;
     sprite->setPosition(glm::vec2(posPlayer.x,posPlayer.y));
     
@@ -98,7 +98,7 @@ void Player::init(const glm::ivec2 &position, const glm::vec2 &spSize, ShaderPro
 void Player::update(int deltaTime)
 {
     if(0 >= hp) dead();
-    sprite->updateHTC(deltaTime);
+    sprite->updateHTC(deltaTime, dir);
 
     if(!death){ //Si estem morts no tenim control
 
@@ -201,38 +201,38 @@ void Player::update(int deltaTime)
             {
                 dir = 0;
                 if(playerSpeed == 2){
-                    if(sprite->animation() != MOVE) sprite->changeAnimationHTC(MOVE);
+                    if(sprite->animation() != MOVE) sprite->changeAnimationHTC(MOVE, dir);
                 }
                 else{
-                    if(sprite->animation() != RUN) sprite->changeAnimationHTC(RUN);
+                    if(sprite->animation() != RUN) sprite->changeAnimationHTC(RUN, dir);
                 }
                 posPlayer.x -= playerSpeed;
                 if(world->collisionMoveLeft(posPlayer, spriteSize))
                 {
                     posPlayer.x += playerSpeed;
-                    sprite->changeAnimationHTC(STAND);
+                    sprite->changeAnimationHTC(STAND, dir);
                 }
             }
             else if(Game::instance().getKey('d'))
             {
                 dir = 1;
                 if(playerSpeed == 2){
-                    if(sprite->animation() != MOVE) sprite->changeAnimationHTC(MOVE);
+                    if(sprite->animation() != MOVE) sprite->changeAnimationHTC(MOVE, dir);
                 }
                 else{
-                    if(sprite->animation() != RUN) sprite->changeAnimationHTC(RUN);
+                    if(sprite->animation() != RUN) sprite->changeAnimationHTC(RUN, dir);
                 }
                 posPlayer.x += playerSpeed;
                 if(world->collisionMoveRight(posPlayer, spriteSize))
                 {
                     posPlayer.x -= playerSpeed;
-                    sprite->changeAnimationHTC(STAND);
+                    sprite->changeAnimationHTC(STAND, dir);
                 }
             }
             else
             {
                 if(sprite->animation() == MOVE or sprite->animation() == RUN )
-                    sprite->changeAnimationHTC(STAND);
+                    sprite->changeAnimationHTC(STAND, dir);
             }
 
             if(bJumping)
@@ -294,8 +294,8 @@ void Player::update(int deltaTime)
         }
 
         //FINAL PLAYER
-        if(!world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y) and sprite->animation() != JUMP )sprite->changeAnimationHTC(JUMP);
-        else if(sprite->animation() == JUMP and world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y))sprite->changeAnimationHTC(STAND);
+        if(!world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y) and sprite->animation() != JUMP )sprite->changeAnimationHTC(JUMP, dir);
+        else if(sprite->animation() == JUMP and world->collisionMoveDown(posPlayer + glm::ivec2(0,1), spriteSize, &posPlayer.y))sprite->changeAnimationHTC(STAND, dir);
 
         sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
 
@@ -363,7 +363,7 @@ void Player::damage(int d)
 void Player::dead()
 {
     death = true;
-    sprite->changeAnimationHTC(DEATH);
+    sprite->changeAnimationHTC(DEATH, dir);
     Game::instance().killed();
 }
 

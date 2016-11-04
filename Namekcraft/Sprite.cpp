@@ -49,7 +49,7 @@ void Sprite::update(int deltaTime)
 	}
 }
 
-void Sprite::updateHTC(int deltaTime) //With Half Texel Correction
+void Sprite::updateHTC(int deltaTime, int dir) //With Half Texel Correction
 {
   if(currentAnimation >= 0)
   {
@@ -60,6 +60,7 @@ void Sprite::updateHTC(int deltaTime) //With Half Texel Correction
       currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
     }
     texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe] + halfTexel; // Correccio de halftexel
+    if (dir == 0) texCoordDispl.x -= 2* halfTexel.x; // Correccio de halftexel
   }
 }
 
@@ -136,7 +137,7 @@ void Sprite::changeAnimation(int animId)
 	}
 }
 
-void Sprite::changeAnimationHTC(int animId) //With Half Texel Correction
+void Sprite::changeAnimationHTC(int animId, int dir) //With Half Texel Correction
 {
   if(animId < int(animations.size()))
   {
@@ -144,6 +145,7 @@ void Sprite::changeAnimationHTC(int animId) //With Half Texel Correction
     currentKeyframe = 0;
     timeAnimation = 0.f;
     texCoordDispl = animations[animId].keyframeDispl[0]  + halfTexel;
+    if (dir == 0) texCoordDispl.x -= 2* halfTexel.x; // Correccio de halftexel
   }
 }
 
